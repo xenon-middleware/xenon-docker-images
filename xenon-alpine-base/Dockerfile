@@ -1,21 +1,43 @@
-# Docker container with ftp server, to run the xenon ftp adaptor integration tests against.
+# Base Docker image based off of Linux Alpine
 #
 # Build with:
 #
-#     docker build -t nlesc/xenon-alpine-base .
+#     docker build --tag nlesc/xenon-alpine-base .
 #
-FROM alpine:3.2
+# Run with:
+#
+#     docker run --user xenon --rm --interactive --tty nlesc/xenon-alpine-base bash
+#
+FROM alpine:3.6
 MAINTAINER Stefan Verhoeven "s.verhoeven@esciencecenter.nl"
 
 # Create a test user
-RUN /usr/sbin/adduser -s /bin/sh -D xenon && echo xenon:javagat |chpasswd
+RUN /usr/sbin/adduser -s /bin/sh -D xenon && \
+# set user xenon's password to javagat
+echo xenon:javagat | chpasswd
+
 WORKDIR /home/xenon
-ADD insecure-ssh-keys /home/xenon/.ssh
-RUN chmod 600 /home/xenon/.ssh/*
 
-# xenon prepare test runs a bash based test script
-RUN apk add --update bash && rm -rf /var/cache/apk/* || /bin/true
+# add ssh config directory
+COPY .ssh .ssh
 
-# Create symlinks
-ADD create_symlinks /tmp/
-RUN /tmp/create_symlinks && rm -f /tmp/create_symlinks && chown -R xenon.xenon .
+RUN chmod 700 .ssh && \
+chmod 600 .ssh/id_rsa .ssh/id_dsa && \
+chmod 644 .ssh/authorized_keys .ssh/id_rsa.pub .ssh/id_dsa.pub && \
+chown -R xenon.xenon .ssh
+
+# use package manageer to install Bash
+RUN apk add --no-cache bash
+
+# Xenon's filesystem integration tests expect certain directory structure, create it here:
+RUN mkdir -p filesystem-test-fixture/links && \
+echo "Hello World" > filesystem-test-fixture/links/file0 && \
+touch filesystem-test-fixture/links/file1 && \
+ln -s /home/xenon/filesystem-test-fixture/links/file0 /home/xenon/filesystem-test-fixture/links/link0 && \
+ln -s /home/xenon/filesystem-test-fixture/links/file1 /home/xenon/filesystem-test-fixture/links/link1 && \
+ln -s /home/xenon/filesystem-test-fixture/links/file2 /home/xenon/filesystem-test-fixture/links/link2 && \
+ln -s /home/xenon/filesystem-test-fixture/links/link0 /home/xenon/filesystem-test-fixture/links/link3 && \
+ln -s /home/xenon/filesystem-test-fixture/links/link2 /home/xenon/filesystem-test-fixture/links/link4 && \
+ln -s /home/xenon/filesystem-test-fixture/links/link6 /home/xenon/filesystem-test-fixture/links/link5 && \
+ln -s /home/xenon/filesystem-test-fixture/links/link5 /home/xenon/filesystem-test-fixture/links/link6 && \
+chown -R xenon.xenon /home/xenon/filesystem-test-fixture
