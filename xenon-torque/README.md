@@ -1,4 +1,4 @@
-# Docker container with ssh server, to run the xenon torque adaptor integration tests against.
+Docker container with ssh server, to run the xenon torque adaptor integration tests against.
 
 Build with:
 
