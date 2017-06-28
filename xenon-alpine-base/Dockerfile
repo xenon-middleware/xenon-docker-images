@@ -1,13 +1,3 @@
-# Base Docker image based off of Linux Alpine
-#
-# Build with:
-#
-#     docker build --tag nlesc/xenon-alpine-base .
-#
-# Run with:
-#
-#     docker run --user xenon --rm --interactive --tty nlesc/xenon-alpine-base bash
-#
 FROM alpine:3.6
 MAINTAINER Stefan Verhoeven "s.verhoeven@esciencecenter.nl"
 
