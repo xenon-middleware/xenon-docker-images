@@ -17,4 +17,4 @@ EXPOSE 22
 CMD ["/usr/sbin/sshd", "-De"]
 
 # define the test that tells us if the docker container is healthy
-HEALTHCHECK --interval=1s CMD ssh -i /home/xenon/.ssh/id_rsa xenon@localhost /bin/true
+HEALTHCHECK --interval=1s CMD ssh -i /home/xenon/.ssh/id_rsa xenon@localhost /bin/true || exit 1
