@@ -1,11 +1,12 @@
 FROM agaveapi/torque
 MAINTAINER Stefan Verhoeven "s.verhoeven@esciencecenter.nl"
 
-# Create a test user
-RUN /usr/sbin/useradd -p $(openssl passwd javagat) -d /home/xenon -m --shell /bin/bash xenon
+# Create a user 'xenon' with password 'javagat'
+RUN /usr/sbin/useradd -p $(openssl passwd javagat) xenon
+
 WORKDIR /home/xenon
 
-# add ssh config directory
+# copy ssh config directory from Docker context to xenon's home directory
 COPY .ssh .ssh
 
 RUN chmod 700 .ssh && \
