@@ -1,5 +1,14 @@
 Docker container with webdav server, to run the xenon webdav adaptor integration tests against.
 
+The Docker container has two users, each with two locations
+
+1. ``xenon``, with password ``javagat``
+    - read access at ``http://<hostname>/~xenon``
+    - write access at ``http://<hostname>/~xenon/uploads``
+1. anonymous
+    - read access at ``http://<hostname>/downloads``
+    - write access at ``http://<hostname>/uploads``
+
 # Build with:
 
 ```bash

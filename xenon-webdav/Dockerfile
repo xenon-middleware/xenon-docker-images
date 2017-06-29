@@ -13,14 +13,39 @@ chown apache.apache /var/www/var && \
 mkdir /home/xenon/uploads && \
 chown apache.apache /home/xenon/uploads && \
 
-# make anonymous user writable directory
+# Xenon's filesystem integration tests expect certain directory structure, create it here:
+# make directory that user xenon can write in
 mkdir /var/www/uploads && \
-cp -r /home/xenon/filesystem-test-fixture /var/www/uploads/ && \
-chown apache.apache /var/www/uploads && \
+cd /var/www/uploads && \
+mkdir -p filesystem-test-fixture/links && \
+echo "Hello World" > filesystem-test-fixture/links/file0 && \
+touch filesystem-test-fixture/links/file1 && \
+ln -s /var/www/uploads/filesystem-test-fixture/links/file0 /var/www/uploads/filesystem-test-fixture/links/link0 && \
+ln -s /var/www/uploads/filesystem-test-fixture/links/file1 /var/www/uploads/filesystem-test-fixture/links/link1 && \
+ln -s /var/www/uploads/filesystem-test-fixture/links/file2 /var/www/uploads/filesystem-test-fixture/links/link2 && \
+ln -s /var/www/uploads/filesystem-test-fixture/links/link0 /var/www/uploads/filesystem-test-fixture/links/link3 && \
+ln -s /var/www/uploads/filesystem-test-fixture/links/link2 /var/www/uploads/filesystem-test-fixture/links/link4 && \
+ln -s /var/www/uploads/filesystem-test-fixture/links/link6 /var/www/uploads/filesystem-test-fixture/links/link5 && \
+ln -s /var/www/uploads/filesystem-test-fixture/links/link5 /var/www/uploads/filesystem-test-fixture/links/link6 && \
+chown -R apache.apache /var/www/uploads/filesystem-test-fixture && \
+cd /home/xenon
 
-# make anonymous user readable directory
+# Xenon's filesystem integration tests expect certain directory structure, create it here:
+# make directory that anonymous user can write in
 mkdir /var/www/localhost/htdocs/downloads && \
-cp -r /home/xenon/filesystem-test-fixture /var/www/localhost/htdocs/downloads/
+cd /var/www/localhost/htdocs/downloads && \
+mkdir -p filesystem-test-fixture/links && \
+echo "Hello World" > filesystem-test-fixture/links/file0 && \
+touch filesystem-test-fixture/links/file1 && \
+ln -s /var/www/localhost/htdocs/downloads/filesystem-test-fixture/links/file0 /var/www/localhost/htdocs/downloads/filesystem-test-fixture/links/link0 && \
+ln -s /var/www/localhost/htdocs/downloads/filesystem-test-fixture/links/file1 /var/www/localhost/htdocs/downloads/filesystem-test-fixture/links/link1 && \
+ln -s /var/www/localhost/htdocs/downloads/filesystem-test-fixture/links/file2 /var/www/localhost/htdocs/downloads/filesystem-test-fixture/links/link2 && \
+ln -s /var/www/localhost/htdocs/downloads/filesystem-test-fixture/links/link0 /var/www/localhost/htdocs/downloads/filesystem-test-fixture/links/link3 && \
+ln -s /var/www/localhost/htdocs/downloads/filesystem-test-fixture/links/link2 /var/www/localhost/htdocs/downloads/filesystem-test-fixture/links/link4 && \
+ln -s /var/www/localhost/htdocs/downloads/filesystem-test-fixture/links/link6 /var/www/localhost/htdocs/downloads/filesystem-test-fixture/links/link5 && \
+ln -s /var/www/localhost/htdocs/downloads/filesystem-test-fixture/links/link5 /var/www/localhost/htdocs/downloads/filesystem-test-fixture/links/link6 && \
+chown -R apache.apache /var/www/localhost/htdocs/downloads/filesystem-test-fixture && \
+cd /home/xenon
 
 ADD httpd.conf /etc/apache2/httpd.conf
 
