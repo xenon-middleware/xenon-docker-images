@@ -9,22 +9,21 @@ The container has two ftp users
 # Build with
 
 ```
+cd xenon-ftp
 docker build --tag nlesc/xenon-ftp .
 ```
 
 # Run with
 
 ```
-docker run --detach --name=xenon-ftp --hostname xenon-ftp nlesc/xenon-ftp
-
-# Get containers ip with
-XENON_FTP_LOCATION=$(docker inspect -f "{{ .NetworkSettings.IPAddress }}" xenon-ftp)
+# needs '--network host' because ftp protocol can switch ports
+docker run --detach --name=xenon-ftp --hostname xenon-ftp --network host nlesc/xenon-ftp
 
 # Login using lftp client (https://lftp.yar.ru/) by
-lftp ftp://xenon:javagat@$XENON_FTP_LOCATION
+lftp ftp://xenon:javagat@localhost
 
 # or for anonymous access
-lftp ftp://$XENON_FTP_LOCATION
+lftp ftp://localhost
 
 # Clean up the run
 docker rm -f xenon-ftp

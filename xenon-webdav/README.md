@@ -19,10 +19,8 @@ docker build -t nlesc/xenon-webdav .
 # Run with:
 
 ```bash
-docker run --detach --name=xenon-webdav --hostname xenon-webdav nlesc/xenon-webdav
+docker run --detach --name=xenon-webdav --hostname xenon-webdav --publish 10080:80 nlesc/xenon-webdav
 
-# Get containers ip with
-XENON_WEBDAV_LOCATION=$(docker inspect -f "{{ .NetworkSettings.IPAddress }}" xenon-webdav)
 ```
 
 Login with username `xenon` and password `javagat`.
@@ -34,13 +32,13 @@ Test with following commands:
 # for example on debian based systems: sudo apt install cadaver
 
 # for basic authenticated read access
-cadaver http://$XENON_WEBDAV_LOCATION/~xenon
+cadaver http://localhost:10080/~xenon
 # or for basic authenticated write access
-cadaver http://$XENON_WEBDAV_LOCATION/~xenon/uploads
+cadaver http://locahost:10080/~xenon/uploads
 # or for anonymous write access
-cadaver http://$XENON_WEBDAV_LOCATION/uploads
+cadaver http://locahost:10080/uploads
 # or for anonymous read access
-cadaver http://$XENON_WEBDAV_LOCATION/downloads
+cadaver http://locahost:10080/downloads
 ```
 
 Example output for ``cadaver``:

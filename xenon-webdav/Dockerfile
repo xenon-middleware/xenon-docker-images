@@ -28,7 +28,7 @@ ln -s /var/www/uploads/filesystem-test-fixture/links/link2 /var/www/uploads/file
 ln -s /var/www/uploads/filesystem-test-fixture/links/link6 /var/www/uploads/filesystem-test-fixture/links/link5 && \
 ln -s /var/www/uploads/filesystem-test-fixture/links/link5 /var/www/uploads/filesystem-test-fixture/links/link6 && \
 chown -R apache.apache /var/www/uploads/filesystem-test-fixture && \
-cd /home/xenon
+cd /home/xenon && \
 
 # Xenon's filesystem integration tests expect certain directory structure, create it here:
 # make directory that anonymous user can write in
