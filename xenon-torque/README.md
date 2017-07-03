@@ -10,14 +10,17 @@ docker build -t nlesc/xenon-torque .
 Run with:
 
 ```bash
-docker run --detach --hostname xenon-torque --publish 10022:22 --privileged nlesc/xenon-torque
+docker run --detach --name xenon-torque --hostname xenon-torque --publish 10022:22 --privileged nlesc/xenon-torque
 
 # use password javagat
-ssh --port 10022 xenon@localhost
+ssh -p 10022 xenon@localhost
 
 # view the queue
 qstat -q
 
+
+# Clean up
+docker rm -f xenon-torque
 ```
 
 Note: Torque does not like hostname that start with number, so hostname is required
