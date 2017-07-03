@@ -3,7 +3,7 @@ MAINTAINER Stefan Verhoeven "s.verhoeven@esciencecenter.nl"
 
 # install Slurm batch scheduler v15.08 using the package manager
 RUN apt-get update && \
-apt-get install -y slurm-llnl slurmdbd && \
+apt-get install -y slurm-llnl slurmdbd mysql-client && \
 apt-get clean && \
 rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
@@ -20,6 +20,9 @@ chown root.root /var/lib/munge /etc/munge
 # copy start-stop scripts for the slurm services from context to inside the
 # Docker image
 ADD service /etc/service
+
+# Register cluster in slurmdbd
+ADD wait-for-mysql.sh /etc/my_init.d/wait-for-mysql.sh
 
 # configure Slurm
 # Key was generated with openssl genrsa -out slurm.key 1024 && openssl rsa -in slurm.key -pubout -out slurm.cert
@@ -38,9 +41,7 @@ touch /var/spool/slurmctld/accounting.txt && \
 chown slurm /var/spool/slurmctld/accounting.txt && \
 chown slurm /var/spool/slurmctld/state && \
 chown slurm /etc/slurm-llnl/slurm.key
-
+ 
 # start the scripts we copied from the context to /etc/service
 CMD ["/sbin/my_init"]
-
-
-HEALTHCHECK --interval=1s CMD sinfo || exit 1
+# HEALTHCHECK --interval=1s CMD sinfo || exit 1
