@@ -1,2 +1,6 @@
 #!/bin/sh
+
+# Create mycluster tables in mysql via slurmdbd
+sacctmgr -i add cluster mycluster
+
 exec /usr/sbin/slurmctld -D -c

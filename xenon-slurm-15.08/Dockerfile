@@ -44,4 +44,4 @@ chown slurm /etc/slurm-llnl/slurm.key
  
 # start the scripts we copied from the context to /etc/service
 CMD ["/sbin/my_init"]
-# HEALTHCHECK --interval=1s CMD sinfo || exit 1
+HEALTHCHECK --interval=1s CMD sinfo || exit 1

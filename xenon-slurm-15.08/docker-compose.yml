@@ -2,7 +2,7 @@ version: '3'
 services:
   # next line is value of property 'JobCompHost' in etc/slurm.conf (hostname of MySQL container)
   mysql:
-    image: mysql:5.5
+    image: mysql:5.6
     environment:
     # next line is value of property 'JobCompPass' in etc/slurm.conf (user password of MySQL container)
     - MYSQL_ROOT_PASSWORD=xenon-slurm-pw
@@ -17,4 +17,4 @@ services:
     - mysql
     ports:
     - 22 # ssh
-    - 6817 # slurm controller
+    - 6817 # slurm controller, when connectable slurm cluster is ready for use
