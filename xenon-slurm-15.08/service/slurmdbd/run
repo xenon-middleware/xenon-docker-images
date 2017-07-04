@@ -1,6 +1,3 @@
 #!/bin/sh
 
-# Make sure slurm controller is restarted before slurmdbd is started, to force controller to reconnect
-killall slurmctld
-
 exec /usr/sbin/slurmdbd -D

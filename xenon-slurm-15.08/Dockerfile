@@ -15,7 +15,7 @@ ADD munge.key /etc/munge/munge.key
 # change permission for MUNGE
 RUN mkdir /var/run/munge && \
 chmod 600 /etc/munge/munge.key && \
-chown root.root /var/lib/munge /etc/munge
+chown root.root /var/lib/munge /etc/munge /var/log/munge
 
 # copy start-stop scripts for the slurm services from context to inside the
 # Docker image
