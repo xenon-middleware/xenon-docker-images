@@ -16,7 +16,7 @@ Use [docker-compose](https://docs.docker.com/compose/) to start mysql container 
 docker-compose up -d
 # Wait for the mysql and slurm containers to have healty status, check with
 docker ps
-# Retrieve ssh port of slurm container
+# The container named 'slurm' exposes its containerPort 22; find out what corresponding hostPort is:
 docker-compose port slurm 22
 # this will produces something like `0.0.0.0:32796`,
 # use 32796 as <SSH_PORT> and `localhost` as <SSH_HOSTNAME>
