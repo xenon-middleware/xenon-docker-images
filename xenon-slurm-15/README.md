@@ -1,9 +1,9 @@
-Docker container for [SLURM](https://slurm.schedmd.com/) batch scheduler v15.08
+Docker container for [SLURM](https://slurm.schedmd.com/) batch scheduler v15
 
 # Build with
 
 ```bash
-docker build --tag nlesc/xenon-slurm:15.08 .
+docker build --tag nlesc/xenon-slurm-15 .
 ```
 
 # Run with
