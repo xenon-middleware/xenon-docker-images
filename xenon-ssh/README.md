@@ -1,14 +1,14 @@
 Docker container with ssh server, to run the xenon ssh filesystem and ssh
 scheduler integration tests against.
 
-Build with
+### Build with
 
 ```bash
 cd xenon-ssh
 docker build -t nlesc/xenon-ssh .
 ```
 
-Run with:
+### Run with
 
 ```bash
 docker run --detach --name=xenon-ssh --hostname xenon-ssh --publish 10022:22 nlesc/xenon-ssh
