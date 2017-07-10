@@ -1,22 +1,3 @@
-# Image which will run the Xenon isolated tests
-# Will startup Docker containers to test against.
-#
-# Build with:
-#
-# docker build -t nlesc/xenon-test .
-#
-# At Xenon repo root dir run with:
-#
-# docker run \
-#   -e MYUID=$UID \
-#   --network host \
-#   --name=xenon-client \
-#   -ti --rm --privileged \
-#   -v $HOME/.gradle:/home/xenon/.gradle \
-#   -v $PWD:/code \
-#   -v /var/run/docker.sock:/var/run/docker.sock \
-#   nlesc/xenon-test
-#
 FROM nlesc/xenon-phusion-base
 MAINTAINER Stefan Verhoeven "s.verhoeven@esciencecenter.nl"
 
@@ -54,6 +35,4 @@ WORKDIR /code
 
 ENTRYPOINT ["/bin/entrypoint.sh"]
 
-# TODO after https://github.com/NLeSC/Xenon/issues/460 is implemented then use isolatedTest cmd
-# CMD ["./gradlew", "--no-deamon", "isolatedTest"]
-CMD ["./gradlew", "-Pxenon.test.properties=src/integrationTest/docker/xenon.test.properties.docker", "--project-cache-dir", "/home/xenon/gradle-cache", "integrationTest"]
+CMD ["./gradlew", "--no-daemon", "fixedClientEnvironmentTest"]
