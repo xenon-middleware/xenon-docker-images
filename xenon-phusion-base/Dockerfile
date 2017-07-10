@@ -1,8 +1,10 @@
 FROM phusion/baseimage:0.9.22
 MAINTAINER Stefan Verhoeven "s.verhoeven@esciencecenter.nl"
 
+# Enable the OpenSSH server (https://github.com/phusion/baseimage-docker#enabling_ssh)
 RUN rm -f /etc/service/sshd/down && \
 /etc/my_init.d/00_regen_ssh_host_keys.sh && \
+# When this image is used as ssh client then ignore the known hosts
 echo "StrictHostKeyChecking no" >> /etc/ssh/ssh_config && \
 echo "HashKnownHosts no" >> /etc/ssh/ssh_config
 
@@ -31,10 +33,13 @@ ln -s /home/xenon/filesystem-test-fixture/links/link6 /home/xenon/filesystem-tes
 ln -s /home/xenon/filesystem-test-fixture/links/link5 /home/xenon/filesystem-test-fixture/links/link6 && \
 chown -R xenon.xenon /home/xenon/filesystem-test-fixture
 
+# Expose the running OpenSSH server
+EXPOSE 22
 
 # Upgrade OS
 RUN apt-get update && apt-get upgrade -y -o Dpkg::Options::="--force-confold" && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
+# Use baseimage-docker's init system.
 CMD ["/sbin/my_init"]
 
 # define the test that tells us if the docker container is healthy
