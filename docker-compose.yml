@@ -1,0 +1,17 @@
+--- 
+services: 
+  munge: 
+    image: lubuntu-munge
+  mysql: 
+    environment: 
+      MYSQL_ROOT_PASSWORD: mysql-root-password
+    image: mysql
+  slurm: 
+    depends_on: 
+      - munge
+      - mysql
+    image: lubuntu-slurm
+  ssh: 
+    image: lubuntu-ssh
+version: "3"
+
