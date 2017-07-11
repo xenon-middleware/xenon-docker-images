@@ -16,32 +16,36 @@ RUN git clone https://github.com/schedmd/slurm
 WORKDIR /usr/local/slurm
 RUN git checkout tags/slurm-17-02-6-1
 
-RUN ./configure --prefix=/usr/local --sysconfdir=/usr/local/etc --with-mysql_config=/usr/bin
+RUN ./configure --prefix=/usr/local --sysconfdir=/usr/local/etc/slurm --with-mysql_config=/usr/bin
 RUN make
 RUN make install
 
+# make a slurm user
+RUN groupadd --system slurm && useradd --system --gid slurm --create-home slurm
 
-#RUN mkdir -p /etc/sysconfig/slurm
-#RUN cp etc/init.d.slurm /etc/init.d/slurmd
-#RUN chmod +x /etc/init.d/slurmd
-#RUN cp -rf doc/html /var/www/html/slurm
-#RUN chown -R apache:apache /var/www/html/slurm
-
-
-# Add user 'slurm'; the --gecos information contains things like the user's full name,
-# room number, etc. We don't need it here, so it's set to an empty string.
-#RUN /usr/sbin/adduser --gecos "" slurm
 # change user slurm's password to 'slurm'
-#RUN echo slurm:slurm | chpasswd
+RUN echo slurm:slurm | chpasswd
 
-# become user slurm
-#USER slurm
+# FIXME something with init.d
+RUN cp etc/init.d.slurm /etc/init.d/slurmd
+RUN chmod +x /etc/init.d/slurmd
 
-# change into user slurm's home directory
-#WORKDIR /home/slurm/
+# FIXME something with /var/www/html/slurm
+RUN mkdir -p /var/www/html/slurm
+RUN cp -rf doc/html /var/www/html/slurm
 
-# Add the ssh configuration from the Docker context to inside the Docker container
-# Note these keys should be different from the user xenon's SSH keys
-#ADD ssh/id_rsa.pub /home/slurm/.ssh/authorized_keys
+# FIXME something with /var/spool
 
+# make slurm sysconfig directory
+RUN mkdir -p /usr/local/etc/slurm
 
+# make slurm logging directory (use supervisor because that is the process that will start all the daemons/services)
+RUN mkdir -p /var/log/slurm
+RUN chown -R slurm:slurm /var/log/slurm
+
+# ADD slurm.conf from context to sysconfig directory
+ADD slurm.conf /usr/local/etc/slurm/slurm.conf
+
+# FIXME do I need to enable slurmctld, slurmdbd, and slurmd (step 10 of the guide)
+
+# start slurmctld and slurmd from the supervisor
