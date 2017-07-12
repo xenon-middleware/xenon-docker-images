@@ -4,24 +4,24 @@ testing out a different slurm configuration
 **Building the Docker images**
 
 ```bash
-cd lubuntu-fixture
-docker build --tag lubuntu-fixture .
+cd fixture
+docker build --tag fixture .
 cd ..
 
-cd lubuntu-ssh
-docker build --tag lubuntu-ssh .
+cd ssh
+docker build --tag ssh .
 cd ..
 
-cd lubuntu-munge
-docker build --tag lubuntu-munge .
+cd munge
+docker build --tag munge .
 cd ..
 
-cd lubuntu-slurm
-docker build --tag lubuntu-slurm .
+cd slurm
+docker build --tag slurm .
 cd ..
 
-cd lubuntu-supervisor
-docker build --tag lubuntu-supervisor .
+cd supervisor
+docker build --tag supervisor .
 cd ..
 
 ```
@@ -30,13 +30,13 @@ cd ..
 **Running the final product (interactive)**
 
 ```bash
-docker run --tty --interactive lubuntu-supervisor bash
+docker run --tty --interactive supervisor bash
 ```
 
 **Running the final product (background)**
 
 ```bash
-docker run --detach --publish 10022:22 lubuntu-supervisor
+docker run --detach --publish 10022:22 supervisor
 ```
 
 Once the container is running, you can log into it with:
@@ -55,8 +55,12 @@ service --status-all
 # ask supervisor for its status
 service supervisor status
 
-# let supervisor start munged
-service supervisor start munged
+# start supervisor
+service supervisor start &
+
+# once supervisorctl has started,
+# list the services it knows about and their status
+supervisorctl -i
 ```
 
 

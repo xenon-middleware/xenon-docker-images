@@ -1,4 +1,4 @@
-FROM lubuntu-slurm
+FROM slurm
 
 # become root
 USER root

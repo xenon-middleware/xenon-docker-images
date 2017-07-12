@@ -1,7 +1,14 @@
-FROM lubuntu-fixture
+FROM fixture
 
 # become root user
 USER root
+
+# install SSH client
+RUN apt-get update && apt-get install -y openssh-server
+
+# Enable the OpenSSH server (https://github.com/phusion/baseimage-docker#enabling_ssh)
+RUN rm -f /etc/service/sshd/down && \
+/etc/my_init.d/00_regen_ssh_host_keys.sh
 
 # When this image is used as ssh client then ignore the known hosts
 RUN echo "StrictHostKeyChecking no" >> /etc/ssh/ssh_config

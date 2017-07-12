@@ -1,7 +1,7 @@
 build Docker image with
 
 ```bash
-docker build --tag lubuntu-supervisor .
+docker build --tag supervisor .
 ```
 
 

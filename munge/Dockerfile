@@ -1,4 +1,4 @@
-FROM lubuntu-ssh
+FROM ssh
 
 # following steps from https://slurm.schedmd.com/quickstart_admin.html
 
@@ -27,5 +27,5 @@ RUN mkdir -p /home/xenon/supervisor
 ADD supervisor/munged.conf /home/xenon/supervisor/munged.conf
 
 # Note: starting the munge daemon as user munge is delegated to the 'supervisord' program, which should
-# be initiated elsewhere (see lubuntu-supervisor container).
+# be initiated elsewhere (see supervisor container).
 

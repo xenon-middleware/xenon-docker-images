@@ -1,13 +1,16 @@
 # following steps from https://slurm.schedmd.com/quickstart_admin.html
-FROM lubuntu-munge
+FROM munge
 
 # become root user
 USER root
 
-# install package libmysqlclient-dev to trigger installation of the MySQL accounting
-# plugin during install of slurm; install gcc to be able to compile slurm from the GitHub
-# source code
-RUN apt-get update && apt-get install -y libmysqlclient-dev gcc
+# libmysqlclient-dev: triggers installation of the MySQL accounting
+#                     plugin during install of slurm;
+# gcc               : to compile slurm from the GitHub source code
+# git               : to be able to download said source code
+# make              : to be able to compile source code
+# python            : slurm wants python
+RUN apt-get update && apt-get install -y libmysqlclient-dev gcc git make python
 
 WORKDIR /usr/local
 

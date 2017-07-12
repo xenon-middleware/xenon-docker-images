@@ -1,6 +1,6 @@
 build Docker image with
 
 ```bash
-docker build --tag lubuntu-fixture .
+docker build --tag fixture .
 ```
 

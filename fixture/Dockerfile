@@ -1,4 +1,4 @@
-FROM dockerzone/lubuntu-desktop
+FROM phusion/baseimage:0.9.22
 
 # become root user
 USER root
