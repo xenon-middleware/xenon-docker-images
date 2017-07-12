@@ -29,15 +29,9 @@ RUN groupadd --system slurm && useradd --system --gid slurm --create-home slurm
 # change user slurm's password to 'slurm'
 RUN echo slurm:slurm | chpasswd
 
-# FIXME something with init.d
-#RUN cp etc/init.d.slurm /etc/init.d/slurmd
-#RUN chmod +x /etc/init.d/slurmd
-
-# FIXME something with /var/www/html/slurm
+# FIXME not sure this is relevant
 RUN mkdir -p /var/www/html/slurm
 RUN cp -rf doc/html /var/www/html/slurm
-
-# FIXME something with /var/spool
 
 # make slurm sysconfig directory
 RUN mkdir -p /usr/local/etc/slurm
@@ -57,7 +51,5 @@ ADD supervisor/slurmd-node-1.conf /home/xenon/supervisor/slurmd-node-1.conf
 ADD supervisor/slurmd-node-2.conf /home/xenon/supervisor/slurmd-node-2.conf
 ADD supervisor/slurmd-node-3.conf /home/xenon/supervisor/slurmd-node-3.conf
 ADD supervisor/slurmd-node-4.conf /home/xenon/supervisor/slurmd-node-4.conf
+ADD supervisor/slurm-nodes.conf /home/xenon/supervisor/slurm-nodes.conf
 
-# FIXME do I need to enable slurmctld, slurmdbd, and slurmd (step 10 of the guide)
-
-# start slurmctld and slurmd from the supervisor
