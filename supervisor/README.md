@@ -4,6 +4,9 @@ build Docker image with
 docker build --tag supervisor .
 ```
 
+```bash
+docker run --tty --interactive supervisor
+```
 
 
 see https://pypi.python.org/pypi/ordered-startup-supervisord/
