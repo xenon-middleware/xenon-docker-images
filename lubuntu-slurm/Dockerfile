@@ -27,8 +27,8 @@ RUN groupadd --system slurm && useradd --system --gid slurm --create-home slurm
 RUN echo slurm:slurm | chpasswd
 
 # FIXME something with init.d
-RUN cp etc/init.d.slurm /etc/init.d/slurmd
-RUN chmod +x /etc/init.d/slurmd
+#RUN cp etc/init.d.slurm /etc/init.d/slurmd
+#RUN chmod +x /etc/init.d/slurmd
 
 # FIXME something with /var/www/html/slurm
 RUN mkdir -p /var/www/html/slurm
@@ -45,6 +45,15 @@ RUN chown -R slurm:slurm /var/log/slurm
 
 # ADD slurm.conf from context to sysconfig directory
 ADD slurm.conf /usr/local/etc/slurm/slurm.conf
+
+# ADD the supervisor configuration for each slurm service
+ADD supervisor/slurmctld.conf /home/xenon/supervisor/slurmctld.conf
+ADD supervisor/slurmdbd.conf /home/xenon/supervisor/slurmdbd.conf
+ADD supervisor/slurmd-node-0.conf /home/xenon/supervisor/slurmd-node-0.conf
+ADD supervisor/slurmd-node-1.conf /home/xenon/supervisor/slurmd-node-1.conf
+ADD supervisor/slurmd-node-2.conf /home/xenon/supervisor/slurmd-node-2.conf
+ADD supervisor/slurmd-node-3.conf /home/xenon/supervisor/slurmd-node-3.conf
+ADD supervisor/slurmd-node-4.conf /home/xenon/supervisor/slurmd-node-4.conf
 
 # FIXME do I need to enable slurmctld, slurmdbd, and slurmd (step 10 of the guide)
 

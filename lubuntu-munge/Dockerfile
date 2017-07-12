@@ -23,8 +23,9 @@ chmod 0755 /var/run/munge && \
 chmod 0400 /etc/munge/munge.key
 
 # copy the munge configuration for supervisord to inside the docker container
-ADD munged.conf /etc/supervisor/conf.d/munged.conf
+RUN mkdir -p /home/xenon/supervisor
+ADD supervisor/munged.conf /home/xenon/supervisor/munged.conf
 
 # Note: starting the munge daemon as user munge is delegated to the 'supervisord' program, which should
-# be initiated elsewhere.
+# be initiated elsewhere (see lubuntu-supervisor container).
 
