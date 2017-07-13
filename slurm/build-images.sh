@@ -10,11 +10,15 @@ cd munge
 docker build --tag munge .
 cd ..
 
-cd slurm
-docker build --tag slurm .
+cd slurm-abstract
+docker build --tag slurm-abstract .
 cd ..
 
 cd supervisor
 docker build --tag supervisor .
+cd ..
+
+cd slurm-17
+docker build --tag slurm-17 .
 cd ..
 
