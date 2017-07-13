@@ -1,16 +1,24 @@
 #!/bin/bash
-echo -e "starting services from start-services.sh\n"
+echo -e "Starting services from start-services.sh...\n"
 /usr/local/bin/supervisord --configuration /home/xenon/supervisor/supervisord.conf
 
-echo -e "status is:\n"
+echo -e "\nThese are the known services and their status:"
 /usr/local/bin/supervisorctl --configuration /home/xenon/supervisor/supervisord.conf status
 
-echo -e "starting munged\n"
+echo -e "\nstarting munged..."
 /usr/local/bin/supervisorctl --configuration /home/xenon/supervisor/supervisord.conf start munged
 
-echo -e "starting compute nodes\n"
+echo -e "\nstarting slurmdbd..."
+/usr/local/bin/supervisorctl --configuration /home/xenon/supervisor/supervisord.conf start slurmdbd
+
+echo -e "\nstarting slurmctld..."
+/usr/local/bin/supervisorctl --configuration /home/xenon/supervisor/supervisord.conf start slurmctld
+
+echo -e "\nstarting compute nodes..."
 /usr/local/bin/supervisorctl --configuration /home/xenon/supervisor/supervisord.conf start slurm-nodes:*
 
+echo -e "\nstarting sshd..."
+/usr/local/bin/supervisorctl --configuration /home/xenon/supervisor/supervisord.conf start sshd
 
-sleep 45
+sleep infinity
 

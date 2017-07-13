@@ -6,9 +6,11 @@ USER root
 # install SSH client
 RUN apt-get update && apt-get install -y openssh-server
 
-# Enable the OpenSSH server (https://github.com/phusion/baseimage-docker#enabling_ssh)
-RUN rm -f /etc/service/sshd/down && \
-/etc/my_init.d/00_regen_ssh_host_keys.sh
+# generate the different types of keys that ssh needs
+RUN ssh-keygen -N "" -t rsa -f /etc/ssh/ssh_host_rsa_key && \
+ssh-keygen -N "" -t dsa -f /etc/ssh/ssh_host_dsa_key && \
+ssh-keygen -N "" -t ecdsa -f /etc/ssh/ssh_host_ecdsa_key && \
+ssh-keygen -N "" -t ed25519 -f /etc/ssh/ssh_host_ed25519_key
 
 # When this image is used as ssh client then ignore the known hosts
 RUN echo "StrictHostKeyChecking no" >> /etc/ssh/ssh_config
@@ -30,4 +32,7 @@ RUN chmod 700 .ssh && \
 chmod 600 .ssh/id_rsa .ssh/id_dsa && \
 chmod 644 .ssh/authorized_keys .ssh/id_rsa.pub .ssh/id_dsa.pub && \
 chown -R xenon:xenon .ssh
+
+# add the supervisor configuration for starting ssh
+ADD supervisor/sshd.conf /home/xenon/supervisor/sshd.conf
 
