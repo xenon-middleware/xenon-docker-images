@@ -15,17 +15,6 @@ USER root
 # tar               : to extract the source code tar ball
 RUN apt-get update && apt-get install -y libmysqlclient-dev gcc make python libssl-dev libmunge-dev tar wget
 
-#WORKDIR /usr/local
-#
-#RUN wget https://github.com/SchedMD/slurm/archive/slurm-17-02-6-1.tar.gz
-#RUN tar -xvzf slurm-17-02-6-1.tar.gz
-#
-#WORKDIR /usr/local/slurm-slurm-17-02-6-1
-#
-#RUN ./configure --prefix=/usr/local --sysconfdir=/usr/local/etc/slurm --with-mysql_config=/usr/bin
-#RUN make
-#RUN make install
-
 # make a slurm user
 RUN groupadd --system slurm && useradd --system --gid slurm --create-home slurm
 
@@ -43,12 +32,6 @@ RUN mkdir -p /usr/local/etc/slurm
 RUN mkdir -p /var/log/slurm
 RUN chown -R slurm:slurm /var/log/slurm
 
-# ADD slurm.conf from context to sysconfig directory
-#ADD slurm.conf /usr/local/etc/slurm/slurm.conf
-#
-# ADD slurmdbd.conf from context to sysconfig directory
-#ADD slurmdbd.conf /usr/local/etc/slurm/slurmdbd.conf
-
 # ADD slurm.cert from context to sysconfig directory
 ADD slurm.cert /usr/local/etc/slurm/slurm.cert
 
@@ -60,7 +43,6 @@ RUN chmod 600 /usr/local/etc/slurm/slurm.key
 
 # change ownership to the slurm user
 RUN chown slurm:slurm /usr/local/etc/slurm/slurm.key
-
 
 # ADD the supervisor configuration for each slurm service
 ADD supervisor/slurmctld.conf /home/xenon/supervisor/slurmctld.conf

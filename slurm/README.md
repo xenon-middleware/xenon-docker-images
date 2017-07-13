@@ -24,43 +24,40 @@ cd supervisor
 docker build --tag supervisor .
 cd ..
 
-```
+cd slurm-14
+docker build --tag slurm-14 .
+cd ..
 
+cd slurm-15
+docker build --tag slurm-15 .
+cd ..
+
+cd slurm-16
+docker build --tag slurm-16 .
+cd ..
+
+cd slurm-17
+docker build --tag slurm-17 .
+cd ..
+
+```
 
 **Running the final product (interactive)**
 
 ```bash
-docker run --tty --interactive supervisor bash
+docker run --tty --interactive slurm-17 bash
 ```
 
 **Running the final product (background)**
 
 ```bash
-docker run --detach --publish 10022:22 supervisor
+docker run --detach --publish 10022:22 slurm-17
 ```
 
 Once the container is running, you can log into it with:
 
 ```bash
 ssh -p 10022 xenon@localhost
-```
-
-
-**sysadmin command cheatsheet**
-
-```bash
-# ask about the running daemons
-service --status-all
-
-# ask supervisor for its status
-service supervisor status
-
-# start supervisor
-service supervisor start &
-
-# once supervisorctl has started,
-# list the services it knows about and their status
-supervisorctl -i
 ```
 
 
