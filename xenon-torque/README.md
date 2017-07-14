@@ -1,23 +1,37 @@
-Docker container with ssh server, to run the xenon torque adaptor integration tests against.
+Docker container for [Torque batch scheduler](http://www.adaptivecomputing.com/products/open-source/torque/) v5.0.0
 
-Build with:
+Used as scheduler in integration tests of [Xenon](nlesc.github.io/Xenon/) Java library.
+
+# Configuration
+
+* SSH server on port 22
+* Posix account `xenon` with password `javagat` and [ssh-keys](https://github.com/NLeSC/xenon-docker-images/tree/master/unsafe-ssh-keys).
+* Torque
+    * `debug` and `batch` queues
+    * `debug` is default queue
+    * Single compute node with single processor
+
+# Build with
 
 ```bash
 cd xenon-torque
 docker build -t nlesc/xenon-torque .
 ```
 
-Run with:
+# Run with
 
 ```bash
-docker run --detach --name xenon-torque --hostname xenon-torque --publish 10022:22 --privileged nlesc/xenon-torque
+docker run --detach --name xenon-torque --hostname xenon-torque --publish 10022:22 --cap-add SYS_RESOURCE nlesc/xenon-torque
 
 # use password javagat
 ssh -p 10022 xenon@localhost
 
-# view the queue
-qstat -q
+# submit
+echo 'printenv' | qsub
+# should write output of `printenv` command to ./STDIN.o0 file
 
+# view the queue
+qstat
 
 # Clean up
 docker rm -f xenon-torque
@@ -25,3 +39,4 @@ docker rm -f xenon-torque
 
 Note: Torque does not like hostname that start with number, so hostname is required
 
+A docker-compose config file called [docker-compose.yml](https://github.com/NLeSC/xenon-docker-images/blob/master/xenon-torque/docker-compose.yml) is included in the repository.

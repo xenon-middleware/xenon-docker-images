@@ -29,5 +29,15 @@ chown -R xenon.xenon /home/xenon/filesystem-test-fixture
 
 ADD docker_entrypoint.sh /docker_entrypoint.sh
 
+# Expose sshd port
+EXPOSE 22
+# Expose pbs_server port
+EXPOSE 15001
+# Expose pbs_mon port
+EXPOSE 15002
+# Expose pbs_sched port
+EXPOSE 15002
+
 # define the test that tells us if the docker container is healthy
-HEALTHCHECK --interval=1s CMD ssh -i /home/xenon/.ssh/id_rsa xenon@localhost /bin/true || exit 1
+# ping ssh and pbs node
+HEALTHCHECK --interval=1s CMD ssh -o NoHostAuthenticationForLocalhost=yes -i /home/xenon/.ssh/id_rsa xenon@localhost /bin/true && pbsnodes -l free $(hostname) || exit 1
