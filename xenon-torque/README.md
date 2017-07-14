@@ -34,6 +34,7 @@ echo 'printenv' | qsub
 qstat
 
 # Clean up
+exit
 docker rm -f xenon-torque
 ```
 

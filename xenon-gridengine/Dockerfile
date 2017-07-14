@@ -1,13 +1,4 @@
 # Used https://github.com/gawbul/docker-sge as inspiration/source
-#
-# Build with
-#
-#     docker build -t nlesc/xenon-gridengine .
-#
-# Run with
-#
-#     docker run -d --name=xenon-gridengine nlesc/xenon-gridengine
-#
 FROM nlesc/xenon-phusion-base
 MAINTAINER Stefan Verhoeven "s.verhoeven@esciencecenter.nl"
 
@@ -20,28 +11,25 @@ apt-get update && \
 DEBIAN_FRONTEND=noninteractive apt-get install -y gridengine-master gridengine-exec gridengine-client inotify-tools && \
 apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-# expose ports
+# Expose sshd port
+EXPOSE 22
+# Expose ge qmaster
 EXPOSE 6444
+# Expose ge execd
 EXPOSE 6445
-EXPOSE 6446
 
 # add init scripts for master and exec deamons
 RUN mkdir -p /etc/my_init.d
 ADD etc/my_init.d/gridengine.sh /etc/my_init.d/gridengine.sh
 
-# Add script to watch for exec container registrations
-RUN mkdir -p /etc/service/sgeexecwatcher
-ADD sync_exec_hosts.sh /usr/bin/sync_exec_hosts.sh
-ADD etc/service/sgeexecwatcher/run.sh /etc/service/sgeexecwatcher/run
-
 # config
 ADD etc/gridengine /etc/gridengine/files
 WORKDIR /etc/gridengine/files
 RUN mkdir host_groups exec_hosts && \
-/bin/echo -e "group_name @allhosts\nhostlist $HOSTNAME" > host_groups/allhosts && \
 # Ignore domains
 perl -pi -e 's/false/true/' /var/lib/gridengine/default/common/bootstrap && \
-/etc/my_init.d/gridengine.sh && \
+echo $HOSTNAME > /var/lib/gridengine/default/common/act_qmaster && \
+/etc/init.d/gridengine-master start && sleep 2 && \
 # submit host
 qconf -as $HOSTNAME && \
 # hosts for queues
@@ -55,9 +43,13 @@ qconf -Aq queues/default && \
 qconf -Aq queues/slow && \
 qconf -Msconf scheduler && \
 qconf -Mconf configurations/global && \
-killall sge_qmaster sge_execd
+killall sge_qmaster
 
 CMD ["/sbin/my_init"]
 
-# Shares for gridengine-exec containers
-VOLUME ["/var/lib/gridengine", "/etc/gridengine/files", "/home"]
+# Check that qmaster, execd and sshd deamons accept connections
+HEALTHCHECK --interval=1s CMD qping -info $(hostname) 6444 qmaster 1 && \
+qping -info $(hostname) 6445 execd 1 && \ 
+ssh -o NoHostAuthenticationForLocalhost=yes -i /home/xenon/.ssh/id_rsa xenon@localhost /bin/true || \
+exit 1
+
