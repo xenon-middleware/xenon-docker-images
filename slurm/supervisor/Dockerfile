@@ -9,7 +9,7 @@ RUN apt-get update && apt-get install -y python-pip
 RUN pip install --upgrade pip && pip install supervisor==3.0b2
 
 # add the supervisor configuration from the Docker context to inside the container
-ADD supervisor/supervisor.conf /etc/supervisor.conf
+ADD supervisor/supervisord.conf /etc/supervisord.conf
 
 # make the logging directory for supervisor
 RUN mkdir -p /var/log/supervisor
