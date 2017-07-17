@@ -34,5 +34,5 @@ chmod 644 .ssh/authorized_keys .ssh/id_rsa.pub .ssh/id_dsa.pub && \
 chown -R xenon:xenon .ssh
 
 # add the supervisor configuration for starting ssh
-ADD supervisor/sshd.conf /home/xenon/supervisor/sshd.conf
+ADD supervisor/sshd.conf /etc/sshd.conf
 

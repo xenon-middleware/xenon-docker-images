@@ -4,6 +4,7 @@ FROM munge
 # become root user
 USER root
 
+# mysql-client      : needed for creating the accounting database
 # libmysqlclient-dev: triggers installation of the MySQL accounting
 #                     plugin during install of slurm;
 # gcc               : to compile slurm from the GitHub source code
@@ -13,7 +14,7 @@ USER root
 # libmunge-dev      : triggers installation of auth/munge plugin for slurm
 # wget              : to be able to download said source code
 # tar               : to extract the source code tar ball
-RUN apt-get update && apt-get install -y libmysqlclient-dev gcc make python libssl-dev libmunge-dev tar wget
+RUN apt-get update && apt-get install -y mysql-client libmysqlclient-dev gcc make python libssl-dev libmunge-dev tar wget
 
 # make a slurm user
 RUN groupadd --system slurm && useradd --system --gid slurm --create-home slurm
@@ -28,7 +29,7 @@ RUN chown -R slurm:slurm /var/spool/slurmctld
 # make slurm sysconfig directory
 RUN mkdir -p /usr/local/etc/slurm
 
-# make slurm logging directory (use supervisor because that is the process that will start all the daemons/services)
+# make slurm logging directory
 RUN mkdir -p /var/log/slurm
 RUN chown -R slurm:slurm /var/log/slurm
 
@@ -45,14 +46,14 @@ RUN chmod 600 /usr/local/etc/slurm/slurm.key
 RUN chown slurm:slurm /usr/local/etc/slurm/slurm.key
 
 # ADD the supervisor configuration for each slurm service
-ADD supervisor/slurmctld.conf /home/xenon/supervisor/slurmctld.conf
-ADD supervisor/slurmdbd.conf /home/xenon/supervisor/slurmdbd.conf
-ADD supervisor/slurmd-node-0.conf /home/xenon/supervisor/slurmd-node-0.conf
-ADD supervisor/slurmd-node-1.conf /home/xenon/supervisor/slurmd-node-1.conf
-ADD supervisor/slurmd-node-2.conf /home/xenon/supervisor/slurmd-node-2.conf
-ADD supervisor/slurmd-node-3.conf /home/xenon/supervisor/slurmd-node-3.conf
-ADD supervisor/slurmd-node-4.conf /home/xenon/supervisor/slurmd-node-4.conf
-ADD supervisor/slurm-nodes.conf /home/xenon/supervisor/slurm-nodes.conf
+ADD supervisor/slurmctld.conf /etc/slurmctld.conf
+ADD supervisor/slurmdbd.conf /etc/slurmdbd.conf
+ADD supervisor/slurmd-node-0.conf /etc/slurmd-node-0.conf
+ADD supervisor/slurmd-node-1.conf /etc/slurmd-node-1.conf
+ADD supervisor/slurmd-node-2.conf /etc/slurmd-node-2.conf
+ADD supervisor/slurmd-node-3.conf /etc/slurmd-node-3.conf
+ADD supervisor/slurmd-node-4.conf /etc/slurmd-node-4.conf
+ADD supervisor/slurm-nodes.conf /etc/slurm-nodes.conf
 
 # set workdirectory to something sane
 WORKDIR /home/xenon/

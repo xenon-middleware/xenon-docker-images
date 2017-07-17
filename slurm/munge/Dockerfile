@@ -25,7 +25,7 @@ RUN chown -R munge:munge /etc/munge /var/lib/munge /var/log/munge /var/run/munge
 
 # copy the munge configuration for supervisord to inside the docker container
 RUN mkdir -p /home/xenon/supervisor
-ADD supervisor/munged.conf /home/xenon/supervisor/munged.conf
+ADD supervisor/munged.conf /etc/munged.conf
 
 # Note: starting the munge daemon as user munge is delegated to the 'supervisord' program, which should
 # be initiated elsewhere (see supervisor container).
