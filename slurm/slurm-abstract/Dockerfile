@@ -46,14 +46,14 @@ RUN chmod 600 /usr/local/etc/slurm/slurm.key
 RUN chown slurm:slurm /usr/local/etc/slurm/slurm.key
 
 # ADD the supervisor configuration for each slurm service
-ADD supervisor/slurmctld.conf /etc/slurmctld.conf
-ADD supervisor/slurmdbd.conf /etc/slurmdbd.conf
-ADD supervisor/slurmd-node-0.conf /etc/slurmd-node-0.conf
-ADD supervisor/slurmd-node-1.conf /etc/slurmd-node-1.conf
-ADD supervisor/slurmd-node-2.conf /etc/slurmd-node-2.conf
-ADD supervisor/slurmd-node-3.conf /etc/slurmd-node-3.conf
-ADD supervisor/slurmd-node-4.conf /etc/slurmd-node-4.conf
-ADD supervisor/slurm-nodes.conf /etc/slurm-nodes.conf
+ADD supervisor/slurmctld.conf /etc/supervisor/slurmctld.conf
+ADD supervisor/slurmdbd.conf /etc/supervisor/slurmdbd.conf
+ADD supervisor/slurmd-node-0.conf /etc/supervisor/slurmd-node-0.conf
+ADD supervisor/slurmd-node-1.conf /etc/supervisor/slurmd-node-1.conf
+ADD supervisor/slurmd-node-2.conf /etc/supervisor/slurmd-node-2.conf
+ADD supervisor/slurmd-node-3.conf /etc/supervisor/slurmd-node-3.conf
+ADD supervisor/slurmd-node-4.conf /etc/supervisor/slurmd-node-4.conf
+ADD supervisor/slurm-nodes.conf /etc/supervisor/slurm-nodes.conf
 
 # set workdirectory to something sane
 WORKDIR /home/xenon/
