@@ -31,12 +31,6 @@ ADD docker_entrypoint.sh /docker_entrypoint.sh
 
 # Expose sshd port
 EXPOSE 22
-# Expose pbs_server port
-#EXPOSE 15001
-# Expose pbs_mon port
-#EXPOSE 15002
-# Expose pbs_sched port
-#EXPOSE 15002
 
 # define the test that tells us if the docker container is healthy
 # ping ssh and pbs node
