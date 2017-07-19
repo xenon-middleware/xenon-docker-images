@@ -12,7 +12,7 @@ services:
   slurm: 
     depends_on: 
       - mysql
-    image: slurm-17
+    image: slurm-14
     ports: 
       - 22
       - 6817
