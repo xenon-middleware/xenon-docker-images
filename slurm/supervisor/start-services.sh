@@ -19,6 +19,9 @@ done
 echo -e "\nstarting slurmdbd..."
 /usr/local/bin/supervisorctl --configuration /etc/supervisord.conf start slurmdbd
 
+echo -e "\nsleeping for a few seconds to avoid problems..."
+sleep 5
+
 # Create mycluster tables in mysql via slurmdbd
 sacctmgr -i add Cluster mycluster
 
