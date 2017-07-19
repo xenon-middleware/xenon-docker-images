@@ -16,6 +16,6 @@ RUN mkdir -p /var/log/supervisor
 RUN chmod -R 777 /var/log/supervisor
 
 # add the shell script that will initialize all other services
-ADD start-services.sh /home/xenon/start-services.sh
-RUN chmod +x /home/xenon/start-services.sh
-CMD /home/xenon/start-services.sh
+ADD start-services.sh /etc/start-services.sh
+RUN chmod +x /etc/start-services.sh
+CMD /etc/start-services.sh
