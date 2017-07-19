@@ -11,6 +11,11 @@ echo -e "\nstarting sshd..."
 echo -e "\nstarting munged..."
 /usr/local/bin/supervisorctl --configuration /etc/supervisord.conf start munged
 
+until mysqladmin -h mysql -pxenon-slurm-pw ping; do
+  >&2 echo "`date`: Mysql is unavailable - sleeping"
+  sleep 1
+done
+
 echo -e "\nstarting slurmdbd..."
 /usr/local/bin/supervisorctl --configuration /etc/supervisord.conf start slurmdbd
 
