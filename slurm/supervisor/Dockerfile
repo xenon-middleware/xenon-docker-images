@@ -1,4 +1,4 @@
-FROM slurm
+FROM slurm-abstract
 
 # become root
 USER root
@@ -9,13 +9,13 @@ RUN apt-get update && apt-get install -y python-pip
 RUN pip install --upgrade pip && pip install supervisor==3.0b2
 
 # add the supervisor configuration from the Docker context to inside the container
-ADD supervisor/supervisord.conf /home/xenon/supervisor/supervisord.conf
+ADD supervisor/supervisord.conf /etc/supervisord.conf
 
 # make the logging directory for supervisor
 RUN mkdir -p /var/log/supervisor
 RUN chmod -R 777 /var/log/supervisor
 
 # add the shell script that will initialize all other services
-ADD start-services.sh /home/xenon/start-services.sh
-RUN chmod +x /home/xenon/start-services.sh
-CMD /home/xenon/start-services.sh
+ADD start-services.sh /etc/start-services.sh
+RUN chmod +x /etc/start-services.sh
+CMD /etc/start-services.sh
