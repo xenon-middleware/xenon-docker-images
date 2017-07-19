@@ -57,3 +57,7 @@ ADD supervisor/slurm-nodes.conf /etc/supervisor/slurm-nodes.conf
 
 # set workdirectory to something sane
 WORKDIR /home/xenon/
+
+# add a test job script
+ADD test-slurm.job /home/xenon/test-slurm.job
+RUN chown xenon:xenon /home/xenon/test-slurm.job
