@@ -17,5 +17,6 @@ ADD slurm.conf /usr/local/etc/slurm/slurm.conf
 # ADD slurmdbd.conf from context to sysconfig directory
 ADD slurmdbd.conf /usr/local/etc/slurm/slurmdbd.conf
 
-# set the workdirectory to something sane
-WORKDIR /home/xenon
+# set the work directory to something sane
+WORKDIR /home/xenon/
+
