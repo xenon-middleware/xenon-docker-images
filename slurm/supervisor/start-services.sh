@@ -5,6 +5,9 @@ echo -e "Starting services from start-services.sh...\n"
 echo -e "\nThese are the known services and their status:"
 /usr/local/bin/supervisorctl --configuration /etc/supervisord.conf status
 
+echo -e "\nstarting sshd..."
+/usr/local/bin/supervisorctl --configuration /etc/supervisord.conf start sshd
+
 echo -e "\nstarting munged..."
 /usr/local/bin/supervisorctl --configuration /etc/supervisord.conf start munged
 
@@ -17,8 +20,8 @@ echo -e "\nstarting slurmctld..."
 echo -e "\nstarting compute nodes..."
 /usr/local/bin/supervisorctl --configuration /etc/supervisord.conf start slurm-nodes:*
 
-echo -e "\nstarting sshd..."
-/usr/local/bin/supervisorctl --configuration /etc/supervisord.conf start sshd
+echo -e "\nStartup complete. These are the known services and their status:"
+/usr/local/bin/supervisorctl --configuration /etc/supervisord.conf status
 
 sleep infinity
 
