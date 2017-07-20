@@ -10,11 +10,13 @@ RUN apk add --no-cache curl
 RUN mkdir /var/s3 && \
 cd /var/s3 && \
 mkdir -p filesystem-test-fixture/links && \
+chmod a+rx filesystem-test-fixture && \
+chmod a+rx filesystem-test-fixture/links && \
 echo "Hello World" > filesystem-test-fixture/links/file0 && \
 touch filesystem-test-fixture/links/file1 && \
-ln -s /var/s3/filesystem-test-fixture/links/file0 /var/s3/filesystem-test-fixture/links/link0 && \
-ln -s /var/s3/filesystem-test-fixture/links/file1 /var/s3/filesystem-test-fixture/links/link1 && \
-ln -s /var/s3/filesystem-test-fixture/links/file2 /var/s3/filesystem-test-fixture/links/link2 
+chmod a+r filesystem-test-fixture/links/file0 && \
+chmod a+r filesystem-test-fixture/links/file1 && \
+
 
 ENTRYPOINT ["/usr/bin/docker-entrypoint.sh"]
 CMD ["server","/var/s3"]

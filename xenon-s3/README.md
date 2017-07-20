@@ -21,5 +21,5 @@ Test by using a browser to open http://127.0.0.1:9000
 Clean up the run
 
 ```bash
-docker rm -f xenon-webdav
+docker rm -f xenon-s3
 ```
