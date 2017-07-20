@@ -15,7 +15,7 @@ chmod a+rx filesystem-test-fixture/links && \
 echo "Hello World" > filesystem-test-fixture/links/file0 && \
 touch filesystem-test-fixture/links/file1 && \
 chmod a+r filesystem-test-fixture/links/file0 && \
-chmod a+r filesystem-test-fixture/links/file1 && \
+chmod a+r filesystem-test-fixture/links/file1 
 
 
 ENTRYPOINT ["/usr/bin/docker-entrypoint.sh"]
