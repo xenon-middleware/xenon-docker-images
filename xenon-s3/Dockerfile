@@ -1,25 +1,54 @@
-FROM minio/minio:latest
+FROM golang:1.8-alpine
+
 MAINTAINER Atze van der Ploeg (a.vanderploeg@esciencecenter.nl)
+
+
+
 ENV MINIO_ACCESS_KEY xenon
 ENV MINIO_SECRET_KEY javagat01
 
-RUN apk add --no-cache curl
+WORKDIR /go/src/app
 
-# Xenon's filesystem integration tests expect certain directory structure, create it here:
-# make directory that user xenon can write in
+# We use mc (minio client) to create files, because creating file on the filesytem caused
+# minio to give errors (when accessing via rest), presumably because some minio
+# meta-info was not present that is generate when using the s3 protocol.
+
+RUN \
+    apk add --no-cache git && \
+		git clone https://github.com/minio/mc && \
+    cd mc && \
+    go-wrapper download && \
+    go-wrapper install -ldflags "$(go run buildscripts/gen-ldflags.go)" && \
+    cd .. && \
+    rm -rf mc && \
+    apk del git
+		
+RUN  \
+     apk add --no-cache ca-certificates && \
+     apk add --no-cache --virtual .build-deps git go musl-dev && \
+     echo 'hosts: files mdns4_minimal [NOTFOUND=return] dns mdns4' >> /etc/nsswitch.conf && \
+     go get -v -d github.com/minio/minio && \
+     cd /go/src/github.com/minio/minio && \
+     go install -v -ldflags "$(go run buildscripts/gen-ldflags.go)" && \
+     rm -rf /go/pkg /go/src /usr/local/go && apk del .build-deps
+
 RUN mkdir /var/s3 && \
-cd /var/s3 && \
-mkdir -p filesystem-test-fixture/links && \
-chmod a+rx filesystem-test-fixture && \
-chmod a+rx filesystem-test-fixture/links && \
-echo "Hello World" > filesystem-test-fixture/links/file0 && \
-touch filesystem-test-fixture/links/file1 && \
-chmod a+r filesystem-test-fixture/links/file0 && \
-chmod a+r filesystem-test-fixture/links/file1 
+		chmod a+rx /var/s3
 
 
-ENTRYPOINT ["/usr/bin/docker-entrypoint.sh"]
-CMD ["server","/var/s3"]
+RUN \
+    minio server /var/s3 & \
+    sleep 1s && \
+    mc config host add hier "http://localhost:9000" xenon javagat01 && \
+    mc mb hier/filesystem-test-fixture && \
+    echo "Hello World!" | mc pipe hier/filesystem-test-fixture/links/file0 && \
+    echo "" | mc pipe hier/filesystem-test-fixture/links/file1 && \
+		sleep 1s && \
+		killall minio 
+
+EXPOSE 9000
+
+CMD ["minio","server","/var/s3"]
 
 
-HEALTHCHECK --interval=1s CMD curl -f http://localhost:9000/minio/login || exit 1
+HEALTHCHECK --interval=1s CMD mc ls hier || exit 1
