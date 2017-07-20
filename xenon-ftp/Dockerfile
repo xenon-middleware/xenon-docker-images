@@ -34,5 +34,6 @@ cd /home/xenon
 ADD vsftpd.conf /etc/vsftpd.conf
 
 EXPOSE 21
+EXPOSE 3000-3100
 
 HEALTHCHECK --interval=1s CMD curl -f ftp://localhost/ || exit 1

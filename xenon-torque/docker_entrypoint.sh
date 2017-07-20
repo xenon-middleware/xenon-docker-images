@@ -2,7 +2,7 @@
 
 set -e
 
-# Set the ulimits for this container. Must be run with the --privileged option
+# Set the ulimits for this container. Must be run with the --cap-add SYS_RESOURCE option
 ulimit -l unlimited
 ulimit -s unlimited
 
