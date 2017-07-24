@@ -34,11 +34,11 @@ Test with following commands:
 # for basic authenticated read access
 cadaver http://localhost:10080/~xenon
 # or for basic authenticated write access
-cadaver http://locahost:10080/~xenon/uploads
+cadaver http://localhost:10080/~xenon/uploads
 # or for anonymous write access
-cadaver http://locahost:10080/uploads
+cadaver http://localhost:10080/uploads
 # or for anonymous read access
-cadaver http://locahost:10080/downloads
+cadaver http://localhost:10080/downloads
 ```
 
 Example output for ``cadaver``:
