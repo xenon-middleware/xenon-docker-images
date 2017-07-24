@@ -1,4 +1,4 @@
-FROM slurm-abstract
+FROM xenon-slurm-abstract
 
 # become root
 USER root

@@ -1,4 +1,4 @@
-FROM fixture
+FROM xenon-fixture
 
 # become root user
 USER root

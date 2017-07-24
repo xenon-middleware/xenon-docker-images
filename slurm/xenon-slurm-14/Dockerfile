@@ -1,4 +1,4 @@
-FROM supervisor
+FROM xenon-supervisor
 
 WORKDIR /usr/local
 
