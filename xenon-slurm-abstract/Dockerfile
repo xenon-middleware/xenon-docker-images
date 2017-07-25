@@ -1,5 +1,5 @@
 # following steps from https://slurm.schedmd.com/quickstart_admin.html
-FROM nlesc/xenon-mysql
+FROM nlesc/xenon-slurm-mysql
 
 # become root user
 USER root

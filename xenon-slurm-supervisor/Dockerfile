@@ -1,4 +1,4 @@
-FROM nlesc/xenon-fixture
+FROM nlesc/xenon-slurm-fixture
 
 # become root
 USER root

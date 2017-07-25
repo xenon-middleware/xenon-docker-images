@@ -1,4 +1,4 @@
-FROM nlesc/xenon-supervisor
+FROM nlesc/xenon-slurm-supervisor
 
 # become root user
 USER root
