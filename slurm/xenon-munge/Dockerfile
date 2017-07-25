@@ -1,4 +1,4 @@
-FROM ssh
+FROM xenon-ssh
 
 # following steps from https://slurm.schedmd.com/quickstart_admin.html
 
@@ -24,7 +24,6 @@ chmod 0400 /etc/munge/munge.key
 RUN chown -R munge:munge /etc/munge /var/lib/munge /var/log/munge /var/run/munge
 
 # copy the munge configuration for supervisord to inside the docker container
-RUN mkdir -p /etc/supervisor
 ADD supervisor/munged.conf /etc/supervisor/munged.conf
 
 # Note: starting the munge daemon as user munge is delegated to the 'supervisord' program, which should

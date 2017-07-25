@@ -1,11 +1,11 @@
-FROM supervisor
+FROM xenon-slurm-abstract
 
 WORKDIR /usr/local
 
-RUN wget https://github.com/SchedMD/slurm/archive/slurm-16-05-10-1.tar.gz
-RUN tar -xvzf slurm-16-05-10-1.tar.gz
+RUN wget https://github.com/SchedMD/slurm/archive/slurm-17-02-6-1.tar.gz
+RUN tar -xvzf slurm-17-02-6-1.tar.gz
 
-WORKDIR /usr/local/slurm-slurm-16-05-10-1
+WORKDIR /usr/local/slurm-slurm-17-02-6-1
 
 RUN ./configure --prefix=/usr/local --sysconfdir=/usr/local/etc/slurm --with-mysql_config=/usr/bin
 RUN make

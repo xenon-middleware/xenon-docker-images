@@ -1,36 +1,40 @@
-cd fixture
-docker build --tag fixture .
+cd xenon-fixture
+docker build --tag xenon-fixture .
 cd ..
 
-cd ssh
-docker build --tag ssh .
+cd xenon-supervisor
+docker build --tag xenon-supervisor .
 cd ..
 
-cd munge
-docker build --tag munge .
+cd xenon-ssh
+docker build --tag xenon-ssh .
 cd ..
 
-cd slurm-abstract
-docker build --tag slurm-abstract .
+cd xenon-munge
+docker build --tag xenon-munge .
 cd ..
 
-cd supervisor
-docker build --tag supervisor .
+cd xenon-mysql
+docker build --tag xenon-mysql .
 cd ..
 
-cd slurm-14
-docker build --tag slurm-14 .
+cd xenon-slurm-abstract
+docker build --tag xenon-slurm-abstract .
 cd ..
 
-cd slurm-15
-docker build --tag slurm-15 .
+cd xenon-slurm-14
+docker build --tag xenon-slurm:14 .
 cd ..
 
-cd slurm-16
-docker build --tag slurm-16 .
+cd xenon-slurm-15
+docker build --tag xenon-slurm:15 .
 cd ..
 
-cd slurm-17
-docker build --tag slurm-17 .
+cd xenon-slurm-16
+docker build --tag xenon-slurm:16 .
+cd ..
+
+cd xenon-slurm-17
+docker build --tag xenon-slurm:17 .
 cd ..
 
