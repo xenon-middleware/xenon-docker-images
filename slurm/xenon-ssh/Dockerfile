@@ -1,4 +1,4 @@
-FROM xenon-fixture
+FROM xenon-supervisor
 
 # become root user
 USER root
@@ -35,4 +35,7 @@ chown -R xenon:xenon .ssh
 
 # add the supervisor configuration for starting ssh
 ADD supervisor/sshd.conf /etc/supervisor/sshd.conf
+
+# define the test that tells us if the docker container is healthy
+HEALTHCHECK --interval=1s CMD ssh -i /home/xenon/.ssh/id_rsa xenon@localhost /bin/true || exit 1
 

@@ -1,4 +1,4 @@
-FROM xenon-supervisor
+FROM xenon-slurm-abstract
 
 WORKDIR /usr/local
 

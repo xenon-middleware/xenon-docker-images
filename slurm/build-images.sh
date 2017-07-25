@@ -2,6 +2,10 @@ cd xenon-fixture
 docker build --tag xenon-fixture .
 cd ..
 
+cd xenon-supervisor
+docker build --tag xenon-supervisor .
+cd ..
+
 cd xenon-ssh
 docker build --tag xenon-ssh .
 cd ..
@@ -16,10 +20,6 @@ cd ..
 
 cd xenon-slurm-abstract
 docker build --tag xenon-slurm-abstract .
-cd ..
-
-cd xenon-supervisor
-docker build --tag xenon-supervisor .
 cd ..
 
 cd xenon-slurm-14
