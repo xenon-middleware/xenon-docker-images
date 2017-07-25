@@ -1,0 +1,12 @@
+#!/bin/bash
+#SBATCH --job-name test-slurm
+#SBATCH --output test-slurm.out
+#SBATCH --error test-slurm.err
+#SBATCH --time 0:30:00
+#SBATCH --partition mypartition
+#SBATCH --ntasks 1
+
+date
+hostname
+sleep 15
+date
