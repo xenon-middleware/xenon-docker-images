@@ -1,4 +1,4 @@
-FROM xenon-munge
+FROM nlesc/xenon-munge
 
 USER root
 

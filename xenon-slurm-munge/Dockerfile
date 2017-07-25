@@ -1,4 +1,4 @@
-FROM xenon-ssh
+FROM nlesc/xenon-ssh
 
 # following steps from https://slurm.schedmd.com/quickstart_admin.html
 

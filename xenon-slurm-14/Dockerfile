@@ -1,4 +1,4 @@
-FROM xenon-slurm-abstract
+FROM nlesc/xenon-slurm-abstract
 
 WORKDIR /usr/local
 

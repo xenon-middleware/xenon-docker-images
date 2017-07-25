@@ -1,4 +1,4 @@
-FROM xenon-supervisor
+FROM nlesc/xenon-supervisor
 
 # become root user
 USER root

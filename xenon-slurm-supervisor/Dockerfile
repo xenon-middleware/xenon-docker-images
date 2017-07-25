@@ -1,4 +1,4 @@
-FROM xenon-fixture
+FROM nlesc/xenon-fixture
 
 # become root
 USER root
