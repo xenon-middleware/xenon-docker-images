@@ -1,6 +1,6 @@
 build Docker image with
 
 ```bash
-docker build --tag xenon-mysql .
+docker build --tag nlesc/xenon-slurm-mysql .
 ```
 

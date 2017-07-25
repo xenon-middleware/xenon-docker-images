@@ -1,6 +1,6 @@
 build Docker image with
 
 ```bash
-docker build --tag slurm .
+docker build --tag nlesc/xenon-slurm-abstract .
 ```
 
