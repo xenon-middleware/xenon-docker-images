@@ -2,7 +2,9 @@ FROM agaveapi/torque
 MAINTAINER Stefan Verhoeven "s.verhoeven@esciencecenter.nl"
 
 RUN trqauthd start && \
-    pbs_mom && pbs_sched && \
+    pbs_mom && pbs_sched && pbs_server && \
+    # allow services to start up
+    sleep 2 && \
     qmgr -c "set server scheduler_iteration = 1"
 
 # Create a user 'xenon' with password 'javagat'
