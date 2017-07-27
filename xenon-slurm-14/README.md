@@ -1,6 +1,6 @@
 This container provides a SLURM 14 ([tar.gz](https://github.com/SchedMD/slurm/archive/slurm-14-11-11-1.tar.gz)) installation. It includes:
 
-- MySQL accounting
+- MySQL accounting; root password is ``xenon-slurm-pw``
 - A Cluster ``mycluster`` with two queues/partitions: ``mypartition`` and ``otherpartition``. Running an ``sinfo`` inside the container yields:
     
     ```text
