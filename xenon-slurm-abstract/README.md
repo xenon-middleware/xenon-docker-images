@@ -1,4 +1,4 @@
-*Building the Docker image*
+**Building the Docker image**
 
 ```bash
 docker build --tag nlesc/xenon-slurm-abstract .
