@@ -1,8 +1,24 @@
-build Docker image with
+*Building the Docker image*
 
 ```bash
 docker build --tag nlesc/xenon-slurm-supervisor .
 ```
 
-see https://pypi.python.org/pypi/ordered-startup-supervisord/
+This docker image provides the 
+[supervisor](https://pypi.python.org/pypi/ordered-startup-supervisord/) system
+for starting the services needed for [Xenon](https://github.com/NLeSC/Xenon)'s
+[SLURM](https://slurm.schedmd.com/) integration tests.
+
+This docker image is an intermediate image; as such it is not meant to be run by
+itself. For docker images that can run by themselves, and which inherit from
+this image, refer to:
+
+- nlesc/xenon-slurm-14
+- nlesc/xenon-slurm-15
+- nlesc/xenon-slurm-16
+- nlesc/xenon-slurm-17
+
+
+
+
 
