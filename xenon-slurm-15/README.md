@@ -32,13 +32,7 @@ This container provides a SLURM 15 ([tar.gz](https://github.com/SchedMD/slurm/ar
 docker build --tag nlesc/xenon-slurm:15 .
 ```
 
-**Running the final product (interactive)**
-
-```bash
-docker run --tty --interactive nlesc/xenon-slurm:15 bash
-```
-
-**Running the final product (background)**
+**Running the Docker container (background)**
 
 ```bash
 docker run --detach --publish 10022:22 nlesc/xenon-slurm:15
@@ -49,5 +43,26 @@ Once the container is running, you can log into it with (password is 'javagat'):
 ```bash
 ssh -p 10022 xenon@localhost
 ```
+
+You can then submit a job, e.g.:
+
+```bash
+srun /bin/hostname
+```
+
+or you can submit the example job script
+
+```bash
+sbatch /home/xenon/test-slurm.job
+```
+
+check the status with 
+
+```bash
+squeue
+sacct
+```
+
+
 
 
