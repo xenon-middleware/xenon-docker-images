@@ -2,10 +2,10 @@ FROM nlesc/xenon-slurm-abstract
 
 WORKDIR /usr/local
 
-RUN wget https://github.com/SchedMD/slurm/archive/slurm-15-08-13-1.tar.gz
-RUN tar -xvzf slurm-15-08-13-1.tar.gz
+RUN wget https://github.com/SchedMD/slurm/archive/slurm-14-11-11-1.tar.gz
+RUN tar -xvzf slurm-14-11-11-1.tar.gz
 
-WORKDIR /usr/local/slurm-slurm-15-08-13-1
+WORKDIR /usr/local/slurm-slurm-14-11-11-1
 
 RUN ./configure --prefix=/usr/local --sysconfdir=/usr/local/etc/slurm --with-mysql_config=/usr/bin
 RUN make

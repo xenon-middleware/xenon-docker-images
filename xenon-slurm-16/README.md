@@ -1,4 +1,4 @@
-This container provides a SLURM 15 ([tar.gz](https://github.com/SchedMD/slurm/archive/slurm-15-08-13-1.tar.gz)) installation. It includes:
+This container provides a SLURM 16 ([tar.gz](https://github.com/SchedMD/slurm/archive/slurm-16-05-10-1.tar.gz)) installation. It includes:
 
 - MySQL accounting; root password is ``xenon-slurm-pw``
 - A Cluster ``mycluster`` with two queues/partitions: ``mypartition`` and ``otherpartition``. Running an ``sinfo`` inside the container yields:
@@ -29,13 +29,13 @@ This container provides a SLURM 15 ([tar.gz](https://github.com/SchedMD/slurm/ar
 **Building the Docker image**
 
 ```bash
-docker build --tag nlesc/xenon-slurm:15 .
+docker build --tag nlesc/xenon-slurm:16 .
 ```
 
-**Running the Docker container (background)**
+**Running the final product (background)**
 
 ```bash
-docker run --detach --publish 10022:22 nlesc/xenon-slurm:15
+docker run --detach --publish 10022:22 nlesc/xenon-slurm:16
 ```
 
 Once the container is running, you can log into it with (password is 'javagat'):
