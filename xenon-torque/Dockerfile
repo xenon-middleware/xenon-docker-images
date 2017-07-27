@@ -1,9 +1,17 @@
 FROM agaveapi/torque
 MAINTAINER Stefan Verhoeven "s.verhoeven@esciencecenter.nl"
 
-RUN trqauthd start && \
+RUN trqauthd start && \ 
+    ./torque.setup root localhost && \
     pbs_mom && pbs_sched && \
-    qmgr -c "set server scheduler_iteration = 1"
+    qmgr -c "create queue debug queue_type=execution" && \
+    qmgr -c "set queue debug enabled=true" && \
+    qmgr -c "set queue debug started=true" && \
+    qmgr -c "set server scheduling=True" && \
+    qmgr -c 'set queue batch resources_default.walltime = 48:00:00' && \
+    qmgr -c 'set queue batch resources_default.nodes = 1' && \
+    qmgr -c 'set server default_queue = debug' && \
+    qmgr -c 'set server scheduler_iteration = 2'
 
 # Create a user 'xenon' with password 'javagat'
 RUN /usr/sbin/useradd -p $(openssl passwd javagat) xenon
