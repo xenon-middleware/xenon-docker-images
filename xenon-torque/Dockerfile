@@ -2,7 +2,6 @@ FROM agaveapi/torque
 MAINTAINER Stefan Verhoeven "s.verhoeven@esciencecenter.nl"
 
 RUN trqauthd start && \
-    ./torque.setup root localhost && \
     pbs_mom && pbs_sched && \
     qmgr -c "set server scheduler_iteration = 1"
 
