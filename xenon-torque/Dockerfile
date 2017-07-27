@@ -1,6 +1,11 @@
 FROM agaveapi/torque
 MAINTAINER Stefan Verhoeven "s.verhoeven@esciencecenter.nl"
 
+RUN trqauthd start && \
+    ./torque.setup root localhost && \
+    pbs_mom && pbs_sched && \
+    qmgr -c "set server scheduler_iteration = 1"
+
 # Create a user 'xenon' with password 'javagat'
 RUN /usr/sbin/useradd -p $(openssl passwd javagat) xenon
 
