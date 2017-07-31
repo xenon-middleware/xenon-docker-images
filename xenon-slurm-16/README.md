@@ -1,4 +1,17 @@
-This container provides a SLURM 16 ([tar.gz](https://github.com/SchedMD/slurm/archive/slurm-16-05-10-1.tar.gz)) installation. It includes:
+This container provides a [SLURM](https://github.com/SchedMD/slurm/) installation. 
+
+**Available tags**
+
+| tag | Dockerfile (on GitHub)|
+|---|---|
+| 17, latest  | [xenon-slurm-17/Dockerfile](https://github.com/NLeSC/xenon-docker-images/blob/master/xenon-slurm-17/Dockerfile) |
+| 16  | [xenon-slurm-16/Dockerfile](https://github.com/NLeSC/xenon-docker-images/blob/master/xenon-slurm-16/Dockerfile) |
+| 15  | [xenon-slurm-15/Dockerfile](https://github.com/NLeSC/xenon-docker-images/blob/master/xenon-slurm-15/Dockerfile) |
+| 14  | [xenon-slurm-14/Dockerfile](https://github.com/NLeSC/xenon-docker-images/blob/master/xenon-slurm-14/Dockerfile) |
+
+**Image description**
+
+The image includes:
 
 - MySQL accounting; root password is ``xenon-slurm-pw``
 - A Cluster ``mycluster`` with two queues/partitions: ``mypartition`` and ``otherpartition``. Running an ``sinfo`` inside the container yields:
@@ -25,17 +38,17 @@ This container provides a SLURM 16 ([tar.gz](https://github.com/SchedMD/slurm/ar
     lrwxrwxrwx 1 xenon xenon 47 Jul 25 14:05 link5 -> /home/xenon/filesystem-test-fixture/links/link6
     lrwxrwxrwx 1 xenon xenon 47 Jul 25 14:05 link6 -> /home/xenon/filesystem-test-fixture/links/link5
     ```
-    
+  
 **Building the Docker image**
 
 ```bash
-docker build --tag nlesc/xenon-slurm:16 .
+docker build --tag nlesc/xenon-slurm:<tag> .
 ```
 
-**Running the final product (background)**
+**Running the Docker container (background)**
 
 ```bash
-docker run --detach --publish 10022:22 nlesc/xenon-slurm:16
+docker run --detach --publish 10022:22 nlesc/xenon-slurm:<tag>
 ```
 
 Once the container is running, you can log into it with (password is 'javagat'):
