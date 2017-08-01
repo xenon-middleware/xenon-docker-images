@@ -28,7 +28,7 @@ images:
         from: xenon-slurm-fixture
     xenon-slurm-abstract:
         context: xenon-slurm-abstract
-        from: xenon-slurm-fixture
+        from: xenon-slurm-ssh
     xenon-slurm:14:
         context: xenon-slurm-14
         from: xenon-slurm-abstract
