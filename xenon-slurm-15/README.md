@@ -13,7 +13,6 @@ This container provides a [SLURM](https://github.com/SchedMD/slurm/) installatio
 
 The image includes:
 
-- MySQL accounting; root password is ``xenon-slurm-pw``
 - A Cluster ``mycluster`` with two queues/partitions: ``mypartition`` and ``otherpartition``. Running an ``sinfo`` inside the container yields:
     
     ```text
