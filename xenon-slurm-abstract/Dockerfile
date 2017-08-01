@@ -7,8 +7,8 @@ USER root
 # add the generic script to compile and install slurm
 ADD install_slurm.sh /usr/local
 
-# slurm wants python and munged
-RUN apt-get update && apt-get install -y python munge libmunge2
+# slurm wants munged including its development files
+RUN apt-get update && apt-get install -y munge libmunge2
 
 # A munge authentication key should have been generated at /etc/munge/munge.key
 # during installation of munge. If not, you can create one with the create-munge-key program or
