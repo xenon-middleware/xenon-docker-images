@@ -1,20 +1,30 @@
 # following steps from https://slurm.schedmd.com/quickstart_admin.html
-FROM nlesc/xenon-slurm-mysql
+FROM nlesc/xenon-slurm-ssh
 
 # become root user
 USER root
 
-# mysql-client      : needed for creating the accounting database
-# libmysqlclient-dev: triggers installation of the MySQL accounting
-#                     plugin during install of slurm;
-# gcc               : to compile slurm from the GitHub source code
-# make              : to be able to compile source code
-# python            : slurm wants python
-# libssl-dev        : triggers installation of crypto/openssl plugin for slurm
-# libmunge-dev      : triggers installation of auth/munge plugin for slurm
-# wget              : to be able to download said source code
-# tar               : to extract the source code tar ball
-RUN apt-get update && apt-get install -y mysql-client libmysqlclient-dev gcc make python libssl-dev libmunge-dev tar wget
+# add the generic script to compile and install slurm
+ADD install_slurm.sh /usr/local
+
+# slurm wants python and munged
+RUN apt-get update && apt-get install -y python munge libmunge2
+
+# A munge authentication key should have been generated at /etc/munge/munge.key
+# during installation of munge. If not, you can create one with the create-munge-key program or
+# by following one of the steps outlined at https://github.com/dun/munge/blob/master/QUICKSTART
+
+# Apply the recommended permissions from https://github.com/dun/munge/wiki/Installation-Guide#securing-the-installation;
+# create /var/run/munge because that doesn't get created during install for some reason.
+RUN chmod 0700 /etc/munge && \
+chmod 0711 /var/lib/munge && \
+chmod 0700 /var/log/munge && \
+mkdir /var/run/munge && \
+chmod 0755 /var/run/munge && \
+chmod 0400 /etc/munge/munge.key
+
+# change ownership of all munge related directories to user 'munge'
+RUN chown -R munge:munge /etc/munge /var/lib/munge /var/log/munge /var/run/munge
 
 # make a slurm user
 RUN groupadd --system slurm && useradd --system --gid slurm --create-home slurm
@@ -45,19 +55,14 @@ RUN chmod 600 /usr/local/etc/slurm/slurm.key
 # change ownership to the slurm user
 RUN chown slurm:slurm /usr/local/etc/slurm/slurm.key
 
-# ADD the supervisor configuration for each slurm service
-ADD supervisor/slurmctld.conf /etc/supervisor/slurmctld.conf
-ADD supervisor/slurmdbd.conf /etc/supervisor/slurmdbd.conf
-ADD supervisor/slurmd-node-0.conf /etc/supervisor/slurmd-node-0.conf
-ADD supervisor/slurmd-node-1.conf /etc/supervisor/slurmd-node-1.conf
-ADD supervisor/slurmd-node-2.conf /etc/supervisor/slurmd-node-2.conf
-ADD supervisor/slurmd-node-3.conf /etc/supervisor/slurmd-node-3.conf
-ADD supervisor/slurmd-node-4.conf /etc/supervisor/slurmd-node-4.conf
-ADD supervisor/slurm-nodes.conf /etc/supervisor/slurm-nodes.conf
-
 # set workdirectory to something sane
 WORKDIR /home/xenon/
 
 # add a test job script
 ADD test-slurm.job /home/xenon/test-slurm.job
 RUN chown xenon:xenon /home/xenon/test-slurm.job
+
+ADD start-services.sh /etc/start-services.sh
+RUN chmod +x /etc/start-services.sh
+CMD /etc/start-services.sh
+

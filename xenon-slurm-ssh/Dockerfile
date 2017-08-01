@@ -1,4 +1,4 @@
-FROM nlesc/xenon-slurm-supervisor
+FROM nlesc/xenon-slurm-fixture
 
 # become root user
 USER root
@@ -32,9 +32,6 @@ RUN chmod 700 .ssh && \
 chmod 600 .ssh/id_rsa .ssh/id_dsa && \
 chmod 644 .ssh/authorized_keys .ssh/id_rsa.pub .ssh/id_dsa.pub && \
 chown -R xenon:xenon .ssh
-
-# add the supervisor configuration for starting ssh
-ADD supervisor/sshd.conf /etc/supervisor/sshd.conf
 
 # define the test that tells us if the docker container is healthy
 HEALTHCHECK --interval=1s CMD ssh -i /home/xenon/.ssh/id_rsa xenon@localhost /bin/true || exit 1
