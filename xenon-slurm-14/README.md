@@ -18,8 +18,7 @@ The image includes:
     ```text
     $ sinfo
     PARTITION      AVAIL  TIMELIMIT  NODES  STATE NODELIST
-    mypartition*      up   infinite      1  down* node-4
-    mypartition*      up   infinite      4   idle node-[0-3]
+    mypartition*      up   infinite      5   idle node-[0-4]
     otherpartition    up   infinite      3   idle node-[0-2]
     ```
     
