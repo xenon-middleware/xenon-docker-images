@@ -11,7 +11,10 @@ images:
         from: xenon-alpine-base
     xenon-phusion-base:
         context: xenon-phusion-base
-    xenon-ftp:
+    xenon-ftp:alpine:
+        context: xenon-ftp-alpine
+        from: xenon-alpine-base
+    xenon-ftp:latest:
         context: xenon-ftp
         from: xenon-phusion-base
     xenon-gridengine:
