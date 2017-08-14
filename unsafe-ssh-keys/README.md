@@ -4,7 +4,7 @@ The following files are duplicated between the 3 base docker images
 - ``authorized_keys``
 - ``id_rsa``
 - ``id_rsa.pub``
-- ``id_dsa``
+- ``id_dsa``, encrypted with `javagat2` passphrase
 - ``id_dsa.pub``
 - (``this README.md``)
 
