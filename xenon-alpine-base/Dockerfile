@@ -11,13 +11,16 @@ echo xenon2:javagat2 | chpasswd && \
 mkdir /home/xenon/.ssh && \
 mkdir /home/xenon2/.ssh
 
-# add ssh config directory
+# add ssh config directory, we need all keys to be able to do a health check by SSH-ing to ourselves
 COPY .ssh/id_rsa.pub /home/xenon/.ssh/authorized_keys
+COPY .ssh/id_rsa /home/xenon/.ssh/id_rsa
+COPY .ssh/id_rsa.pub /home/xenon/.ssh/id_rsa.pub
 COPY .ssh/id_rsa_pw.pub /home/xenon2/.ssh/authorized_keys
 
 RUN chmod 700 /home/xenon/.ssh && \
 chmod 700 /home/xenon2/.ssh && \
-chmod 644 /home/xenon/.ssh/authorized_keys && \
+chmod 644 /home/xenon/.ssh/authorized_keys /home/xenon/.ssh/id_rsa.pub && \
+chmod 600 /home/xenon/.ssh/id_rsa && \
 chmod 644 /home/xenon2/.ssh/authorized_keys && \
 chown -R xenon.xenon /home/xenon/.ssh && \
 chown -R xenon2.xenon2 /home/xenon2/.ssh
