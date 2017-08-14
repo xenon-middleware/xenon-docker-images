@@ -3,21 +3,29 @@ MAINTAINER Stefan Verhoeven "s.verhoeven@esciencecenter.nl"
 
 # Create a test user
 RUN /usr/sbin/adduser -s /bin/sh -D xenon && \
-# set user xenon's password to javagat
-echo xenon:javagat | chpasswd
+/usr/sbin/adduser -s /bin/sh -D xenon2 && \
 
-WORKDIR /home/xenon
+# set user xenon's password to javagat
+echo xenon:javagat | chpasswd && \
+echo xenon2:javagat2 | chpasswd && \
+mkdir /home/xenon/.ssh && \
+mkdir /home/xenon2/.ssh
 
 # add ssh config directory
-COPY .ssh .ssh
+COPY .ssh/id_rsa.pub /home/xenon/.ssh/authorized_keys
+COPY .ssh/id_rsa_pw.pub /home/xenon2/.ssh/authorized_keys
 
-RUN chmod 700 .ssh && \
-chmod 600 .ssh/id_rsa .ssh/id_dsa && \
-chmod 644 .ssh/authorized_keys .ssh/id_rsa.pub .ssh/id_dsa.pub && \
-chown -R xenon.xenon .ssh
+RUN chmod 700 /home/xenon/.ssh && \
+chmod 700 /home/xenon2/.ssh && \
+chmod 644 /home/xenon/.ssh/authorized_keys && \
+chmod 644 /home/xenon2/.ssh/authorized_keys && \
+chown -R xenon.xenon /home/xenon/.ssh && \
+chown -R xenon2.xenon2 /home/xenon2/.ssh
 
 # use package manageer to install Bash
 RUN apk add --no-cache bash
+
+WORKDIR /home/xenon
 
 # Xenon's filesystem integration tests expect certain directory structure, create it here:
 RUN mkdir -p filesystem-test-fixture/links && \
