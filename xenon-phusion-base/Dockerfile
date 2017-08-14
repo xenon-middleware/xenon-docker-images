@@ -16,8 +16,8 @@ WORKDIR /home/xenon
 COPY .ssh .ssh
 
 RUN chmod 700 .ssh && \
-chmod 600 .ssh/id_rsa .ssh/id_dsa && \
-chmod 644 .ssh/authorized_keys .ssh/id_rsa.pub .ssh/id_dsa.pub && \
+chmod 600 .ssh/id_rsa .ssh/id_dsa .ssh/id_rsa_pw && \
+chmod 644 .ssh/authorized_keys .ssh/id_rsa.pub .ssh/id_dsa.pub .ssh/id_rsa_pw.pub && \
 chown -R xenon.xenon .ssh
 
 # Xenon's filesystem integration tests expect certain directory structure, create it here:

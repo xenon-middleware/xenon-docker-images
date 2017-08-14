@@ -4,8 +4,8 @@ The following files are duplicated between the 3 base docker images
 - ``authorized_keys``
 - ``id_rsa``
 - ``id_rsa.pub``
-- ``id_dsa``, encrypted with `javagat2` passphrase
-- ``id_dsa.pub``
+- ``id_rsa_pw``, encrypted with `javagat2` passphrase
+- ``id_rsa_pw.pub``
 - (``this README.md``)
 
 The originals can be found in the ``xenon-docker-images`` repository at:
