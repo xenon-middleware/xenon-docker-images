@@ -1,4 +1,4 @@
-FROM nlesc/xenon-ssh
+FROM nlesc/xenon-alpine-base
 
 # Inspired from mdouchement/hdfs (has MIT license)
 
@@ -8,8 +8,6 @@ RUN apk --update add openjdk7-jre && \
 		apk add sudo
 WORKDIR /opt
 
-# Disable sshd authentication
-RUN echo "PermitRootLogin yes" >> /etc/ssh/sshd_config
 
 # Install Hadoop
 RUN curl -L http://apache.40b.nl/hadoop/common/hadoop-2.8.1/hadoop-2.8.1.tar.gz -s -o - | tar -xzf -
@@ -21,11 +19,6 @@ ENV PATH /opt/hadoop/bin:/opt/hadoop/sbin:$PATH
 
 RUN sed --in-place='.ori' -e "s/\${JAVA_HOME}/\/usr\/lib\/jvm\/java-1.7-openjdk\/jre/" etc/hadoop/hadoop-env.sh
 
-# Configure ssh client
-RUN ssh-keygen -t rsa -P '' -f ~/.ssh/id_rsa && \
-    cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys && \
-    chmod 0600 ~/.ssh/authorized_keys
-
 
 ENV JAVA_HOME /usr/lib/jvm/java-1.7-openjdk/jre/
 
@@ -33,42 +26,26 @@ ENV JAVA_HOME /usr/lib/jvm/java-1.7-openjdk/jre/
 # Pseudo-Distributed Operation
 COPY etc/hadoop/core-site.xml etc/hadoop/core-site.xml
 COPY etc/hadoop/hdfs-site.xml etc/hadoop/hdfs-site.xml
-RUN hdfs namenode -format
+COPY cmd.sh /cmd.sh
+
 
 RUN \
-	/usr/sbin/sshd && \
-  start-dfs.sh && \
-  hadoop-daemon.sh start portmap && \
-  hadoop-daemon.sh start nfs3 && \
-	su xenon && \
+  hadoop namenode -format && \
+	(hdfs namenode &) && sleep 5s &&  (hdfs datanode &) && hdfs dfsadmin -safemode wait && \
 	sudo -u xenon ./bin/hdfs dfs -mkdir /filesystem-test-fixture && \
   sudo -u xenon ./bin/hdfs dfs -mkdir /filesystem-test-fixture/links && \
   sudo -u xenon echo "Hello World" > file0 && \
 	sudo -u xenon ./bin/hdfs dfs -put file0 /filesystem-test-fixture/links/ && \
 	sudo -u xenon echo "" > file1 && \
 	sudo -u xenon ./bin/hdfs dfs -put file1 /filesystem-test-fixture/links/ && \
-  hadoop-daemon.sh stop nfs3 && \
-  hadoop-daemon.sh stop portmap && \
-  stop-dfs.sh 
+	chmod a+x /cmd.sh
 
 
-
-
-# SSH
-EXPOSE 22
 # hdfs://localhost:8020
 EXPOSE 8020
-# HDFS namenode
-EXPOSE 50020
 # HDFS Web browser
 EXPOSE 50070
-# HDFS datanodes
-EXPOSE 50075
-# HDFS secondary namenode
-EXPOSE 50090
 
-CMD /usr/sbin/sshd \
-  && start-dfs.sh \
-  && hadoop-daemon.sh start portmap \
-  && hadoop-daemon.sh start nfs3 \
-  && bash
+CMD /cmd.sh
+
+HEALTHCHECK --interval=1s CMD test -f /opt/hadoop/up || exit 1
