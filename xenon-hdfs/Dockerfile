@@ -41,8 +41,15 @@ RUN \
 	chmod a+x /cmd.sh
 
 
+
+
 # hdfs://localhost:8020
 EXPOSE 8020
+EXPOSE 50010
+EXPOSE 50020
+EXPOSE 50070
+EXPOSE 50075
+EXPOSE 50090
 # HDFS Web browser
 EXPOSE 50070
 
