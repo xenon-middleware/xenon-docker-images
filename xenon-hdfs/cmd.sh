@@ -1,3 +1,4 @@
+/usr/bin/supervisord -c /etc/supervisord.conf &
 hdfs namenode & 
 sleep 5s 
 hdfs datanode &
