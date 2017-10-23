@@ -13,6 +13,10 @@ WORKDIR /opt
 RUN curl  http://apache.40b.nl/hadoop/common/hadoop-2.8.1/hadoop-2.8.1.tar.gz  -o hadoop.tar.gz && tar -xzvf hadoop.tar.gz && rm hadoop.tar.gz && echo done
 RUN mv hadoop-2.8.1 hadoop
 
+#Generate Kerberos principals
+RUN kadmin.local -q "addprinc -randkey hdfs/localhost@esciencecenter.nl"
+RUN kadmin.local -q "addprinc -randkey HTTP/localhost@esciencecenter.nl"
+RUN ktadd -norandkey -k /opt/hadoop/hdfs-hostid.service.keytab  hdfs/localhost@esciencecenter.nl HTTP/localhost@esciencecenter.nl
 
 WORKDIR /opt/hadoop
 ENV PATH /opt/hadoop/bin:/opt/hadoop/sbin:$PATH
