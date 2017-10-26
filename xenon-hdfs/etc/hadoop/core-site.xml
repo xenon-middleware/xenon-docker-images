@@ -12,11 +12,7 @@
   </property>
 	<property>
 		<name>hadoop.security.authentication</name>
-		<value>kerberos</value> <!-- A value of "simple" would disable security. -->
-	</property>
-	<property>
-		<name>hadoop.security.authorization</name>
-		<value>true</value>
+		<value>simple</value> <!-- A value of "simple" would disable security. -->
 	</property>
   <property>
     <name>hadoop.proxyuser.root.hosts</name>
