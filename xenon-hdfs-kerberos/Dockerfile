@@ -20,7 +20,6 @@ RUN kadmin.local -q "addprinc -randkey hdfs/localhost@esciencecenter.nl" &&\
  kadmin.local -q "addprinc -pw javagat xenonpw@esciencecenter.nl" &&\
  kadmin.local -q "ktadd -norandkey -k /opt/hadoop/hdfs.keytab  hdfs/localhost@esciencecenter.nl HTTP/localhost@esciencecenter.nl" &&\
  kadmin.local -q "ktadd -norandkey -k /home/xenon/xenon.keytab xenon@esciencecenter.nl" &&\
-
  chown xenon /home/xenon/xenon.keytab &&\
  chmod 400 /home/xenon/xenon.keytab &&\
  chmod 400 /opt/hadoop/hdfs.keytab
