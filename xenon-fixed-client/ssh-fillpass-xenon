@@ -3,4 +3,4 @@ set timeout 15
 spawn ssh-add /home/xenon/.ssh/id_dsa
 expect "Enter passphrase for /home/xenon/.ssh/id_dsa:"
 send "javagat2\r"
-expect eo
+expect eof
