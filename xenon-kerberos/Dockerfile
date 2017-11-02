@@ -10,8 +10,8 @@ COPY supervisord.conf /etc/supervisord.conf
 
 
 RUN printf "javagat\njavagat\n" | kdb5_util create -r esciencecenter.nl
-RUN kadmin.local -q "addprinc -pw javagat admin/admin@esciencecenter.nl"
-
+RUN kadmin.local -q "addprinc -pw javagat admin/admin@esciencecenter.nl" &&\
+ kadmin.local -q "addprinc -pw javagat xenon@esciencecenter.nl" 
 EXPOSE 749 464 88
 
 CMD ["/usr/bin/supervisord","-c","/etc/supervisord.conf"]

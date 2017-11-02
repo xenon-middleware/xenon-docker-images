@@ -16,12 +16,7 @@ RUN mv hadoop-2.8.1 hadoop
 #Generate Kerberos principals
 RUN kadmin.local -q "addprinc -randkey hdfs/localhost@esciencecenter.nl" &&\
  kadmin.local -q "addprinc -randkey HTTP/localhost@esciencecenter.nl" &&\
- kadmin.local -q "addprinc -randkey xenon@esciencecenter.nl" &&\
- kadmin.local -q "addprinc -pw javagat xenonpw@esciencecenter.nl" &&\
  kadmin.local -q "ktadd -norandkey -k /opt/hadoop/hdfs.keytab  hdfs/localhost@esciencecenter.nl HTTP/localhost@esciencecenter.nl" &&\
- kadmin.local -q "ktadd -norandkey -k /home/xenon/xenon.keytab xenon@esciencecenter.nl" &&\
- chown xenon /home/xenon/xenon.keytab &&\
- chmod 400 /home/xenon/xenon.keytab &&\
  chmod 400 /opt/hadoop/hdfs.keytab
 
 WORKDIR /opt/hadoop
@@ -47,7 +42,7 @@ RUN \
 sleep 5s && \
 hadoop namenode -format && \
 (hdfs namenode &) && sleep 5s &&  (hdfs datanode &) && \
- sudo -u xenon kinit -k -t /home/xenon/xenon.keytab xenon@esciencecenter.nl &&\
+ sudo -u xenon kinit -k -t /home/xenon/xenon.keytab xenonk@esciencecenter.nl &&\
  sudo -u xenon hdfs dfsadmin -safemode wait &&\
  sudo -u xenon ./bin/hdfs dfs -mkdir /filesystem-test-fixture && \
  sudo -u xenon ./bin/hdfs dfs -mkdir /filesystem-test-fixture/links && \
