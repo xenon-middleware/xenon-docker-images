@@ -10,7 +10,7 @@ WORKDIR /opt
 
 
 # Install Hadoop
-RUN curl  http://apache.40b.nl/hadoop/common/hadoop-2.8.1/hadoop-2.8.1.tar.gz  -o hadoop.tar.gz && tar -xzvf hadoop.tar.gz && rm hadoop.tar.gz && echo done
+RUN curl  http://apache.cs.uu.nl/hadoop/common/hadoop-2.8.1/hadoop-2.8.1.tar.gz  -o hadoop.tar.gz && tar -xzvf hadoop.tar.gz && rm hadoop.tar.gz && echo done
 RUN mv hadoop-2.8.1 hadoop
 
 #Generate Kerberos principals
@@ -35,6 +35,7 @@ COPY etc/hadoop/ssl-server.xml etc/hadoop/ssl-server.xml
 COPY keys/cxfca.jks /opt/hadoop/cxfca.jks
 COPY keys/bob.jks /opt/hadoop/bob.jks
 COPY cmd.sh /cmd.sh
+COPY loginxenon.sh /loginxenon.sh
 
 
 RUN \
@@ -42,7 +43,8 @@ RUN \
 sleep 5s && \
 hadoop namenode -format && \
 (hdfs namenode &) && sleep 5s &&  (hdfs datanode &) && \
- sudo -u xenon kinit -k -t /home/xenon/xenon.keytab xenonk@esciencecenter.nl &&\
+ chmod a+x /loginxenon.sh &&\
+ sudo -u xenon /loginxenon.sh &&\
  sudo -u xenon hdfs dfsadmin -safemode wait &&\
  sudo -u xenon ./bin/hdfs dfs -mkdir /filesystem-test-fixture && \
  sudo -u xenon ./bin/hdfs dfs -mkdir /filesystem-test-fixture/links && \

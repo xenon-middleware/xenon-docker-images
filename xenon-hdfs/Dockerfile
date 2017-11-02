@@ -10,7 +10,7 @@ WORKDIR /opt
 
 
 # Install Hadoop
-RUN curl  http://apache.40b.nl/hadoop/common/hadoop-2.8.1/hadoop-2.8.1.tar.gz  -o hadoop.tar.gz && tar -xzvf hadoop.tar.gz && rm hadoop.tar.gz && echo done
+RUN curl  http://apache.cs.uu.nl/hadoop/common/hadoop-2.8.1/hadoop-2.8.1.tar.gz  -o hadoop.tar.gz && tar -xzvf hadoop.tar.gz && rm hadoop.tar.gz && echo done
 RUN mv hadoop-2.8.1 hadoop
 
 
