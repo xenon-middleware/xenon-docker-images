@@ -5,7 +5,8 @@ RUN trqauthd start && \
     pbs_mom && pbs_sched && pbs_server && \
     # allow services to start up
     sleep 2 && \
-    qmgr -c "set server scheduler_iteration = 1"
+    qmgr -c "set server scheduler_iteration = 1" && \
+    qmgr -c "set server job_stat_rate = 5"
 
 # Create a user 'xenon' with password 'javagat'
 RUN /usr/sbin/useradd -p $(openssl passwd javagat) xenon
