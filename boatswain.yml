@@ -9,6 +9,12 @@ images:
     xenon-webdav:
         context: xenon-webdav
         from: xenon-alpine-base
+    xenon-kerberos:
+        context: xenon-kerberos
+        from: xenon-alpine-base
+    xenon-hdfs:
+        context: xenon-hdfs
+        from: xenon-alpine-base
     xenon-phusion-base:
         context: xenon-phusion-base
     xenon-ftp:alpine:
@@ -47,3 +53,7 @@ images:
     xenon-slurm:
         context: xenon-slurm-17
         from: xenon-slurm-abstract
+    xenon-hdfs-kerberos:
+        context: xenon-hdfs-kerberos
+        from: xenon-kerberos
+

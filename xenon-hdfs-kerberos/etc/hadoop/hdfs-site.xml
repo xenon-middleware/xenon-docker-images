@@ -44,6 +44,11 @@
   <value>hdfs/localhost@esciencecenter.nl</value>
 </property>
 
+  <property>
+         <name>dfs.encrypt.data.transfer</name>
+         <value>true</value>
+  </property>
+
 
 
  <property>
@@ -67,8 +72,9 @@
         <value>1</value>
     </property>
 
+
     <property>
-      <name>dfs.permissions</name>
+      <name>dfs.permissions.enabled</name>
       <value>false</value>
     </property>
 

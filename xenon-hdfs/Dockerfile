@@ -2,25 +2,29 @@ FROM nlesc/xenon-alpine-base
 
 # Inspired from mdouchement/hdfs (has MIT license)
 
-RUN apk --update add openjdk7-jre && \
+RUN apk --update add openjdk8-jre && \
     apk add --update curl && \
     apk --no-cache add procps && \
-		apk add sudo
+    apk add sudo  && \
+    rm -rf /var/cache/apk/*
+
 WORKDIR /opt
 
-
 # Install Hadoop
-RUN curl  http://apache.cs.uu.nl/hadoop/common/hadoop-2.8.1/hadoop-2.8.1.tar.gz  -o hadoop.tar.gz && tar -xzvf hadoop.tar.gz && rm hadoop.tar.gz && echo done
-RUN mv hadoop-2.8.1 hadoop
-
+RUN curl http://apache.cs.uu.nl/hadoop/common/hadoop-2.8.1/hadoop-2.8.1.tar.gz -o hadoop.tar.gz && \
+    tar -xzvf hadoop.tar.gz && \
+    rm hadoop.tar.gz && \
+    rm -rf hadoop-2.8.1/share/doc/ && \
+    mv hadoop-2.8.1 hadoop && \
+    echo done
 
 WORKDIR /opt/hadoop
+
 ENV PATH /opt/hadoop/bin:/opt/hadoop/sbin:$PATH
 
-RUN sed --in-place='.ori' -e "s/\${JAVA_HOME}/\/usr\/lib\/jvm\/java-1.7-openjdk\/jre/" etc/hadoop/hadoop-env.sh
+RUN sed --in-place='.ori' -e "s/\${JAVA_HOME}/\/usr\/lib\/jvm\/java-1.8-openjdk\/jre/" etc/hadoop/hadoop-env.sh
 
-
-ENV JAVA_HOME /usr/lib/jvm/java-1.7-openjdk/jre/
+ENV JAVA_HOME /usr/lib/jvm/java-1.8-openjdk/jre/
 
 
 # Pseudo-Distributed Operation
@@ -29,21 +33,7 @@ COPY etc/hadoop/hdfs-site.xml etc/hadoop/hdfs-site.xml
 
 COPY cmd.sh /cmd.sh
 
-
-RUN \
-hadoop namenode -format && \
-(hdfs namenode &) && sleep 5s &&  (hdfs datanode &) && \
- sudo -u xenon hdfs dfsadmin -safemode wait &&\
- sudo -u xenon ./bin/hdfs dfs -mkdir /filesystem-test-fixture && \
- sudo -u xenon ./bin/hdfs dfs -mkdir /filesystem-test-fixture/links && \
- sudo -u xenon echo "Hello World" > file0 && \
- sudo -u xenon ./bin/hdfs dfs -put file0 /filesystem-test-fixture/links/ && \
- sudo -u xenon echo "" > file1 && \
- sudo -u xenon ./bin/hdfs dfs -put file1 /filesystem-test-fixture/links/ && \
- chmod a+x /cmd.sh
-
-
-
+RUN /bin/chmod +x /cmd.sh
 
 # hdfs://localhost:8020
 EXPOSE 8020
@@ -52,8 +42,6 @@ EXPOSE 50020
 EXPOSE 50070
 EXPOSE 50075
 EXPOSE 50090
-# HDFS Web browser
-EXPOSE 50070
 
 CMD /cmd.sh
 

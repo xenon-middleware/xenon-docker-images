@@ -1,12 +1,22 @@
 /usr/bin/supervisord -c /etc/supervisord.conf &
-sleep 3s
-hdfs namenode & 
-sleep 3s 
+sleep 5s
+hadoop namenode -format
+hdfs namenode &
+sleep 5s
 hdfs datanode &
+sleep 5s
 sudo -u xenon kinit -k -t /home/xenon/xenon.keytab xenon@esciencecenter.nl
-sudo -u xenon hdfs dfsadmin -safemode wait 
-sleep 3s
-sudo -u xenon hdfs dfsadmin -safemode wait 
+
+chmod a+x /loginxenon.sh
+sudo -u xenon /loginxenon.sh
+sudo -u xenon hdfs dfsadmin -safemode wait
+sudo -u xenon ./bin/hdfs dfs -mkdir /filesystem-test-fixture
+sudo -u xenon ./bin/hdfs dfs -mkdir /filesystem-test-fixture/links
+sudo -u xenon echo "Hello World" > file0
+sudo -u xenon ./bin/hdfs dfs -put file0 /filesystem-test-fixture/links/
+sudo -u xenon echo "" > file1
+sudo -u xenon ./bin/hdfs dfs -put file1 /filesystem-test-fixture/links/
+
 echo DONE!!!!!!!!!!!
-touch /opt/hadoop/up 
+touch /opt/hadoop/up
 wait

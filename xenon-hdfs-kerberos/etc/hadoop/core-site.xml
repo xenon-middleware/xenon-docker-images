@@ -4,6 +4,12 @@
     <value>hdfs://localhost:8020</value>
   </property>
 
+     <property>
+        <name>hadoop.rpc.protection</name>
+        <value>integrity</value>
+    </property>
+
+
   <!-- Enable NFS -->
   <!-- https://hadoop.apache.org/docs/r2.4.1/hadoop-project-dist/hadoop-hdfs/HdfsNfsGateway.html -->
   <property>
