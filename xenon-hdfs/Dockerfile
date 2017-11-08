@@ -16,6 +16,7 @@ RUN curl http://apache.cs.uu.nl/hadoop/common/hadoop-2.8.1/hadoop-2.8.1.tar.gz -
     rm hadoop.tar.gz && \
     rm -rf hadoop-2.8.1/share/doc/ && \
     mv hadoop-2.8.1 hadoop && \
+    mkdir /opt/hadoop/logs && \
     echo done
 
 WORKDIR /opt/hadoop
