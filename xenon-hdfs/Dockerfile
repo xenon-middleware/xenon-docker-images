@@ -1,12 +1,7 @@
 FROM nlesc/xenon-alpine-java
 
 # Inspired from mdouchement/hdfs (has MIT license)
-#apk --update add openjdk8-jre && \
-
-RUN apk add --update curl && \
-    apk --no-cache add procps && \
-    apk add sudo  && \
-    rm -rf /var/cache/apk/*
+RUN apk --no-cache add curl procps sudo
 
 WORKDIR /opt
 
@@ -22,10 +17,6 @@ RUN curl http://apache.cs.uu.nl/hadoop/common/hadoop-2.8.1/hadoop-2.8.1.tar.gz -
 WORKDIR /opt/hadoop
 
 ENV PATH /opt/hadoop/bin:/opt/hadoop/sbin:$PATH
-
-RUN sed --in-place='.ori' -e "s/\${JAVA_HOME}/\/usr\/lib\/jvm\/java-8-oracle\/jre/" etc/hadoop/hadoop-env.sh
-
-ENV JAVA_HOME /usr/lib/jvm/java-1.8-openjdk/jre/
 
 # Pseudo-Distributed Operation
 COPY etc/hadoop/core-site.xml etc/hadoop/core-site.xml
