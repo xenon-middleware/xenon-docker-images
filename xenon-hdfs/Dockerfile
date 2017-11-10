@@ -1,9 +1,9 @@
-FROM nlesc/xenon-alpine-base
+FROM nlesc/xenon-alpine-java
 
 # Inspired from mdouchement/hdfs (has MIT license)
+#apk --update add openjdk8-jre && \
 
-RUN apk --update add openjdk8-jre && \
-    apk add --update curl && \
+RUN apk add --update curl && \
     apk --no-cache add procps && \
     apk add sudo  && \
     rm -rf /var/cache/apk/*
@@ -23,10 +23,9 @@ WORKDIR /opt/hadoop
 
 ENV PATH /opt/hadoop/bin:/opt/hadoop/sbin:$PATH
 
-RUN sed --in-place='.ori' -e "s/\${JAVA_HOME}/\/usr\/lib\/jvm\/java-1.8-openjdk\/jre/" etc/hadoop/hadoop-env.sh
+RUN sed --in-place='.ori' -e "s/\${JAVA_HOME}/\/usr\/lib\/jvm\/java-8-oracle\/jre/" etc/hadoop/hadoop-env.sh
 
 ENV JAVA_HOME /usr/lib/jvm/java-1.8-openjdk/jre/
-
 
 # Pseudo-Distributed Operation
 COPY etc/hadoop/core-site.xml etc/hadoop/core-site.xml

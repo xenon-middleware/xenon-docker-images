@@ -3,7 +3,7 @@ FROM nlesc/xenon-kerberos
 # Inspired from mdouchement/hdfs (has MIT license)
 
 RUN apk --update add openjdk8-jre && \
-    apk add --update curl && \
+    apk add --update curl unzip java-cacerts && \
     apk --no-cache add procps && \
     apk add sudo && \
     rm -rf /var/cache/apk/*
@@ -16,6 +16,7 @@ RUN curl http://apache.cs.uu.nl/hadoop/common/hadoop-2.8.1/hadoop-2.8.1.tar.gz  
     rm hadoop.tar.gz && \
     rm -rf hadoop-2.8.1/share/doc/ && \
     mv hadoop-2.8.1 hadoop  && \
+    mkdir /opt/hadoop/logs && \
     echo done
 
 #Generate Kerberos principals
