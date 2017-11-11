@@ -1,1 +1,1 @@
-echo javagat | /usr/bin/kinit
+echo javagat | /usr/bin/kinit xenon

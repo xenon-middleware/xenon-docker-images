@@ -2,7 +2,7 @@
 
 	<property>
 		<name>ssl.server.truststore.location</name>
-		<value>/opt/hadoop/cxfca.jks</value>
+		<value>/opt/hadoop/keystore.jks</value>
 	</property>
 	<property>
 		<name>ssl.server.truststore.password</name>
@@ -10,8 +10,13 @@
 	</property>
 
 	<property>
+		<name>ssl.server.truststore.type</name>
+		<value>jks</value>
+	</property>
+
+	<property>
 		<name>ssl.server.keystore.location</name>
-		<value>/opt/hadoop/cxfca.jks</value>
+		<value>/opt/hadoop/keystore.jks</value>
 	</property>
 
 	<property>
@@ -22,6 +27,11 @@
 	<property>
 		<name>ssl.server.keystore.keypassword</name>
 		<value>password</value>
+	</property>
+
+	<property>
+		<name>ssl.server.keystore.type</name>
+		<value>jks</value>
 	</property>
 
 </configuration>

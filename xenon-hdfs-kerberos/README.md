@@ -12,10 +12,17 @@ docker build -t nlesc/xenon-hdfs-kerberos .
 ### Run with
 
 ```bash
-docker run --detach --name=xenon-hdfs-kerberos --hostname xenon-hdfs-kerberos -p 8020:8020 -p 50010:50010 -p 50075:50075 nlesc/xenon-hdfs-kerberos
+docker run --detach --name=xenon-hdfs-kerberos --hostname xenon-hdfs-kerberos -p 8020:8020 -p 50010:50010 -p50470:50470 -p 50475:50475 nlesc/xenon-hdfs-kerberos
 
-# You can now reach the web interface of the DataNode on http://localhost:50075
-curl http://localhost:50075/jmx?qry=Hadoop:name=FSDatasetState,service=DataNode 
+# You can now run HDFS commands inside the docker after login into kerberos...
+docker exec -i -t xenon-hdfs-kerberos /bin/bash /loginxenon.sh
+docker exec -i -t xenon-hdfs-kerberos /opt/hadoop/bin/hdfs dfsadmin -report
+
+# ...and reach the web interface of the NameNode on http://localhost:50470 
+curl -k https://localhost:50470/jmx?qry=Hadoop:service=NameNode,name=NameNodeInfo
+
+# You can now reach the web interface of the DataNode on http://localhost:50475
+curl -k https://localhost:50475/jmx?qry=Hadoop:name=FSDatasetState,service=DataNode
 
 # Clean up the run
 docker rm -f xenon-hdfs-kerberos

@@ -127,6 +127,24 @@
     </property>
 
     <property>
+      <name>dfs.namenode.https.address</name>
+      <value>0.0.0.0:50470</value>
+      <description>
+        The address and the base port where the dfs namenode web ui will listen on.
+        If the port is 0 then the server will start on a free port.
+      </description>
+    </property>
+
+    <property>
+      <name>dfs.datanode.https.address</name>
+      <value>0.0.0.0:50475</value>
+      <description>
+        The address and the base port where the dfs namenode web ui will listen on.
+        If the port is 0 then the server will start on a free port.
+      </description>
+    </property>
+
+    <property>
       <name>dfs.namenode.rpc-bind-host</name>
       <value>0.0.0.0</value>
       <description>
