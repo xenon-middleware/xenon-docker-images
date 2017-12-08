@@ -26,6 +26,9 @@ images:
     xenon-gridengine:
         context: xenon-gridengine
         from: xenon-phusion-base
+    xenon-fixed-client:
+        context: xenon-fixed-client
+        from: xenon-phusion-base
     xenon-s3:
         context: xenon-s3
     xenon-torque:
