@@ -59,4 +59,8 @@ images:
     xenon-hdfs-kerberos:
         context: xenon-hdfs-kerberos
         from: xenon-kerberos
+    xenon-gridftp:
+        context: xenon-gridftp
+        from: xenon-phusion-base
+
 
