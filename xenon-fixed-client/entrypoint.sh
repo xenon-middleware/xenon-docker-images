@@ -29,6 +29,7 @@ fi
 eval `setuser xenon ssh-agent`
 setuser xenon /bin/ssh-fillpass-xenon
 setuser xenon ssh-add -l
+setuser xenon grid-proxy-init
 
 setuser xenon "$@"
 

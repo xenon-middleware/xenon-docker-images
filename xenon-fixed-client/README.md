@@ -1,5 +1,11 @@
 Image which will run the [Xenon](http://nlesc.github.io/Xenon/) fixed client environment tests.
 
+Fixed client environment tests, are integration tests which rely on a specific state of the environment 
+on the client. For example, the presence (or lack) of specific credentials (such as from SSH or globus) 
+or on the content of certain configurations files (such as SSH's known_hosts files). Since we cannot 
+control these on an abritrary machine on which the test are run, we run these tests in a docker container 
+instead.
+
 Will startup Docker containers to test against.
 
 # Build with:
