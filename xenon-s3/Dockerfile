@@ -44,8 +44,12 @@ RUN \
     mc mb hier/filesystem-test-fixture && \
     echo "Hello World" | mc pipe hier/filesystem-test-fixture/links/file0 && \
     echo "" | mc pipe hier/filesystem-test-fixture/links/file1 && \
+    mc mb hier/filesystem-test-fixture2 && \
+    echo "Hello World" | mc pipe hier/filesystem-test-fixture2/links/file0 && \
+    echo "" | mc pipe hier/filesystem-test-fixture2/links/file1 && \
+    mc policy public hier/filesystem-test-fixture2 && \
 		sleep 1s && \
-		killall minio 
+		killall minio
 
 EXPOSE 9000
 
