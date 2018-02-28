@@ -1,4 +1,5 @@
-FROM golang:1.8-alpine
+# FROM golang:1.8-alpine
+FROM golang:1.9.4-alpine3.6
 
 MAINTAINER Atze van der Ploeg (a.vanderploeg@esciencecenter.nl)
 
