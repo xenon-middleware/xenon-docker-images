@@ -4,12 +4,15 @@ hadoop namenode -format
 hdfs namenode &
 sleep 5s
 hdfs datanode &
-sleep 5s
+sleep 30s
 sudo -u xenon kinit -k -t /home/xenon/xenon.keytab xenon@esciencecenter.nl
 
 chmod a+x /loginxenon.sh
 sudo -E -u xenon /loginxenon.sh
 sudo -E -u xenon hdfs dfsadmin -safemode wait
+
+echo CREATING FIXTURES
+
 sudo -E -u xenon ./bin/hdfs dfs -mkdir /filesystem-test-fixture
 sudo -E -u xenon ./bin/hdfs dfs -mkdir /filesystem-test-fixture/links
 sudo -E -u xenon echo "Hello World" > file0

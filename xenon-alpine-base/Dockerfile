@@ -1,4 +1,4 @@
-FROM alpine:3.6
+FROM alpine:3.8
 MAINTAINER Stefan Verhoeven "s.verhoeven@esciencecenter.nl"
 
 # Create a test user
