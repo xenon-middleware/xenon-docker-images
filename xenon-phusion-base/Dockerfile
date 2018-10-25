@@ -1,4 +1,4 @@
-FROM phusion/baseimage:0.9.22
+FROM phusion/baseimage:0.11
 MAINTAINER Stefan Verhoeven "s.verhoeven@esciencecenter.nl"
 
 # Enable the OpenSSH server (https://github.com/phusion/baseimage-docker#enabling_ssh)
