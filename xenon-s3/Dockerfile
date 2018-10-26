@@ -1,12 +1,5 @@
 # FROM golang:1.8-alpine
-FROM golang:1.9.4-alpine3.6
-
-MAINTAINER Atze van der Ploeg (a.vanderploeg@esciencecenter.nl)
-
-
-
-ENV MINIO_ACCESS_KEY xenon
-ENV MINIO_SECRET_KEY javagat01
+FROM golang:1.11.1-alpine3.8 AS BUILD
 
 WORKDIR /go/src/app
 
@@ -15,29 +8,26 @@ WORKDIR /go/src/app
 # meta-info was not present that is generate when using the s3 protocol.
 
 RUN \
-    apk add --no-cache git && \
-		git clone https://github.com/minio/mc && \
-    cd mc && \
-    go-wrapper download && \
-    go-wrapper install -ldflags "$(go run buildscripts/gen-ldflags.go)" && \
-    cd .. && \
-    rm -rf mc && \
-    apk del git
-		
-RUN  \
-     apk add --no-cache ca-certificates && \
-     apk add --no-cache --virtual .build-deps git go musl-dev && \
-     echo 'hosts: files mdns4_minimal [NOTFOUND=return] dns mdns4' >> /etc/nsswitch.conf && \
-     go get -v -d github.com/minio/minio && \
-     cd /go/src/github.com/minio/minio && \
-     go install -v -ldflags "$(go run buildscripts/gen-ldflags.go)" && \
-     rm -rf /go/pkg /go/src /usr/local/go && apk del .build-deps
+    apk add --no-cache git musl-dev ca-certificates && \
+		go get -v github.com/minio/mc && \
+    go get -v github.com/minio/minio
 
-RUN mkdir /var/s3 && \
-		chmod a+rx /var/s3
+FROM alpine:3.8
+LABEL maintainer="Stefan Verhoeven s.verhoeven@esciencecenter.nl>"
 
+ENV MINIO_ACCESS_KEY xenon
+ENV MINIO_SECRET_KEY javagat01
+
+COPY --from=build /go/bin/mc /usr/bin/mc
+COPY --from=build /go/bin/minio /usr/bin/minio
 
 RUN \
+    # Data dir
+    mkdir /var/s3 && \
+		chmod a+rx /var/s3 && \
+    # Enable mdns4
+    echo 'hosts: files mdns4_minimal [NOTFOUND=return] dns mdns4' >> /etc/nsswitch.conf && \
+    # Populate server
     minio server /var/s3 & \
     sleep 1s && \
     mc config host add hier "http://localhost:9000" xenon javagat01 && \
@@ -53,7 +43,6 @@ RUN \
 
 EXPOSE 9000
 
-CMD ["minio","server","/var/s3"]
-
+CMD ["minio", "server", "/var/s3"]
 
 HEALTHCHECK --interval=1s CMD mc ls hier || exit 1
