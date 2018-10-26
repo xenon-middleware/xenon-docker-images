@@ -31,12 +31,12 @@ COPY fill.sh /fill.sh
 
 RUN sh /fill.sh && chmod +x /etc/service/1namenode/run /etc/service/2datanode/run
 
-# hdfs://localhost:9820
+# Ports as described in https://issues.apache.org/jira/browse/HDFS-9427
 EXPOSE 9820
+EXPOSE 9870
+EXPOSE 9871
 EXPOSE 9866
 EXPOSE 9867
-EXPOSE 9870
 EXPOSE 9864
-EXPOSE 9868
 
-HEALTHCHECK --interval=1s CMD hadoop fs -test -e / || exit 1
+HEALTHCHECK --interval=1s CMD (hdfs dfsadmin -safemode get | grep -q OFF) || exit 1

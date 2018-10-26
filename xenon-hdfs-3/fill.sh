@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash -e
 
 hadoop namenode -format -force
 

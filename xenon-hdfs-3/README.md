@@ -10,7 +10,7 @@ docker build -t nlesc/xenon-hdfs-3 .
 ### Run with
 
 ```bash
-docker run --detach --name=xenon-hdfs-3 --hostname xenon-hdfs-3 -p 9820:9820 -p 9866:9866 -p 9870:9870 -p 9864:9864 nlesc/xenon-hdfs-3
+docker run --detach --name=xenon-hdfs-3 --hostname xenon-hdfs-3 --network=host nlesc/xenon-hdfs-3
 
 # You can now run HDFS commands inside the docker...
 docker exec -i -t xenon-hdfs /opt/hadoop/bin/hdfs dfsadmin -report

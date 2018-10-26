@@ -10,51 +10,8 @@
     </property>
 
     <property>
-      <name>dfs.secondary.http.address</name>
-      <value>0.0.0.0:9868</value>
-      <description>
-        The secondary namenode http server address and port.
-        If the port is 0 then the server will start on a free port.
-      </description>
-    </property>
-
-    <property>
-      <name>dfs.datanode.address</name>
-      <value>0.0.0.0:9866</value>
-      <description>
-        The address where the datanode server will listen to.
-        If the port is 0 then the server will start on a free port.
-      </description>
-    </property>
-<property>
       <name>dfs.client.block.write.replace-datanode-on-failure.policy</name>
       <value>NEVER</value>
-    </property>
-    <property>
-      <name>dfs.datanode.http.address</name>
-      <value>0.0.0.0:9864</value>
-      <description>
-        The datanode http server address and port.
-        If the port is 0 then the server will start on a free port.
-      </description>
-    </property>
-
-    <property>
-      <name>dfs.datanode.ipc.address</name>
-      <value>0.0.0.0:9867</value>
-      <description>
-        The datanode ipc server address and port.
-        If the port is 0 then the server will start on a free port.
-      </description>
-    </property>
-
-    <property>
-      <name>dfs.http.address</name>
-      <value>0.0.0.0:9870</value>
-      <description>
-        The address and the base port where the dfs namenode web ui will listen on.
-        If the port is 0 then the server will start on a free port.
-      </description>
     </property>
 
     <property>
@@ -105,8 +62,6 @@
       </description>
     </property>
 
-    <!-- Enable NFS -->
-    <!-- https://hadoop.apache.org/docs/r2.4.1/hadoop-project-dist/hadoop-hdfs/HdfsNfsGateway.html -->
     <property>
       <name>dfs.namenode.accesstime.precision</name>
       <value>3600000</value>
@@ -116,17 +71,13 @@
         access times for HDFS.
       </description>
     </property>
-
     <property>
-      <name>dfs.nfs3.dump.dir</name>
-      <value>/data/hdfs-nfs/</value>
+      <name>dfs.namenode.datanode.registration.ip-hostname-check</name>
+      <value>false</value>
     </property>
-  <property>
-    <name>dfs.namenode.datanode.registration.ip-hostname-check</name>
-    <value>false</value>
-  </property>
+    <!-- Prevent `The reported blocks 2 has reached the threshold 0.5000 of total blocks 2. The number of live datanodes 1 has reached the minimum number 0. In safe mode extension. Safe mode will be turned off automatically in 9 seconds.` error -->
     <property>
-      <name>dfs.nfs.exports.allowed.hosts</name>
-      <value>* rw</value>
+      <name>dfs.namenode.safemode.threshold-pct</name>
+      <value>0f</value>
     </property>
 </configuration>

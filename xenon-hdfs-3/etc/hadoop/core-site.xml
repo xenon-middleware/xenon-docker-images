@@ -4,8 +4,6 @@
     <value>hdfs://localhost:9820</value>
   </property>
 
-  <!-- Enable NFS -->
-  <!-- https://hadoop.apache.org/docs/r2.4.1/hadoop-project-dist/hadoop-hdfs/HdfsNfsGateway.html -->
   <property>
     <name>hadoop.proxyuser.root.groups</name>
     <value>*</value>
