@@ -9,14 +9,16 @@
 #
 
 FROM nlesc/xenon-phusion-base
-MAINTAINER Jason Maassen "j.maassen@esciencecenter.nl"
+LABEL maintainer="Jason Maassen <j.maassen@esciencecenter.nl>"
 
 # Use the globus from the package manager:
 #
 RUN apt-get update && apt-get install -y libglobus-ftp-client2 \
- libglobus-gridftp-server-control0 globus-gridftp-server-progs \
- globus-gss-assist-progs && \
-apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
+        libglobus-gridftp-server-control0 globus-gridftp-server-progs \
+        globus-gss-assist-progs && \
+    apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
+    # install ca certificates
+    mkdir /etc/ca-files
 
 # Alternatively, we can install the latest globus using:
 #
@@ -29,8 +31,6 @@ apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
 # apt-get install -y globus-connect-server && \
 # apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
 
-# install ca certificates
-mkdir /etc/ca-files
 ADD files /etc/ca-files
 RUN dpkg -i /etc/ca-files/globus-simple-ca-*_all.deb
 

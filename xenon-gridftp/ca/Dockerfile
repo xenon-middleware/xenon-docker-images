@@ -1,11 +1,11 @@
 FROM phusion/baseimage:0.9.22
-MAINTAINER Stefan Verhoeven "s.verhoeven@esciencecenter.nl"
+LABEL maintainer="Stefan Verhoeven <s.verhoeven@esciencecenter.nl>"
 
-RUN apt-get update && apt-get install -y globus-simple-ca globus-gsi-cert-utils-progs fakeroot dpkg-dev cdbs openssh-client && \
-apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-
-# grid-ca-create will be run as non-root, edit script so it doesnt die on `id -un`
-RUN perl -pi -e 's/\$\(id -un\)/nobody/' /usr/bin/grid-ca-create
+RUN apt-get update && \
+    apt-get install -y globus-simple-ca globus-gsi-cert-utils-progs fakeroot dpkg-dev cdbs openssh-client && \
+    apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
+    # grid-ca-create will be run as non-root, edit script so it doesnt die on `id -un`
+    perl -pi -e 's/\$\(id -un\)/nobody/' /usr/bin/grid-ca-create
 
 ENV CA_SUBJECT CN=eScienceCenterSimpleCA, O=eScienceCenter
 ENV CA_EMAIL nobody@example.com

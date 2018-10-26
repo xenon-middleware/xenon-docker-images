@@ -1,4 +1,5 @@
 FROM nlesc/xenon-phusion-base
+LABEL maintainer="Stefan Verhoeven <s.verhoeven@esciencecenter.nl>"
 
 RUN apt update && apt install -y openjdk-8-jre && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
