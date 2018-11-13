@@ -10,4 +10,3 @@ ADD slurm.conf /usr/local/etc/slurm/slurm.conf
 
 # set the work directory to something sane
 WORKDIR /home/xenon/
-
