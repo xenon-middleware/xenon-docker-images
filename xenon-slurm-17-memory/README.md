@@ -5,7 +5,7 @@ This container provides a [SLURM](https://github.com/SchedMD/slurm/) installatio
 | tag | Dockerfile (on GitHub)|
 |---|---|
 | 17, latest  | [xenon-slurm-17/Dockerfile](https://github.com/NLeSC/xenon-docker-images/blob/master/xenon-slurm-17/Dockerfile) |
-| 17-mem | [xenon-slurm-17/Dockerfile](https://github.com/NLeSC/xenon-docker-images/blob/master/xenon-slurm-17-memory/Dockerfile) |
+| 17-mem2g (nodes hardcoded to 2Gb RAM) | [xenon-slurm-17/Dockerfile](https://github.com/NLeSC/xenon-docker-images/blob/master/xenon-slurm-17-memory/Dockerfile) |
 | 16  | [xenon-slurm-16/Dockerfile](https://github.com/NLeSC/xenon-docker-images/blob/master/xenon-slurm-16/Dockerfile) |
 | 15  | [xenon-slurm-15/Dockerfile](https://github.com/NLeSC/xenon-docker-images/blob/master/xenon-slurm-15/Dockerfile) |
 | 14  | [xenon-slurm-14/Dockerfile](https://github.com/NLeSC/xenon-docker-images/blob/master/xenon-slurm-14/Dockerfile) |
