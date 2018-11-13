@@ -53,6 +53,9 @@ images:
     xenon-slurm:17:
         context: xenon-slurm-17
         from: xenon-slurm-abstract
+    xenon-slurm:17-mem2g:
+        context: xenon-slurm-17-memory
+        from: xenon-slurm:17
     xenon-slurm:
         context: xenon-slurm-17
         from: xenon-slurm-abstract
