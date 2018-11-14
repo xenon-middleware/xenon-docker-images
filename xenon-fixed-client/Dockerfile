@@ -4,7 +4,7 @@ MAINTAINER Stefan Verhoeven "s.verhoeven@esciencecenter.nl"
 # Instal Oracle jdk8 + docker
 
 RUN apt-get update && apt-get install -y python-software-properties && \
-add-apt-repository ppa:webupd8team/java -y && \
+add-apt-repository ppa:linuxuprising/java -y && \
 add-apt-repository -y "deb http://archive.ubuntu.com/ubuntu $(lsb_release -sc) main universe" &&\
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add - && \
 add-apt-repository \
@@ -12,8 +12,8 @@ add-apt-repository \
    $(lsb_release -cs) \
    stable" && \
 apt-get update && \
-echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | debconf-set-selections && \
-apt-get install -y docker-ce oracle-java8-installer oracle-java8-set-default expect && \
+echo oracle-java11-installer shared/accepted-oracle-license-v1-2 select true | debconf-set-selections && \
+apt-get install -y docker-ce oracle-java11-installer oracle-java11-set-default expect && \
 apt-get install -y krb5-user krb5-config && \
 apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
 # Install docker compose
