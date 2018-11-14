@@ -62,12 +62,9 @@ images:
     xenon-gridftp:
         context: xenon-gridftp
         from: xenon-phusion-base
-    xenon-alpine-java:
-        context: xenon-alpine-java
-        from: xenon-alpine-base
     xenon-hdfs:
         context: xenon-hdfs
-        from: xenon-alpine-java
+        from: xenon-phusion-base
     xenon-hdfs-kerberos:
         context: xenon-hdfs-kerberos
         from: xenon-hdfs

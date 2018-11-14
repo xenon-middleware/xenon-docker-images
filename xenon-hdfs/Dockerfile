@@ -1,7 +1,8 @@
-FROM nlesc/xenon-alpine-java
+FROM nlesc/xenon-phusion-base
+LABEL maintainer="Stefan Verhoeven <s.verhoeven@esciencecenter.nl>"
 
-# Inspired from mdouchement/hdfs (has MIT license)
-RUN apk --no-cache add curl procps sudo
+RUN apt update && apt install -y openjdk-8-jre && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64/jre
 
 WORKDIR /opt
 
@@ -36,4 +37,4 @@ EXPOSE 50090
 
 CMD /cmd.sh
 
-HEALTHCHECK --interval=1s CMD test -f /opt/hadoop/up || exit 1
+HEALTHCHECK --start-period=20s --interval=1s CMD hdfs dfs -test -e /filesystem-test-fixture/links/file0 || exit 1

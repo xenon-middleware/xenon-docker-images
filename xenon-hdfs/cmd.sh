@@ -1,15 +1,14 @@
-hadoop namenode -format -force
+hdfs namenode -format -force
 hdfs namenode &
 sleep 5s
 hdfs datanode &
 sleep 5s
-sudo -E -u xenon hdfs dfsadmin -safemode wait
-sudo -E -u xenon ./bin/hdfs dfs -mkdir /filesystem-test-fixture
-sudo -E -u xenon ./bin/hdfs dfs -mkdir /filesystem-test-fixture/links
-sudo -E -u xenon echo "Hello World" > file0
-sudo -E -u xenon ./bin/hdfs dfs -put file0 /filesystem-test-fixture/links/
-sudo -E -u xenon echo "" > file1
-sudo -E -u xenon ./bin/hdfs dfs -put file1 /filesystem-test-fixture/links/
-touch /opt/hadoop/up
-echo DONE!!!!!!!!!!
+hdfs dfsadmin -safemode wait
+hdfs dfs -mkdir /filesystem-test-fixture
+hdfs dfs -mkdir /filesystem-test-fixture/links
+echo "Hello World" > file0
+hdfs dfs -put file0 /filesystem-test-fixture/links/
+echo "" > file1
+hdfs dfs -put file1 /filesystem-test-fixture/links/
+hdfs dfs -chown -R xenon:xenon /filesystem-test-fixture
 wait
