@@ -15,6 +15,8 @@ images:
     xenon-hdfs:
         context: xenon-hdfs
         from: xenon-alpine-base
+    xenon-phusion-base-16:
+        context: xenon-phusion-base-16
     xenon-phusion-base:
         context: xenon-phusion-base
     xenon-ftp:alpine:
@@ -22,9 +24,6 @@ images:
         from: xenon-alpine-base
     xenon-ftp:latest:
         context: xenon-ftp
-        from: xenon-phusion-base
-    xenon-gridengine:
-        context: xenon-gridengine
         from: xenon-phusion-base
     xenon-fixed-client:
         context: xenon-fixed-client
@@ -64,6 +63,9 @@ images:
         from: xenon-kerberos
     xenon-gridftp:
         context: xenon-gridftp
-        from: xenon-phusion-base
+        from: xenon-phusion-base-16
+    xenon-gridengine:
+        context: xenon-gridengine
+        from: xenon-phusion-base-16
 
 
