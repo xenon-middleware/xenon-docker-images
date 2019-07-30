@@ -1,5 +1,5 @@
 FROM nlesc/xenon-alpine-base
-MAINTAINER Atze van der Ploeg "a.vanderploeg@esciencecenter.nl"
+LABEL maintainer="Atze van der Ploeg <a.vanderploeg@esciencecenter.nl>"
 
 RUN apk add --no-cache krb5-server krb5 supervisor && \
     rm -rf /var/cache/apk/*

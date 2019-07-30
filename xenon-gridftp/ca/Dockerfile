@@ -1,5 +1,5 @@
 FROM phusion/baseimage:0.9.22
-MAINTAINER Stefan Verhoeven "s.verhoeven@esciencecenter.nl"
+LABEL maintainer="Stefan Verhoeven <s.verhoeven@esciencecenter.nl>"
 
 RUN apt-get update && apt-get install -y globus-simple-ca globus-gsi-cert-utils-progs fakeroot dpkg-dev cdbs openssh-client && \
 apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*

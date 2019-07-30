@@ -2,6 +2,8 @@ Docker container with [minio](https://minio.io/) S3 compatible server, to run th
 
 S3 server has accessKey `xenon` with secretKey `javagat01` (8 chars minimum, hence javagat01 instead of javagat)
 
+The `filesystem-test-fixture` bucket has been populated with the test fixtures for the xenon filesystem adaptor integration tests.
+
 # Build with:
 
 ```bash

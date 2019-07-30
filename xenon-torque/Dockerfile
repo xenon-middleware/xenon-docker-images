@@ -1,5 +1,5 @@
 FROM agaveapi/torque
-MAINTAINER Stefan Verhoeven "s.verhoeven@esciencecenter.nl"
+LABEL maintainer="Stefan Verhoeven <s.verhoeven@esciencecenter.nl>"
 
 RUN trqauthd start && \
     pbs_mom && pbs_sched && pbs_server && \

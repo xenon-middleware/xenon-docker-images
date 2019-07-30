@@ -1,5 +1,5 @@
 FROM phusion/baseimage:0.9.22
-MAINTAINER Stefan Verhoeven "s.verhoeven@esciencecenter.nl"
+LABEL maintainer="Stefan Verhoeven <s.verhoeven@esciencecenter.nl>"
 
 # Enable the OpenSSH server (https://github.com/phusion/baseimage-docker#enabling_ssh)
 RUN rm -f /etc/service/sshd/down && \

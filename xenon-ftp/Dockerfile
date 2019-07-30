@@ -1,19 +1,17 @@
 FROM nlesc/xenon-phusion-base
-MAINTAINER Stefan Verhoeven "s.verhoeven@esciencecenter.nl"
+LABEL maintainer="Stefan Verhoeven <s.verhoeven@esciencecenter.nl>"
 
 # update packages and install FTP daemon program 'vsftpd'
 RUN apt-get update && \
 apt-get install -y vsftpd && \
 apt-get clean && \
 rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
-
 # configure the vsftpd service to start automatically with the container
 mkdir /etc/service/vsftpd && \
 echo "#!/bin/sh" > /etc/service/vsftpd/run && \
 echo "/usr/sbin/vsftpd /etc/vsftpd.conf" >> /etc/service/vsftpd/run && \
 chmod +x /etc/service/vsftpd/run && \
 mkdir -p /var/run/vsftpd/empty && \
-
 # copy fixtures also for anonymous user (/srv/ftp)
 # Xenon's filesystem integration tests expect certain directory structure, create it here:
 cd /srv/ftp/ && \

@@ -1,5 +1,5 @@
 FROM nlesc/xenon-alpine-base
-MAINTAINER Stefan Verhoeven "s.verhoeven@esciencecenter.nl"
+LABEL maintainer="Stefan Verhoeven <s.verhoeven@esciencecenter.nl>"
 
 # install openssh and configure for rsa, dsa, and ecdsa keys
 # for ssh clients within this docker image,
