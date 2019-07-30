@@ -1,10 +1,9 @@
-FROM alpine:3.8
-MAINTAINER Stefan Verhoeven "s.verhoeven@esciencecenter.nl"
+FROM alpine:3.10
+LABEL maintainer="Stefan Verhoeven <s.verhoeven@esciencecenter.nl>"
 
 # Create a test user
 RUN /usr/sbin/adduser -s /bin/sh -D xenon && \
 /usr/sbin/adduser -s /bin/sh -D xenon2 && \
-
 # set user xenon's password to javagat
 echo xenon:javagat | chpasswd && \
 echo xenon2:javagat2 | chpasswd && \

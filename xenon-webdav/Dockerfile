@@ -1,18 +1,14 @@
 FROM nlesc/xenon-alpine-base
-MAINTAINER Stefan Verhoeven "s.verhoeven@esciencecenter.nl"
+LABEL maintainer="Stefan Verhoeven <s.verhoeven@esciencecenter.nl>"
 
 RUN apk add --no-cache apache2-webdav apache2-utils curl && \
 htpasswd -bc /var/www/users.htpasswd xenon javagat && \
-mkdir /run/apache2 && \
-
 # make directory for DavLockDB (see ./httpd.conf)
 mkdir /var/www/var && \
 chown apache.apache /var/www/var && \
-
 # make xenon user writable directory
 mkdir /home/xenon/uploads && \
 chown apache.apache /home/xenon/uploads && \
-
 # Xenon's filesystem integration tests expect certain directory structure, create it here:
 # make directory that user xenon can write in
 mkdir /var/www/uploads && \
@@ -29,7 +25,6 @@ ln -s /var/www/uploads/filesystem-test-fixture/links/link6 /var/www/uploads/file
 ln -s /var/www/uploads/filesystem-test-fixture/links/link5 /var/www/uploads/filesystem-test-fixture/links/link6 && \
 chown -R apache.apache /var/www/uploads && \
 cd /home/xenon && \
-
 # Xenon's filesystem integration tests expect certain directory structure, create it here:
 # make directory that anonymous user can write in
 mkdir /var/www/localhost/htdocs/downloads && \

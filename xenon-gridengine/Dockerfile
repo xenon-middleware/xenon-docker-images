@@ -1,6 +1,6 @@
 # Used https://github.com/gawbul/docker-sge as inspiration/source
 FROM nlesc/xenon-phusion-base-16
-MAINTAINER Stefan Verhoeven "s.verhoeven@esciencecenter.nl"
+LABEL maintainer="Stefan Verhoeven <s.verhoeven@esciencecenter.nl>"
 
 RUN echo "Package: xserver-xorg*\nPin: release *\nPin-Priority: -1" >> /etc/apt/preferences && \
 echo "Package: unity*\nPin: release *\nPin-Priority: -1" >> /etc/apt/preferences && \

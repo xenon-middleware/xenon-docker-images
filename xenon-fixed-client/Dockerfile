@@ -1,5 +1,5 @@
 FROM nlesc/xenon-phusion-base
-MAINTAINER Stefan Verhoeven "s.verhoeven@esciencecenter.nl"
+LABEL maintainer="Stefan Verhoeven <s.verhoeven@esciencecenter.nl>"
 
 # Install Java 10 or 11, docker compose and kerberos.  
 RUN apt-get update && \
