@@ -14,17 +14,9 @@ echo "StrictHostKeyChecking no" >> /etc/ssh/ssh_config && \
 echo "HashKnownHosts no" >> /etc/ssh/ssh_config && \
 echo "xenon" >> /etc/at.allow
 
-
-#echo "/usr/sbin/atd" > /home/xenon/startup.sh && \\
-#echo "/usr/sbin/sshd -De" >> /home/xenon/startup.sh && \\
-#chmod +x /home/xenon/startup.sh
-
 ADD supervisord.conf /etc/supervisord.conf
 
 EXPOSE 22
-#CMD ["/usr/sbin/sshd", "-De"]
-#CMD ["/usr/sbin/atd"]
-#CMD ["/bin/sh", "/home/xenon/startup.sh"]
 
 ENTRYPOINT ["supervisord", "--nodaemon", "--configuration", "/etc/supervisord.conf"]
 

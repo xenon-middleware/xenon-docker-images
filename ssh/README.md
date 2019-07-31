@@ -4,7 +4,7 @@ scheduler integration tests against.
 ### Build with
 
 ```bash
-cd xenon-ssh
+cd ssh
 docker build -t xenonmiddleware/ssh .
 ```
 
