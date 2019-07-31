@@ -9,7 +9,7 @@ set -e
 cd /usr/local
 
 apt-get update
-apt-get --no-install-recommends install -y gcc make libssl-dev libmunge-dev tar wget
+apt-get --no-install-recommends install -y gcc make libssl-dev libmunge-dev tar wget python
 
 NAME=`basename -s .tar.gz $1`
 
@@ -27,6 +27,6 @@ rm -rf /usr/local/slurm-$NAME
 rm /usr/local/$1
 
 # NOTE: removing tar seems to break stuff.
-apt-get purge -y gcc make wget libssl-dev libmunge-dev
+apt-get purge -y gcc make wget libssl-dev libmunge-dev python
 apt autoremove -y
 apt-get clean -y
