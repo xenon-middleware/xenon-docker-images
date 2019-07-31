@@ -12,6 +12,7 @@ ssh-keygen -N "" -t ecdsa -f /etc/ssh/ssh_host_ecdsa_key && \
 ssh-keygen -N "" -t ed25519 -f /etc/ssh/ssh_host_ed25519_key && \
 echo "StrictHostKeyChecking no" >> /etc/ssh/ssh_config && \
 echo "HashKnownHosts no" >> /etc/ssh/ssh_config && \
+echo -e "AllowTCPForwarding yes\nAuthorizedKeysFile	.ssh/authorized_keys\nGatewayPorts no\nPermitOpen any\nSubsystem	sftp	/usr/lib/ssh/sftp-server\nX11Forwarding no\n" > /etc/ssh/sshd_config && \
 echo "xenon" >> /etc/at.allow
 
 ADD supervisord.conf /etc/supervisord.conf
