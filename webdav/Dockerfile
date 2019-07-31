@@ -1,7 +1,7 @@
 FROM xenonmiddleware/alpine-base
 LABEL maintainer="Stefan Verhoeven <s.verhoeven@esciencecenter.nl>"
 
-RUN apk add --no-cache apache2-webdav apache2-utils curl && \
+RUN apk add --no-cache apache2-webdav apache2-utils apr-util-dbm_db curl && \
 htpasswd -bc /var/www/users.htpasswd xenon javagat && \
 # make directory for DavLockDB (see ./httpd.conf)
 mkdir /var/www/var && \
