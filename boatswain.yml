@@ -12,9 +12,12 @@ images:
     kerberos:
         context: kerberos
         from: alpine-base
+    alpine-java:
+        context: alpine-java
+        from: alpine-base
     hdfs:
         context: hdfs
-        from: alpine-base
+        from: alpine-java
     phusion-base-16:
         context: phusion-base-16
     phusion-base:
@@ -61,6 +64,9 @@ images:
     hdfs-kerberos:
         context: hdfs-kerberos
         from: kerberos
+    gridftp-ca:
+        context: gridftp/ca
+        from: phusion-base-16
     gridftp:
         context: gridftp
         from: phusion-base-16
