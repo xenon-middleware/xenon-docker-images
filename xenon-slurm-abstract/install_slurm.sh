@@ -4,6 +4,8 @@
 # downloads a slurm version, compiles and installs is, and removes any unnecessary
 # code and tools afterwards.
 
+set -e
+
 cd /usr/local
 
 apt-get update
@@ -11,13 +13,13 @@ apt-get --no-install-recommends install -y gcc make libssl-dev libmunge-dev tar 
 
 NAME=`basename -s .tar.gz $1`
 
-wget https://github.com/SchedMD/slurm/archive/$1
-tar -xvzf $1
+wget -q https://github.com/SchedMD/slurm/archive/$1
+tar -xf $1
 
 cd /usr/local/slurm-$NAME
 
 ./configure --prefix=/usr/local --sysconfdir=/usr/local/etc/slurm
-make
+make -j ${nproc}
 make install
 
 cd /usr/local
