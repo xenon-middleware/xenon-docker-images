@@ -18,6 +18,9 @@ images:
     hdfs:
         context: hdfs
         from: alpine-java
+    hdfs-kerberos:
+        context: hdfs-kerberos
+        from: hdfs
     phusion-base-16:
         context: phusion-base-16
     phusion-base:
@@ -61,9 +64,6 @@ images:
     slurm:
         context: slurm-17
         from: slurm-abstract
-    hdfs-kerberos:
-        context: hdfs-kerberos
-        from: kerberos
     gridftp-ca:
         context: gridftp/ca
         from: phusion-base-16

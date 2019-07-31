@@ -1,4 +1,4 @@
-Docker image based off xenon-alpine-base that adds a Java JRE installation (openjdk 8).
+Docker image based off alpine-base that adds a Java JRE installation (openjdk 8).
 
 Build with:
 

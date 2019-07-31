@@ -1,5 +1,5 @@
 Docker container with kerberos server, used as a basis for other containers that need 
-kerberos authentication (such as xenon-hdfs-kerberos).
+kerberos authentication (such as hdfs-kerberos).
 
 In this container a user "xenon" is configured with password "javagat".
 

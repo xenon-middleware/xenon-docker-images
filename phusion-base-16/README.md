@@ -1,5 +1,4 @@
-
-Base Docker image based off of [phusion base image](http://phusion.github.io/baseimage-docker/).
+Base Docker image based off of [phusion base image](http://phusion.github.io/baseimage-docker/) which is used by other images for schedulers and filesystems which need to be tested by the Xenon library.
 
 Build with:
 
