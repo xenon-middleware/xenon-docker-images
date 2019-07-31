@@ -14,7 +14,7 @@ Used as scheduler in integration tests of [Xenon](nlesc.github.io/Xenon/) Java l
 # Build with
 
 ```bash
-cd xenon-torque
+cd torque
 docker build -t xenonmiddleware/torque .
 ```
 

@@ -16,7 +16,7 @@ The container has one ftp user
 # Build with
 
 ```
-cd xenon-ftp-alpine
+cd ftp-alpine
 docker build --tag xenonmiddleware/ftp:<tag> .
 ```
 

@@ -15,7 +15,7 @@ Used as scheduler in integration tests of [Xenon](nlesc.github.io/Xenon/) Java l
 # Build with
 
 ```bash
-cd xenon-gridengine
+cd gridengine
 docker build -t xenonmiddleware/gridengine .
 ```
 

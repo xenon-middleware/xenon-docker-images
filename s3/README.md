@@ -7,7 +7,7 @@ The `filesystem-test-fixture` bucket has been populated with the test fixtures f
 # Build with:
 
 ```bash
-cd xenon-s3
+cd s3
 docker build -t xenonmiddleware/s3 .
 ```
 

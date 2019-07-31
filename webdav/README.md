@@ -12,7 +12,7 @@ The Docker container has two users, each with two locations
 # Build with:
 
 ```bash
-cd xenon-webdav
+cd webdav
 docker build -t xenonmiddleware/webdav .
 ```
 

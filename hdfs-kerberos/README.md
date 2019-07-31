@@ -5,7 +5,7 @@ Kerberos is initialized with the user "xenon" and password "Javagat"
 ### Build with
 
 ```bash
-cd xenon-hdfs-kerberos
+cd hdfs-kerberos
 docker build -t xenonmiddleware/hdfs-kerberos .
 ```
 

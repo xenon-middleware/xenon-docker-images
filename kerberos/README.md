@@ -6,7 +6,7 @@ In this container a user "xenon" is configured with password "javagat".
 ### Build with
 
 ```bash
-cd xenon-kerberos
+cd kerberos
 docker build -t xenonmiddleware/kerberos .
 ```
 

@@ -3,7 +3,7 @@ Docker container with simple HDFS installation.
 ### Build with
 
 ```bash
-cd xenon-hdfs
+cd hdfs
 docker build -t xenonmiddleware/hdfs .
 ```
 
