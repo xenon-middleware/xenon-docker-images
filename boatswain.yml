@@ -1,71 +1,69 @@
 version: 1.0
-organisation: nlesc
+organisation: xenonmiddleware
 images:
-    xenon-alpine-base:
-        context: xenon-alpine-base
-    xenon-ssh:
-        context: xenon-ssh
-        from: xenon-alpine-base
-    xenon-webdav:
-        context: xenon-webdav
-        from: xenon-alpine-base
-    xenon-kerberos:
-        context: xenon-kerberos
-        from: xenon-alpine-base
-    xenon-hdfs:
-        context: xenon-hdfs
-        from: xenon-alpine-base
-    xenon-phusion-base-16:
-        context: xenon-phusion-base-16
-    xenon-phusion-base:
-        context: xenon-phusion-base
-    xenon-ftp:alpine:
-        context: xenon-ftp-alpine
-        from: xenon-alpine-base
-    xenon-ftp:latest:
-        context: xenon-ftp
-        from: xenon-phusion-base
-    xenon-fixed-client:
-        context: xenon-fixed-client
-        from: xenon-phusion-base
-    xenon-s3:
-        context: xenon-s3
-    xenon-torque:
-        context: xenon-torque
-    xenon-slurm-fixture:
-        context: xenon-slurm-fixture
-    xenon-slurm-ssh:
-        context: xenon-slurm-ssh
-        from: xenon-slurm-fixture
-    xenon-slurm-abstract:
-        context: xenon-slurm-abstract
-        from: xenon-slurm-ssh
-    xenon-slurm:14:
-        context: xenon-slurm-14
-        from: xenon-slurm-abstract
-    xenon-slurm:15:
-        context: xenon-slurm-15
-        from: xenon-slurm-abstract
-    xenon-slurm:16:
-        context: xenon-slurm-16
-        from: xenon-slurm-abstract
-    xenon-slurm:17:
-        context: xenon-slurm-17
-        from: xenon-slurm-abstract
-    xenon-slurm:17-mem2g:
-        context: xenon-slurm-17-memory
-        from: xenon-slurm-abstract
-    xenon-slurm:
-        context: xenon-slurm-17
-        from: xenon-slurm-abstract
-    xenon-hdfs-kerberos:
-        context: xenon-hdfs-kerberos
-        from: xenon-kerberos
-    xenon-gridftp:
-        context: xenon-gridftp
-        from: xenon-phusion-base-16
-    xenon-gridengine:
-        context: xenon-gridengine
-        from: xenon-phusion-base-16
-
-
+    alpine-base:
+        context: alpine-base
+    ssh:
+        context: ssh
+        from: alpine-base
+    webdav:
+        context: webdav
+        from: alpine-base
+    kerberos:
+        context: kerberos
+        from: alpine-base
+    hdfs:
+        context: hdfs
+        from: alpine-base
+    phusion-base-16:
+        context: phusion-base-16
+    phusion-base:
+        context: phusion-base
+    ftp:alpine:
+        context: ftp-alpine
+        from: alpine-base
+    ftp:latest:
+        context: ftp
+        from: phusion-base
+    fixed-client:
+        context: fixed-client
+        from: phusion-base
+    s3:
+        context: s3
+    torque:
+        context: torque
+    slurm-fixture:
+        context: slurm-fixture
+    slurm-ssh:
+        context: slurm-ssh
+        from: slurm-fixture
+    slurm-abstract:
+        context: slurm-abstract
+        from: slurm-ssh
+    slurm:14:
+        context: slurm-14
+        from: slurm-abstract
+    slurm:15:
+        context: slurm-15
+        from: slurm-abstract
+    slurm:16:
+        context: slurm-16
+        from: slurm-abstract
+    slurm:17:
+        context: slurm-17
+        from: slurm-abstract
+    slurm:17-mem2g:
+        context: slurm-17-memory
+        from: slurm-abstract
+    slurm:
+        context: slurm-17
+        from: slurm-abstract
+    hdfs-kerberos:
+        context: hdfs-kerberos
+        from: kerberos
+    gridftp:
+        context: gridftp
+        from: phusion-base-16
+    gridengine:
+        context: gridengine
+        from: phusion-base-16

@@ -1,0 +1,9 @@
+version: '3'
+services:
+  torque:
+    image: xenonmiddleware/torque
+    hostname: xenon-torque
+    ports:
+    - 22 # ssh
+    cap_add:
+    - SYS_RESOURCE
