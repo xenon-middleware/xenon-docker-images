@@ -5,7 +5,7 @@ Will startup Docker containers to test against.
 # Build with:
 
 ```bash
-cd xenon-fixed-client
+cd fixed-client
 docker build -t xenonmiddleware/fixed-client .
 ```
 
@@ -14,9 +14,11 @@ docker build -t xenonmiddleware/fixed-client .
 To run the [Xenon fixed client environment tests](https://github.com/NLeSC/Xenon/blob/master/TESTING.md#fixed-client-environment-tests) run from Xenon repo root dir run with:
 
 ```bash
-cd Xenon
+cd xenon
+MYDOCKERGID=`cut -d: -f3 < <(getent group docker)`
 docker run \
     --env MYUID=$UID \
+    --env DOCKERGID=$MYDOCKERGID \
     --network host \
     --volume $HOME/.gradle:/home/xenon/.gradle \
     --volume $HOME/.m2:/home/xenon/.m2 \
@@ -29,9 +31,12 @@ docker run \
 The above command breaks down as follows:
 
 ```bash
+MYDOCKERGID=`cut -d: -f3 < <(getent group docker)`
 docker run \
     # The tests will output files which will be owned by my UID (the UID outside of the container)
     --env MYUID=$UID \
+    # To communicate with docker daemon the group of the docker user must be the same
+    --env DOCKERGID=$MYDOCKERGID \
     # Tests will start other Docker containers, by using network=host the ports of sibling containers (slurm, sftp, etc.) are accessible by this Docker container.
     --network host \
     # Use gradle cache from outside container, so no new downloads are required
@@ -50,9 +55,11 @@ docker run \
 By default, xenonmiddleware/fixed-client will run `./gradlew --no-daemon fixedClientEnvironmentTest`; to run a different command, append the CMD you want to run, for example:
 
 ```bash
-cd Xenon
+cd xenon
+MYDOCKERGID=`cut -d: -f3 < <(getent group docker)`
 docker run \
     --env MYUID=$UID \
+    --env DOCKERGID=$MYDOCKERGID \
     --network host \
     --volume $HOME/.gradle:/home/xenon/.gradle \
     --volume $HOME/.m2:/home/xenon/.m2 \
