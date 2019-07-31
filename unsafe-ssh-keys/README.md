@@ -1,11 +1,13 @@
-The following files are duplicated between the 3 base docker images
-(xenon-alpine-base, xenon-phusion-base, and xenon-torque):
+The following files are duplicated between the base docker images
+(xenon-alpine-base, xenon-phusion-base-16, xenon-phusion-base, and xenon-torque):
 
 - ``authorized_keys``
 - ``id_rsa``
 - ``id_rsa.pub``
 - ``id_rsa_pw``, encrypted with `javagat2` passphrase
 - ``id_rsa_pw.pub``
+- ``id_dsa``
+- ``id_dsa.pub``
 - (``this README.md``)
 
 The originals can be found in the ``xenon-docker-images`` repository at:
