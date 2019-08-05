@@ -20,11 +20,11 @@ RUN \
     sleep 1s && \
     mc config host add hier http://localhost:9000 xenon javagat01 && \
     mc mb hier/filesystem-test-fixture && \
-    echo "Hello World" | mc pipe hier/filesystem-test-fixture/links/file0 && \
-    echo "" | mc pipe hier/filesystem-test-fixture/links/file1 && \
+    echo "Hello World" | mc pipe hier/filesystem-test-fixture/filesystem-test-fixture/links/file0 && \
+    echo "" | mc pipe hier/filesystem-test-fixture/filesystem-test-fixture/links/file1 && \
     mc mb hier/filesystem-test-fixture2 && \
-    echo "Hello World" | mc pipe hier/filesystem-test-fixture2/links/file0 && \
-    echo "" | mc pipe hier/filesystem-test-fixture2/links/file1 && \
+    echo "Hello World" | mc pipe hier/filesystem-test-fixture2/lfilesystem-test-fixture/inks/file0 && \
+    echo "" | mc pipe hier/filesystem-test-fixture2/filesystem-test-fixture/links/file1 && \
     mc policy public hier/filesystem-test-fixture2 && \
 		sleep 1s && \
 		killall minio
