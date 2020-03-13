@@ -61,6 +61,9 @@ images:
     slurm:17-mem2g:
         context: slurm-17-memory
         from: slurm-abstract
+    slurm:20:
+        context: slurm-20
+        from: slurm-abstract
     slurm:
         context: slurm-17
         from: slurm-abstract

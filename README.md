@@ -9,6 +9,7 @@ The docker images are registered as automated builds in the [xenon middleware Do
 ## Local build
 
 All images can be build locally using [boatswain](https://github.com/nlesc-sherlock/boatswain) by running:
+
 ```sh
 pip install boatswain
 boatswain build
