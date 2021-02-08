@@ -1,0 +1,8 @@
+TARGETS = sgemaster.xenoncluster syslog-ng killprocs sgeexecd.xenoncluster postfix single ssh cron rc.local ondemand
+INTERACTIVE =
+postfix: syslog-ng
+single: killprocs
+ssh: syslog-ng
+cron: syslog-ng
+rc.local: sgemaster.xenoncluster syslog-ng postfix ssh cron sgeexecd.xenoncluster
+ondemand: sgemaster.xenoncluster syslog-ng postfix ssh cron sgeexecd.xenoncluster

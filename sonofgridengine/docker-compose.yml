@@ -1,0 +1,6 @@
+version: '1'
+services:
+  gridengine:
+    hostname: xenon-sonofgridengine
+    ports:
+    - 22 # ssh

@@ -1,0 +1,10 @@
+TARGETS = sgemaster.xenoncluster sgeexecd.xenoncluster postfix urandom syslog-ng sendsigs hwclock.sh umountnfs.sh networking umountfs umountroot halt reboot
+syslog-ng: postfix
+sendsigs: sgemaster.xenoncluster syslog-ng postfix sgeexecd.xenoncluster
+hwclock.sh: syslog-ng
+umountnfs.sh: sgemaster.xenoncluster syslog-ng postfix sendsigs sgeexecd.xenoncluster
+networking: sgemaster.xenoncluster syslog-ng postfix umountnfs.sh sgeexecd.xenoncluster
+umountfs: urandom sgemaster.xenoncluster syslog-ng postfix hwclock.sh umountnfs.sh networking sgeexecd.xenoncluster
+umountroot: umountfs
+halt: umountroot
+reboot: umountroot

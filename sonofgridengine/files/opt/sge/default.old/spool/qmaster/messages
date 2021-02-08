@@ -1,0 +1,11 @@
+02/01/2021 15:39:16|  main|xenon-sonofge|I|read job database with 0 entries in 0 seconds
+02/01/2021 15:39:16|  main|xenon-sonofge|E|error opening file "/opt/sge/default/common/./sched_configuration" for reading: No such file or directory
+02/01/2021 15:39:16|  main|xenon-sonofge|E|error opening file "/opt/sge/default/spool/qmaster/./sharetree" for reading: No such file or directory
+02/01/2021 15:39:16|  main|xenon-sonofge|I|qmaster hard descriptor limit is set to 1048576
+02/01/2021 15:39:16|  main|xenon-sonofge|I|qmaster soft descriptor limit is set to 1048576
+02/01/2021 15:39:16|  main|xenon-sonofge|I|qmaster will use max. 1003 file descriptors for communication
+02/01/2021 15:39:16|  main|xenon-sonofge|I|qmaster will accept max. 950 dynamic event clients
+02/01/2021 15:39:16|  main|xenon-sonofge|I|starting up SGE 8.1.9 (lx-amd64)
+02/01/2021 15:39:16|  main|xenon-sonofge|W|can't open job sequence number file "jobseqnum": for reading: No such file or directory -- guessing next number
+02/01/2021 15:39:16|  main|xenon-sonofge|W|can't open ar sequence number file "arseqnum": for reading: No such file or directory -- guessing next number
+02/01/2021 15:40:35|worker|xenon-sonofge|E|adminhost "xenon-sonofge" already exists
