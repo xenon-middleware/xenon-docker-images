@@ -79,3 +79,6 @@ images:
     gridengine:
         context: gridengine
         from: phusion-base-16
+    sonofgridengine:
+        context: sonofgridengine
+        from: phusion-base-16
