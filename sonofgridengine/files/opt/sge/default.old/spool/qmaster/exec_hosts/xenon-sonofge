@@ -1,0 +1,16 @@
+# Version: 8.1.9
+# 
+# DO NOT MODIFY THIS FILE MANUALLY!
+# 
+hostname              xenon-sonofge
+load_scaling          NONE
+complex_values        NONE
+load_values           arch=lx-amd64,num_proc=8,mem_total=15666.472656M,swap_total=975.996094M,virtual_total=16642.468750M,m_topology=SCTTCTTCTTCTT,m_socket=1,m_core=4,m_thread=8
+processors            8
+reschedule_unknown_list NONE
+user_lists            NONE
+xuser_lists           NONE
+projects              NONE
+xprojects             NONE
+usage_scaling         NONE
+report_variables      NONE
