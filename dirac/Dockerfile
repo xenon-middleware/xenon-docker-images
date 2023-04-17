@@ -1,8 +1,12 @@
 #
 # docker build -t xenonmiddleware/dirac:latest  --progress plain .
+#
 # docker run --privileged xenonmiddleware/dirac:latest
 # (to run apptainer containers requires the --privileged flag)
-
+#
+# For debugging:
+# docker run --privileged -ti --entrypoint bash xenonmiddleware/dirac:latest
+#
 # Follows the instructions from:
 # https://dirac.readthedocs.io/en/latest/AdministratorGuide/Tutorials/basicTutoSetup.html
 # and
@@ -51,12 +55,12 @@ WORKDIR /home/dirac/DiracInstallation
 
 COPY install.cfg ./
 
-RUN sed -i "s/dirac-tuto/${HOSTNAME}/"g install.cfg
+RUN sed -i "s/dirac-tuto/${HOSTNAME}/"g install.cfg && chown dirac:dirac /home/dirac/DiracInstallation
 
 RUN curl -O https://raw.githubusercontent.com/DIRACGrid/management/master/install_site.sh && \
     chmod +x install_site.sh
 
 RUN nohup bash -c '/bin/entrypoint.sh &' && \
-    ./install_site.sh install.cfg
+    su dirac -c './install_site.sh install.cfg'
 
 CMD ["/bin/entrypoint.sh"]
