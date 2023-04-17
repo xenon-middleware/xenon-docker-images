@@ -1,4 +1,5 @@
 #!/bin/bash
+
 cd /opt/dirac
 # RUNSVCTRL='/sbin/runsvctrl'
 # chpst -u dirac $RUNSVCTRL d /opt/dirac/startup/*

@@ -9,5 +9,5 @@ export SERVERINSTALLDIR=/opt/dirac
 export CI_CONFIG=~/caUtilities/
 source utilities.sh
 generateCA
-generateCertificates 365
-generateUserCredentials 365
+generateCertificates 3650
+generateUserCredentials 3650

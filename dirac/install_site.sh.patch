@@ -1,0 +1,9 @@
+--- install_site.sh.orig        2023-04-17 16:24:06.435329679 +0200
++++ install_site.sh     2023-04-17 16:24:46.845331385 +0200
+@@ -131,6 +131,7 @@
+   echo 'export X509_VOMSES=${X509_VOMSES:-"'"${install_root}/etc/grid-security/vomses"'"}'
+   echo ''
+   echo '. $DIRAC/diracosrc'
++  echo 'export PATH=$DIRACOS/bin:$PATH'
+ } > "${install_root}/bashrc"
+ source "${install_root}/bashrc"
