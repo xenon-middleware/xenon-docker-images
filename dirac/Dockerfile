@@ -1,11 +1,12 @@
 #
-# docker build -t xenonmiddleware/dirac:latest --add-host dirac-tuto:172.17.0.2 --progress plain .
+# docker build -t xenonmiddleware/dirac:latest --progress plain --build-arg BUILDKIT_SANDBOX_HOSTNAME=dirac-tuto .
 #
-# docker run --privileged --hostname dirac-tuto xenonmiddleware/dirac:latest
+# docker run --privileged --hostname dirac-tuto --name dirac-tuto xenonmiddleware/dirac:latest
 # (to run apptainer containers requires the --privileged flag)
 #
 # For debugging:
-# docker run --privileged -ti --rm --hostname dirac-tuto --entrypoint bash xenonmiddleware/dirac:latest
+# docker run --privileged -ti --rm --hostname dirac-tuto --name dirac-tuto --entrypoint bash xenonmiddleware/dirac:latest
+# docker exec -ti dirac-tuto bash
 #
 # Follows the instructions from:
 # https://dirac.readthedocs.io/en/latest/AdministratorGuide/Tutorials/basicTutoSetup.html
@@ -14,11 +15,13 @@
 
 FROM diracgrid/cc7-dirac
 
+# Use BUILDKIT_SANDBOX_HOSTNAME to force hostname
+# see https://docs.docker.com/engine/reference/builder/#buildkit-built-in-build-args
+
 RUN yum install -y tzdata passwd patch
 
 # Dont need apptainer as it is part of diracos conda environment
-#RUN yum install -y apptainer tzdata passwd
-# CMD ["apptainer", "run", "docker://sylabsio/lolcow:latest"]
+# . /opt/dirac/bashrc && apptainer run docker://sylabsio/lolcow:latest
 
 COPY MariaDB.repo /etc/yum.repos.d/MariaDB.repo
 COPY entrypoint.sh /bin/entrypoint.sh
@@ -37,6 +40,7 @@ RUN adduser -s /bin/bash -d /home/dirac dirac || echo "User dirac already exists
 RUN nohup bash -c 'mariadbd --default-time-zone=+00:00 --user=mysql &' && \
     sleep 3 && ps -ef && \
     echo "CREATE USER 'Dirac'@'%' IDENTIFIED BY 'Dirac';FLUSH PRIVILEGES;" | mysql -B -u root && \
+    echo "CREATE USER 'Dirac'@'localhost' IDENTIFIED BY 'Dirac';FLUSH PRIVILEGES;" | mysql -B -u root && \
     echo "ALTER USER 'root'@'localhost' IDENTIFIED BY 'password';FLUSH PRIVILEGES;" | mysql -B -u root
 
 # 2023-04-17 14:55:52 UTC dirac-setup-site/MySQL [139876592334656] DEBUG: _query: SHOW STATUS
@@ -47,7 +51,7 @@ RUN nohup bash -c 'mariadbd --default-time-zone=+00:00 --user=mysql &' && \
 # 2023-04-17 14:55:52 UTC dirac-setup-site/MySQL [139876592334656] ERROR: _query (GRANT SELECT,INSERT,LOCK TABLES,UPDATE,DELETE,CREATE,DROP,ALTER,REFERENCES,CREATE VIEW,SHOW VIEW,INDEX,TRIGGER,ALTER ROUTINE,CREATE ROUTINE ON `InstalledComponentsDB`.* TO 'Dirac'@'%'): Execution failed. 1133: Can't find any matching row in the user table
 # 2023-04-17 14:55:52 UTC dirac-setup-site [139876592334656] ERROR: Error executing 'GRANT SELECT,INSERT,LOCK TABLES,UPDATE,DELETE,CREATE,DROP,ALTER,REFERENCES,CREATE VIEW,SHOW VIEW,INDEX,TRIGGER,ALTER ROUTINE,CREATE ROUTINE ON `InstalledComponentsDB`.* TO 'Dirac'@'%'' MySQL Error ( 1131 : Execution failed.: ( 1133: Can't find any matching row in the user table ))
 # 2023-04-17 14:55:52 UTC dirac-setup-site [139876592334656] ERROR: Error executing 'GRANT SELECT,INSERT,LOCK TABLES,UPDATE,DELETE,CREATE,DROP,ALTER,REFERENCES,CREATE VIEW,SHOW VIEW,INDEX,TRIGGER,ALTER ROUTINE,CREATE ROUTINE ON `InstalledComponentsDB`.* TO 'Dirac'@'%''
-# Possibly fixed by creating Dirac user
+# Fixed by creating Dirac user in above RUN command
 
 COPY runsvdir-start /opt/dirac/sbin/runsvdir-start
 
@@ -60,15 +64,11 @@ COPY setupCA ./
 
 RUN chmod +x setupCA && chown dirac:dirac setupCA && ln -s /opt/dirac/etc/grid-security /etc/grid-security
 
-# USER dirac
-
 RUN ./setupCA
 
 WORKDIR /opt/dirac
 
 COPY install.cfg install_site.sh.patch ./
-
-# RUN sed -i "s/dirac-tuto/${HOSTNAME}/"g install.cfg && 
 
 RUN curl -O https://raw.githubusercontent.com/DIRACGrid/management/master/install_site.sh && \
     chmod +x install_site.sh && \
@@ -90,6 +90,13 @@ RUN nohup bash -c '/bin/entrypoint.sh &' && \
 # 2023-04-17 14:39:58 UTC dirac-setup-site [140578409948992] ERROR: Could not connect to MySQL server
 # ERROR: Could not connect to MySQL server
 # Fixed by symlinking mysql.sock
+
+# Generate cert that can be used in the browser
+# 1. docker cp dirac-tuto:/opt/dirac/user/certificate.p12 .
+# 2. Add certificate.p12 to browser
+# 3. Add dirac-tuto to /etc/hosts of machine running the browser
+# 4. Goto https://dirac-tuto:8443/DIRAC/s:MyDIRAC-Production/g:dirac_user/
+RUN openssl pkcs12 -export -out /opt/dirac/user/certificate.p12 -inkey /opt/dirac/user/client.key -in /opt/dirac/user/client.pem -passout pass:
 
 # TODO https://dirac.readthedocs.io/en/latest/AdministratorGuide/Tutorials/installWMS.html and its prerequisites
 
