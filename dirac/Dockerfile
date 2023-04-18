@@ -68,10 +68,10 @@ RUN ./setupCA
 
 WORKDIR /opt/dirac
 
-COPY install.cfg install_site.sh.patch ./
+COPY install.cfg install_site.sh.patch post_install.sh ./
 
 RUN curl -O https://raw.githubusercontent.com/DIRACGrid/management/master/install_site.sh && \
-    chmod +x install_site.sh && \
+    chmod +x install_site.sh post_install.sh && \
     patch install_site.sh install_site.sh.patch && \
     chown dirac:dirac -R /opt/dirac
 
@@ -84,7 +84,7 @@ RUN curl -O https://raw.githubusercontent.com/DIRACGrid/management/master/instal
 # As installer needs mysql to be running we have to start mysql in the same run command
 RUN nohup bash -c '/bin/entrypoint.sh &' && \
     ln -s /var/lib/mysql/mysql.sock /tmp/mysql.sock && \
-    su dirac -c './install_site.sh install.cfg'
+    su dirac -c './install_site.sh install.cfg && ./post_install.sh'
 
 # 2023-04-17 14:39:58 UTC dirac-setup-site [140578409948992] ERROR: Cannot connect to the DB  MySQL Error ( 1131 : Could not connect: (2002, "Can't connect to local MySQL server through socket '/tmp/mysql.sock' (2)"))
 # 2023-04-17 14:39:58 UTC dirac-setup-site [140578409948992] ERROR: Could not connect to MySQL server
