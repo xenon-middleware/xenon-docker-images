@@ -6,6 +6,12 @@ and
 https://github.com/DIRACGrid/DIRAC/blob/integration/docs/source/AdministratorGuide/Tutorials/basicTutoSetup.sh
 and integration test scripts.
 
+## Run from GHCR
+
+```shell
+docker run --privileged --hostname dirac-tuto --name dirac-tuto ghcr.io/xenon-middleware/dirac:latest
+``
+
 ## Build
 
 ```shell
