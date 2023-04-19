@@ -7,6 +7,17 @@
 . bashrc
 dirac-proxy-init -g dirac_admin -C /opt/dirac/user/client.pem -K /opt/dirac/user/client.key
 
+# https://dirac.readthedocs.io/en/latest/AdministratorGuide/Tutorials/managingIdentities.html
+
+cat | dirac-admin-sysadmin-cli --host dirac-tuto <<EOL
+install db ProxyDB
+install service Framework ProxyManager
+quit
+EOL
+
+dirac-admin-add-group -G dirac_data -P NormalUser Users=ciuser AutoUploadProxy=True
+dirac-admin-add-shifter DataManager ciuser dirac_data
+
 # https://dirac.readthedocs.io/en/latest/AdministratorGuide/Tutorials/diracSE.html
 echo 'add instance DataManagement Production' | dirac-admin-sysadmin-cli --host dirac-tuto 
 echo 'restart *' | dirac-admin-sysadmin-cli --host dirac-tuto
@@ -309,7 +320,9 @@ mkdir -p /opt/dirac/webRoot/www/pilot
 #                 MaxWaitingJobs = 10
 #                 BundleProxy = True
 #                 BatchError = /opt/dirac/diracpilot/localsite/error
+#                 BatchOutput = /opt/dirac/diracpilot/localsite/output
 #                 ExecutableArea = /opt/dirac/diracpilot/localsite/submission
+#                 SharedArea = /opt/dirac/diracpilot/localsite/shared
 #                 RemoveOutput = True
 #               }
 #             }
@@ -382,7 +395,10 @@ csAPI.setOption("Resources/Sites/MyGrid/MyGrid.Site1.uk/CEs/dirac-tuto/Queues/qu
 csAPI.setOption("Resources/Sites/MyGrid/MyGrid.Site1.uk/CEs/dirac-tuto/Queues/queue/MaxWaitingJobs", "10")
 csAPI.setOption("Resources/Sites/MyGrid/MyGrid.Site1.uk/CEs/dirac-tuto/Queues/queue/BundleProxy", "True")
 csAPI.setOption("Resources/Sites/MyGrid/MyGrid.Site1.uk/CEs/dirac-tuto/Queues/queue/BatchError", "/opt/dirac/diracpilot/localsite/error")
+csAPI.setOption("Resources/Sites/MyGrid/MyGrid.Site1.uk/CEs/dirac-tuto/Queues/queue/BatchOutput", "/opt/dirac/diracpilot/localsite/output")
 csAPI.setOption("Resources/Sites/MyGrid/MyGrid.Site1.uk/CEs/dirac-tuto/Queues/queue/ExecutableArea", "/opt/dirac/diracpilot/localsite/submission")
+csAPI.setOption("Resources/Sites/MyGrid/MyGrid.Site1.uk/CEs/dirac-tuto/Queues/queue/SharedArea", "/opt/dirac/diracpilot/localsite/shared")
+
 csAPI.setOption("Resources/Sites/MyGrid/MyGrid.Site1.uk/CEs/dirac-tuto/Queues/queue/RemoveOutput", "True")
 
 res = csAPI.createSection("Operations/MyDIRAC-Production")

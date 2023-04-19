@@ -1,18 +1,3 @@
-#
-# docker build -t xenonmiddleware/dirac:latest --progress plain --build-arg BUILDKIT_SANDBOX_HOSTNAME=dirac-tuto .
-#
-# docker run --privileged --hostname dirac-tuto --name dirac-tuto xenonmiddleware/dirac:latest
-# (to run apptainer containers requires the --privileged flag)
-#
-# For debugging:
-# docker run --privileged -ti --rm --hostname dirac-tuto --name dirac-tuto --entrypoint bash xenonmiddleware/dirac:latest
-# docker exec -ti dirac-tuto bash
-#
-# Follows the instructions from:
-# https://dirac.readthedocs.io/en/latest/AdministratorGuide/Tutorials/basicTutoSetup.html
-# and
-# https://github.com/DIRACGrid/DIRAC/blob/integration/docs/source/AdministratorGuide/Tutorials/basicTutoSetup.sh
-
 FROM diracgrid/cc7-dirac
 
 # Use BUILDKIT_SANDBOX_HOSTNAME to force hostname
@@ -92,12 +77,6 @@ RUN nohup bash -c '/bin/entrypoint.sh &' && \
 # Fixed by symlinking mysql.sock
 
 # Generate cert that can be used in the browser
-# 1. docker cp dirac-tuto:/opt/dirac/user/certificate.p12 .
-# 2. Add certificate.p12 to browser
-# 3. Add dirac-tuto to /etc/hosts of machine running the browser
-# 4. Goto https://dirac-tuto:8443/DIRAC/s:MyDIRAC-Production/g:dirac_user/
 RUN openssl pkcs12 -export -out /opt/dirac/user/certificate.p12 -inkey /opt/dirac/user/client.key -in /opt/dirac/user/client.pem -passout pass:
-
-# TODO https://dirac.readthedocs.io/en/latest/AdministratorGuide/Tutorials/installWMS.html and its prerequisites
 
 CMD ["/bin/entrypoint.sh"]
