@@ -3,7 +3,7 @@ FROM diracgrid/cc7-dirac
 # Use BUILDKIT_SANDBOX_HOSTNAME to force hostname
 # see https://docs.docker.com/engine/reference/builder/#buildkit-built-in-build-args
 
-RUN yum install -y tzdata passwd patch
+RUN yum install -y tzdata passwd patch openssh-server
 
 # Dont need apptainer as it is part of diracos conda environment
 # . /opt/dirac/bashrc && apptainer run docker://sylabsio/lolcow:latest
@@ -51,6 +51,16 @@ RUN chmod +x setupCA && chown dirac:dirac setupCA && ln -s /opt/dirac/etc/grid-s
 
 RUN ./setupCA
 
+RUN ssh-keygen -N "" -t rsa -f /etc/ssh/ssh_host_rsa_key && \
+    ssh-keygen -N "" -t dsa -f /etc/ssh/ssh_host_dsa_key && \
+    ssh-keygen -N "" -t ecdsa -f /etc/ssh/ssh_host_ecdsa_key && \
+    ssh-keygen -N "" -t ed25519 -f /etc/ssh/ssh_host_ed25519_key && \
+    echo "StrictHostKeyChecking no" >> /etc/ssh/ssh_config && \
+    echo "HashKnownHosts no" >> /etc/ssh/ssh_config && \
+    rm -f /run/nologin && \
+    adduser -s /bin/bash -d /home/diracpilot diracpilot && \
+    echo password | /usr/bin/passwd --stdin diracpilot
+
 WORKDIR /opt/dirac
 
 COPY install.cfg install_site.sh.patch post_install.sh ./
@@ -78,5 +88,18 @@ RUN nohup bash -c '/bin/entrypoint.sh &' && \
 
 # Generate cert that can be used in the browser
 RUN openssl pkcs12 -export -out /opt/dirac/user/certificate.p12 -inkey /opt/dirac/user/client.key -in /opt/dirac/user/client.pem -passout pass:
+
+# https://dirac.readthedocs.io/en/latest/AdministratorGuide/Tutorials/basicTutoSetup.html#client-installation
+
+RUN adduser -s /bin/bash -d /home/diracuser diracuser || echo "User diracuser already exists." && \
+    echo password | /usr/bin/passwd --stdin diracuser && \
+    mkdir -p ~diracuser/.globus/ && \
+    cp /opt/dirac/user/client.pem ~diracuser/.globus/usercert.pem && \
+    cp /opt/dirac/user/client.key ~diracuser/.globus/userkey.pem && \
+    openssl pkcs12 -export -out ~diracuser/.globus/certificate.p12 -inkey ~diracuser/.globus/userkey.pem -in ~diracuser/.globus/usercert.pem -passout pass: && \
+    chown -R diracuser:diracuser ~diracuser/.globus/
+
+COPY dirac.client.cfg /home/diracuser/dirac.cfg
+
 
 CMD ["/bin/entrypoint.sh"]

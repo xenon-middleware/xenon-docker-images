@@ -26,6 +26,7 @@ For debugging:
 docker run --privileged -ti --rm --hostname dirac-tuto --name dirac-tuto --entrypoint bash xenonmiddleware/dirac:latest
 # In another terminal
 docker exec -ti dirac-tuto bash
+/bin/entrypoint.sh &
 ```
 
 ## Test
@@ -46,23 +47,41 @@ dirac-wms-job-submit Simple.jdl
 dirac-wms-job-status 1
 ```
 
-Job stuck on `JobID=1 ApplicationStatus=Unknown; MinorStatus=Pilot Agent Submission; Status=Waiting; Site=ANY;` possibly due to `startup/WorkloadManagement_SiteDirector/log/current` error
-2023-04-19 08:23:05 UTC WorkloadManagement/SiteDirector WARN: Issue getting socket: <DIRAC.Core.DISET.private.Transports.M2SSLTransport.SSLTransport object at 0x7fa6ebf31220> : ('dips', 'dirac-tuto', 9152, 'Framework/ProxyManager') : [Errno 111] Connection refused:ConnectionRefusedError(111, 'Connection refused')
-2023-04-19 08:23:05 UTC WorkloadManagement/SiteDirector WARN: Non-responding URL temporarily banned dips://dirac-tuto:9152/Framework/ProxyManager
-2023-04-19 08:23:05 UTC WorkloadManagement/SiteDirector INFO: Retry connection : 1 to dips://dirac-tuto:9152/Framework/ProxyManager
-2023-04-19 08:23:05 UTC WorkloadManagement/SiteDirector INFO: Waiting 2.000000 seconds before retry all service(s)
-2023-04-19 08:23:07 UTC WorkloadManagement/SiteDirector WARN: Issue getting socket: <DIRAC.Core.DISET.private.Transports.M2SSLTransport.SSLTransport object at 0x7fa6ebed4d90> : ('dips', 'dirac-tuto', 9152, 'Framework/ProxyManager') : [Errno 111] Connection refused:ConnectionRefusedError(111, 'Connection refused')
-2023-04-19 08:23:07 UTC WorkloadManagement/SiteDirector WARN: Non-responding URL temporarily banned dips://dirac-tuto:9152/Framework/ProxyManager
-2023-04-19 08:23:07 UTC WorkloadManagement/SiteDirector INFO: Retry connection : 2 to dips://dirac-tuto:9152/Framework/ProxyManager
-2023-04-19 08:23:07 UTC WorkloadManagement/SiteDirector INFO: Waiting 2.000000 seconds before retry all service(s)
-...
-2023-04-19 08:23:09 UTC WorkloadManagement/SiteDirector WARN: No voms attribute assigned to group dirac_user when requested pilot proxy
-2023-04-19 08:23:09 UTC WorkloadManagement/SiteDirector WARN: Could not get stored proxy strength /C=ch/O=DIRAC/OU=DIRAC CI/CN=ciuser, dirac_user: {'OK': False, 'Errno': 1101, 'Message': "Can't find proxy ( 1101 : /C=ch/O=DIRAC/OU=DIRAC CI/CN=ciuser@dirac_user has no proxy registered)", 'rpcStub': [['Framework/ProxyManager', {'timeout': 600, 'skipCACheck': False, 'keepAliveLapse': 150}], 'getStoredProxyStrength', ['/C=ch/O=DIRAC/OU=DIRAC CI/CN=ciuser', 'dirac_user', None]]}
-2023-04-19 08:23:09 UTC WorkloadManagement/SiteDirector/WorkloadManagement/SiteDirector ERROR: Errors in updating pilot status:  Can't find proxy ( 1101 : Can't get proxy for 37800 seconds: Can't find proxy ( 1101 : /C=ch/O=DIRAC/OU=DIRAC CI/CN=ciuser@dirac_user has no proxy registered), try to generate new; Cannot generate proxy: No proxy providers found for "/C=ch/O=DIRAC/OU=DIRAC CI/CN=ciuser")
+Job stuck on `JobID=1 ApplicationStatus=Unknown; MinorStatus=Pilot Agent Submission; Status=Waiting; Site=ANY;` possibly due after
+Added `-ddd` to /opt/dirac/startup/WorkloadManagement_SiteDirector to see where it goes wrong
+
+```
+2023-04-19 12:54:10 UTC WorkloadManagement/SiteDirector [140103544424256] DEBUG: New connection -> 172.17.0.2:9145
+2023-04-19 12:54:10 UTC WorkloadManagement/SiteDirector/WorkloadManagement/SiteDirector [140103544424256] VERBOSE: Checking overall TQ availability with requirements
+2023-04-19 12:54:10 UTC WorkloadManagement/SiteDirector/WorkloadManagement/SiteDirector [140103544424256] VERBOSE: {'Setup': 'MyDIRAC-Production', 'CPUTime': 9999999, 'Community': 'tutoVO', 'OwnerGroup': ['dirac_user', 'dirac_data', 'dirac_prod'], 'Site': ['MyGrid.Site1.uk'], 'Tag': [], 'NumberOfProcessors': 1, 'MaxRAM': 2048}
+2023-04-19 12:54:10 UTC WorkloadManagement/SiteDirector/DIRAC.Core.Tornado.Client.ClientSelector [140103544424256] DEBUG: Trying to autodetect client for WorkloadManagement/Matcher
+2023-04-19 12:54:10 UTC WorkloadManagement/SiteDirector/DIRAC.Core.Tornado.Client.ClientSelector [140103544424256] DEBUG: URL resolved: dips://dirac-tuto:9170/WorkloadManagement/Matcher
+2023-04-19 12:54:10 UTC WorkloadManagement/SiteDirector [140103544424256] DEBUG: Discovering URL for service WorkloadManagement/Matcher -> dips://dirac-tuto:9170/WorkloadManagement/Matcher
+2023-04-19 12:54:10 UTC WorkloadManagement/SiteDirector [140103544424256] DEBUG: Trying to connect to: dips://dirac-tuto:9170/WorkloadManagement/Matcher
+2023-04-19 12:54:10 UTC WorkloadManagement/SiteDirector [140103544424256] DEBUG: Connected to: dips://dirac-tuto:9170/WorkloadManagement/Matcher
+2023-04-19 12:54:10 UTC WorkloadManagement/SiteDirector [140103544424256] DEBUG: New connection -> 172.17.0.2:9170
+2023-04-19 12:54:10 UTC WorkloadManagement/SiteDirector/WorkloadManagement/PilotAgentsDB [140103544424256] DEBUG: _query: SELECT COUNT(PilotID) from PilotAgents    WHERE `TaskQueueID` IN ( "1" ) AND `Status` IN ( "Submitted", "Waiting", "Scheduled" ) 
+2023-04-19 12:54:10 UTC WorkloadManagement/SiteDirector/WorkloadManagement/SiteDirector [140103544424256] INFO: Total jobs : number of task queues : number of waiting pilots 1 : 1 : 0
+2023-04-19 12:54:10 UTC WorkloadManagement/SiteDirector/WorkloadManagement/SiteDirector [140103544424256] DEBUG: Going to try to submit some pilots
+2023-04-19 12:54:10 UTC WorkloadManagement/SiteDirector/WorkloadManagement/SiteDirector [140103544424256] VERBOSE: Queues treated dirac-tuto_queue
+2023-04-19 12:54:10 UTC WorkloadManagement/SiteDirector/WorkloadManagement/SiteDirector [140103544424256] VERBOSE: Evaluating queue dirac-tuto_queue
+2023-04-19 12:54:10 UTC WorkloadManagement/SiteDirector/DIRAC.Core.Tornado.Client.ClientSelector [140103544424256] DEBUG: Trying to autodetect client for WorkloadManagement/Matcher
+2023-04-19 12:54:10 UTC WorkloadManagement/SiteDirector/DIRAC.Core.Tornado.Client.ClientSelector [140103544424256] DEBUG: URL resolved: dips://dirac-tuto:9170/WorkloadManagement/Matcher
+2023-04-19 12:54:10 UTC WorkloadManagement/SiteDirector [140103544424256] DEBUG: Discovering URL for service WorkloadManagement/Matcher -> dips://dirac-tuto:9170/WorkloadManagement/Matcher
+2023-04-19 12:54:10 UTC WorkloadManagement/SiteDirector [140103544424256] DEBUG: Trying to connect to: dips://dirac-tuto:9170/WorkloadManagement/Matcher
+2023-04-19 12:54:10 UTC WorkloadManagement/SiteDirector [140103544424256] DEBUG: Connected to: dips://dirac-tuto:9170/WorkloadManagement/Matcher
+2023-04-19 12:54:10 UTC WorkloadManagement/SiteDirector [140103544424256] DEBUG: New connection -> 172.17.0.2:9170
+2023-04-19 12:54:10 UTC WorkloadManagement/SiteDirector/WorkloadManagement/SiteDirector [140103544424256] VERBOSE: No matching TQs found for {'Site': 'MyGrid.Site1.uk', 'WaitingToRunningRatio': 0.5, 'MaxWaitingJobs': '10', 'MaxTotalJobs': '5', 'SharedArea': '$HOME', 'BatchOutput': 'data', 'BatchError': '/home/diracpilot/localsite/error', 'ExecutableArea': '/home/diracpilot/localsite/submission', 'InfoArea': 'info', 'WorkArea': 'work', 'CEType': 'SSH', 'SSHHost': 'dirac-tuto', 'SSHUser': 'diracpilot', 'SSHPassword': 'password', 'SSHType': 'ssh', 'CPUTime': 40000, 'BundleProxy': 'True', 'RemoveOutput': 'True', 'Queue': 'queue', 'GridCE': 'dirac-tuto', 'GridEnv': '', 'Setup': 'MyDIRAC-Production', 'Tag': [], 'RequiredTag': [], 'BatchSystem': 'Host', 'Community': 'tutoVO', 'OwnerGroup': ['dirac_user', 'dirac_data', 'dirac_prod']}
+2023-04-19 12:54:10 UTC WorkloadManagement/SiteDirector/WorkloadManagement/SiteDirector [140103544424256] DEBUG: 0 pilotsWeMayWantToSubmit are eligible for dirac-tuto_queue queue
+2023-04-19 12:54:10 UTC WorkloadManagement/SiteDirector/WorkloadManagement/SiteDirector [140103544424256] DEBUG: ...so skipping dirac-tuto_queue
+2023-04-19 12:54:10 UTC WorkloadManagement/SiteDirector/WorkloadManagement/SiteDirector [140103544424256] INFO: Total number of pilots submitted in this cycle 0
+```
+
+I did not expect `No matching TQs found` from src/DIRAC/WorkloadManagementSystem/Agent/SiteDirector.py
 
 ## WebApp
 
-1. `docker cp dirac-tuto:/opt/dirac/user/certificate.p12 .`
+1. `docker cp dirac-tuto:/home/diracuser/.globus/certificate.p12 .`
 2. Add certificate.p12 to browser
 3. Add dirac-tuto to /etc/hosts of machine running the browser
 4. Goto https://dirac-tuto:8443/DIRAC/s:MyDIRAC-Production/g:dirac_user/

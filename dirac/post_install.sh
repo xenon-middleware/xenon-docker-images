@@ -15,7 +15,7 @@ install service Framework ProxyManager
 quit
 EOL
 
-dirac-admin-add-group -G dirac_data -P NormalUser Users=ciuser AutoUploadProxy=True
+dirac-admin-add-group -G dirac_data -P NormalUser -P GenericPilot Users=ciuser AutoUploadProxy=True 
 dirac-admin-add-shifter DataManager ciuser dirac_data
 
 # https://dirac.readthedocs.io/en/latest/AdministratorGuide/Tutorials/diracSE.html
@@ -65,7 +65,7 @@ from DIRAC.ConfigurationSystem.Client.CSAPI import CSAPI
 
 csAPI = CSAPI()
 
-res = csAPI.createSection("Resources/StorageElements/")
+res = csAPI.createSection("Resources/StorageElements")
 if not res["OK"]:
     print(res["Message"])
     sys.exit(1)
@@ -85,8 +85,8 @@ if not res["OK"]:
 csAPI.setOption("Resources/StorageElements/StorageElementOne/DIP/Host", "dirac-tuto")
 csAPI.setOption("Resources/StorageElements/StorageElementOne/DIP/Port", "9148")
 csAPI.setOption("Resources/StorageElements/StorageElementOne/DIP/Protocol", "dips")
-csAPI.setOption("Resources/StorageElements/StorageElementOne/DIP/Access", "remote")
 csAPI.setOption("Resources/StorageElements/StorageElementOne/DIP/Path", "/DataManagement/StorageElement")
+csAPI.setOption("Resources/StorageElements/StorageElementOne/DIP/Access", "remote")
 
 res = csAPI.createSection("Resources/StorageElements/StorageElementTwo")
 if not res["OK"]:
@@ -103,8 +103,8 @@ if not res["OK"]:
 csAPI.setOption("Resources/StorageElements/StorageElementTwo/DIP/Host", "dirac-tuto")
 csAPI.setOption("Resources/StorageElements/StorageElementTwo/DIP/Port", "9147")
 csAPI.setOption("Resources/StorageElements/StorageElementTwo/DIP/Protocol", "dips")
-csAPI.setOption("Resources/StorageElements/StorageElementTwo/DIP/Access", "remote")
 csAPI.setOption("Resources/StorageElements/StorageElementTwo/DIP/Path", "/DataManagement/StorageElementTwo")
+csAPI.setOption("Resources/StorageElements/StorageElementTwo/DIP/Access", "remote")
 
 res = csAPI.commit()
 print(res)
@@ -114,7 +114,6 @@ dirac-restart-component DataManagement
 dirac-restart-component Framework '*'  # ?needed
 
 # https://dirac.readthedocs.io/en/latest/AdministratorGuide/Tutorials/installDFC.html
-
 
 cat | dirac-admin-sysadmin-cli --host dirac-tuto <<EOL
 install db FileCatalogDB
@@ -199,6 +198,7 @@ quit
 EOL
 
 dirac-admin-add-group -G dirac_prod -P ProductionManagement -P NormalUser Users=ciuser AutoUploadProxy=True
+dirac-restart-component ProxyManager
 dirac-admin-add-shifter ProdManager ciuser dirac_prod
 
 
@@ -259,7 +259,6 @@ EOL
 
 # https://dirac.readthedocs.io/en/latest/AdministratorGuide/Tutorials/installWMS.html
 
-
 cat | dirac-admin-sysadmin-cli --host dirac-tuto <<EOL
 # Part of install.cfg?
 # add instance WorkloadManagement Production
@@ -294,7 +293,6 @@ EOL
 # [ERROR] Can not find Services/Monitoring in template
 # Replaced with `install service Framework ComponentMonitoring`
 
-mkdir -p /opt/dirac/diracpilot
 mkdir -p /opt/dirac/webRoot/www/pilot
 # Use python to add:
 # Resources
@@ -310,7 +308,11 @@ mkdir -p /opt/dirac/webRoot/www/pilot
 #         {
 #           dirac-tuto
 #           {
-#             CEType = Local
+#             CEType = SSH
+#             SSHHost = dirac-tuto
+#             SSHUser = diracpilot
+#             SSHPassword = password
+#             SSHType = ssh
 #             Queues
 #             {
 #               queue
@@ -319,10 +321,8 @@ mkdir -p /opt/dirac/webRoot/www/pilot
 #                 MaxTotalJobs = 5
 #                 MaxWaitingJobs = 10
 #                 BundleProxy = True
-#                 BatchError = /opt/dirac/diracpilot/localsite/error
-#                 BatchOutput = /opt/dirac/diracpilot/localsite/output
-#                 ExecutableArea = /opt/dirac/diracpilot/localsite/submission
-#                 SharedArea = /opt/dirac/diracpilot/localsite/shared
+#                 BatchError = /home/diracpilot/localsite/error
+#                 ExecutableArea = /home/diracpilot/localsite/submission
 #                 RemoveOutput = True
 #               }
 #             }
@@ -378,7 +378,11 @@ if not res["OK"]:
     print(res["Message"])
     sys.exit(1)
 
-csAPI.setOption("Resources/Sites/MyGrid/MyGrid.Site1.uk/CEs/dirac-tuto/CEType", "Local")
+csAPI.setOption("Resources/Sites/MyGrid/MyGrid.Site1.uk/CEs/dirac-tuto/CEType", "SSH")
+csAPI.setOption("Resources/Sites/MyGrid/MyGrid.Site1.uk/CEs/dirac-tuto/SSHHost", "dirac-tuto")
+csAPI.setOption("Resources/Sites/MyGrid/MyGrid.Site1.uk/CEs/dirac-tuto/SSHUser", "diracpilot")
+csAPI.setOption("Resources/Sites/MyGrid/MyGrid.Site1.uk/CEs/dirac-tuto/SSHPassword", "password")
+csAPI.setOption("Resources/Sites/MyGrid/MyGrid.Site1.uk/CEs/dirac-tuto/SSHType", "ssh")
 
 res = csAPI.createSection("Resources/Sites/MyGrid/MyGrid.Site1.uk/CEs/dirac-tuto/Queues")
 if not res["OK"]:
@@ -394,10 +398,8 @@ csAPI.setOption("Resources/Sites/MyGrid/MyGrid.Site1.uk/CEs/dirac-tuto/Queues/qu
 csAPI.setOption("Resources/Sites/MyGrid/MyGrid.Site1.uk/CEs/dirac-tuto/Queues/queue/MaxTotalJobs", "5")
 csAPI.setOption("Resources/Sites/MyGrid/MyGrid.Site1.uk/CEs/dirac-tuto/Queues/queue/MaxWaitingJobs", "10")
 csAPI.setOption("Resources/Sites/MyGrid/MyGrid.Site1.uk/CEs/dirac-tuto/Queues/queue/BundleProxy", "True")
-csAPI.setOption("Resources/Sites/MyGrid/MyGrid.Site1.uk/CEs/dirac-tuto/Queues/queue/BatchError", "/opt/dirac/diracpilot/localsite/error")
-csAPI.setOption("Resources/Sites/MyGrid/MyGrid.Site1.uk/CEs/dirac-tuto/Queues/queue/BatchOutput", "/opt/dirac/diracpilot/localsite/output")
-csAPI.setOption("Resources/Sites/MyGrid/MyGrid.Site1.uk/CEs/dirac-tuto/Queues/queue/ExecutableArea", "/opt/dirac/diracpilot/localsite/submission")
-csAPI.setOption("Resources/Sites/MyGrid/MyGrid.Site1.uk/CEs/dirac-tuto/Queues/queue/SharedArea", "/opt/dirac/diracpilot/localsite/shared")
+csAPI.setOption("Resources/Sites/MyGrid/MyGrid.Site1.uk/CEs/dirac-tuto/Queues/queue/BatchError", "/home/diracpilot/localsite/error")
+csAPI.setOption("Resources/Sites/MyGrid/MyGrid.Site1.uk/CEs/dirac-tuto/Queues/queue/ExecutableArea", "/home/diracpilot/localsite/submission")
 
 csAPI.setOption("Resources/Sites/MyGrid/MyGrid.Site1.uk/CEs/dirac-tuto/Queues/queue/RemoveOutput", "True")
 
@@ -473,9 +475,8 @@ if not res["OK"]:
 csAPI.setOption("Resources/StorageElements/ProductionSandboxSE/DIP/Host", "dirac-tuto")
 csAPI.setOption("Resources/StorageElements/ProductionSandboxSE/DIP/Port", "9146")
 csAPI.setOption("Resources/StorageElements/ProductionSandboxSE/DIP/Protocol", "dips")
-csAPI.setOption("Resources/StorageElements/ProductionSandboxSE/DIP/Access", "remote")
 csAPI.setOption("Resources/StorageElements/ProductionSandboxSE/DIP/Path", "/DataManagement/ProductionSandboxSE")
-
+csAPI.setOption("Resources/StorageElements/ProductionSandboxSE/DIP/Access", "remote")
 
 res = csAPI.commit()
 print(res)
@@ -484,3 +485,17 @@ EOL
 dirac-admin-allow-site MyGrid.Site1.uk "test" -E False
 
 echo 'restart WorkloadManagement *' | dirac-admin-sysadmin-cli --host dirac-tuto
+
+# Make sure pilot has proxy it can use
+dirac-proxy-init -g dirac_data -C /opt/dirac/user/client.pem -K /opt/dirac/user/client.key
+
+# TODO make intervals shorter to make using in test suite quicker
+
+# TODO add CE which can run singularity
+
+# TODO add monitoring?
+# see https://github.com/DIRACGrid/DIRAC/blob/integration/docs/source/AdministratorGuide/Systems/MonitoringSystem/index.rst
+# will need opensearch service to be set up
+
+# TODO add cvmfs to store apptainer images
+
