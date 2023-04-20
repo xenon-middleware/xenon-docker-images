@@ -10,7 +10,7 @@ and integration test scripts.
 
 ```shell
 docker run --privileged --hostname dirac-tuto --name dirac-tuto ghcr.io/xenon-middleware/dirac:latest
-``
+```
 
 ## Build
 

@@ -76,7 +76,8 @@ RUN curl -O https://raw.githubusercontent.com/DIRACGrid/management/master/instal
 # runsvstat /opt/dirac/startup/*
 
 # Services are only available within same run command
-# As installer needs mysql to be running we have to start mysql in the same run command
+# As installer needs mysql to be running we have to start mysql in the same run command.
+# In tutorial the setup is configured as diracuser user, but here we use dirac user, so not to have diracos installed twice.
 RUN nohup bash -c '/bin/entrypoint.sh &' && \
     ln -s /var/lib/mysql/mysql.sock /tmp/mysql.sock && \
     su dirac -c './install_site.sh install.cfg && ./post_install.sh'
@@ -101,5 +102,5 @@ RUN adduser -s /bin/bash -d /home/diracuser diracuser || echo "User diracuser al
 
 COPY dirac.client.cfg /home/diracuser/dirac.cfg
 
-
 CMD ["/bin/entrypoint.sh"]
+
