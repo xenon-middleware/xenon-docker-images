@@ -317,7 +317,7 @@ mkdir -p /opt/dirac/webRoot/www/pilot
 #             {
 #               queue
 #               {
-#                 CPUTime = 40000
+#                 CPUTime = 86400
 #                 MaxTotalJobs = 5
 #                 MaxWaitingJobs = 10
 #                 BundleProxy = True
@@ -394,7 +394,7 @@ if not res["OK"]:
     print(res["Message"])
     sys.exit(1)
 
-csAPI.setOption("Resources/Sites/MyGrid/MyGrid.Site1.uk/CEs/dirac-tuto/Queues/queue/CPUTime", "40000")
+csAPI.setOption("Resources/Sites/MyGrid/MyGrid.Site1.uk/CEs/dirac-tuto/Queues/queue/CPUTime", "86400")
 csAPI.setOption("Resources/Sites/MyGrid/MyGrid.Site1.uk/CEs/dirac-tuto/Queues/queue/MaxTotalJobs", "5")
 csAPI.setOption("Resources/Sites/MyGrid/MyGrid.Site1.uk/CEs/dirac-tuto/Queues/queue/MaxWaitingJobs", "10")
 csAPI.setOption("Resources/Sites/MyGrid/MyGrid.Site1.uk/CEs/dirac-tuto/Queues/queue/BundleProxy", "True")
