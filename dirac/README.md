@@ -51,24 +51,14 @@ OutputSandbox = {"StdOut","StdErr"};
 EOL
 dirac-wms-job-submit Simple.jdl
 dirac-wms-job-status 1
+# JobID=1 ApplicationStatus=Unknown; MinorStatus=Execution Complete; Status=Done; Site=MyGrid.Site1.uk;
+dirac-wms-job-get-output 1
+# Files retrieved and extracted in /opt/dirac/1
+# Job output sandbox retrieved in /opt/dirac/1/
+cat 1/StdOut
+# total 4
+# -rw-r--r-- 1 diracpilot diracpilot 604 Apr 21 12:08 job.info
 ```
-
-Job stuck on `JobID=1 ApplicationStatus=Unknown; MinorStatus=Pilot Agent Submission; Status=Waiting; Site=ANY;` possibly due after
-Added `-ddd` to /opt/dirac/startup/WorkloadManagement_SiteDirector and WorkflowManagement_Match and `sv restart <service>` to see where it goes wrong .
-
-In /home/diracpilot/localsite/output/334F7FCD.out
-```
-2023-04-21 06:12:53 UTC INFO     Launching dirac-pilot script from /home/diracpilot/shared/work/334F7FCD/DIRAC_PpnOFQpilot
-2023-04-21 06:12:53 UTC INFO     But first unpacking pilot files
-2023-04-21 06:12:53 UTC INFO     Getting the pilot files from dirac-tuto:8443
-Trying https://dirac-tuto:8443
-2023-04-21 06:12:53 UTC ERROR    https://dirac-tuto:8443 unreacheable (this is normal!)
-2023-04-21 06:12:53 UTC ERROR    HTTP Error 404: Not Found
-...
-2023-04-21 06:12:53 UTC ERROR    https://dirac-tuto:8443/pilot unreacheable (this is normal!)
-2023-04-21 06:12:53 UTC ERROR    HTTP Error 404: Not Found
-```
-Look at PilotSyncAgent how /home/dirac/webRoot/www/pilot is filled.
 
 ## WebApp
 

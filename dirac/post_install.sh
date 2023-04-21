@@ -259,6 +259,7 @@ EOL
 
 # https://dirac.readthedocs.io/en/latest/AdministratorGuide/Tutorials/installWMS.html
 
+mkdir -p /opt/dirac/webRoot/www/pilot
 cat | dirac-admin-sysadmin-cli --host dirac-tuto <<EOL
 # Part of install.cfg?
 # add instance WorkloadManagement Production
@@ -282,6 +283,7 @@ install agent WorkloadManagement SiteDirector
 install agent WorkloadManagement JobCleaningAgent
 install agent WorkloadManagement PilotStatusAgent
 install agent WorkloadManagement StalledJobAgent
+install agent WorkloadManagement PilotSyncAgent -p SaveDirectory=/opt/dirac/webRoot/www/pilot
 install executor WorkloadManagement Optimizers
 restart WorkloadManagement *
 quit
@@ -293,7 +295,6 @@ EOL
 # [ERROR] Can not find Services/Monitoring in template
 # Replaced with `install service Framework ComponentMonitoring`
 
-mkdir -p /opt/dirac/webRoot/www/pilot
 # Use python to add:
 # Resources
 # {
@@ -337,7 +338,7 @@ mkdir -p /opt/dirac/webRoot/www/pilot
 # Operations/MyDIRAC-Production {
 #     Pilot
 #     {
-#     Version = v7r0p36
+#     Version = v8r0p18
 #     CheckVersion = False
 #     Command
 #     {
@@ -417,7 +418,7 @@ if not res["OK"]:
     print(res["Message"])
     sys.exit(1)
 
-csAPI.setOption("Operations/MyDIRAC-Production/Pilot/Version", "v7r0p36")
+csAPI.setOption("Operations/MyDIRAC-Production/Pilot/Version", "v8r0p18")
 csAPI.setOption("Operations/MyDIRAC-Production/Pilot/CheckVersion", "False")
 
 res = csAPI.createSection("Operations/MyDIRAC-Production/Pilot/Command")
@@ -493,7 +494,9 @@ echo 'restart WorkloadManagement *' | dirac-admin-sysadmin-cli --host dirac-tuto
 # Make sure pilot has proxy it can use
 dirac-proxy-init -g dirac_data -C /opt/dirac/user/client.pem -K /opt/dirac/user/client.key
 
-# TODO make intervals shorter to make using in test suite quicker
+# TODO make sure pilot has been installed, by submitting a job and waiting for it to complete
+
+# TODO make intervals shorter to make using container in test suite quicker
 
 # TODO add CE which can run singularity
 
