@@ -323,6 +323,8 @@ mkdir -p /opt/dirac/webRoot/www/pilot
 #                 BundleProxy = True
 #                 BatchError = /home/diracpilot/localsite/error
 #                 ExecutableArea = /home/diracpilot/localsite/submission
+#                 SharedArea = /home/diracpilot/shared
+#                 BatchOutput = /home/diracpilot/localsite/output
 #                 RemoveOutput = True
 #               }
 #             }
@@ -400,6 +402,8 @@ csAPI.setOption("Resources/Sites/MyGrid/MyGrid.Site1.uk/CEs/dirac-tuto/Queues/qu
 csAPI.setOption("Resources/Sites/MyGrid/MyGrid.Site1.uk/CEs/dirac-tuto/Queues/queue/BundleProxy", "True")
 csAPI.setOption("Resources/Sites/MyGrid/MyGrid.Site1.uk/CEs/dirac-tuto/Queues/queue/BatchError", "/home/diracpilot/localsite/error")
 csAPI.setOption("Resources/Sites/MyGrid/MyGrid.Site1.uk/CEs/dirac-tuto/Queues/queue/ExecutableArea", "/home/diracpilot/localsite/submission")
+csAPI.setOption("Resources/Sites/MyGrid/MyGrid.Site1.uk/CEs/dirac-tuto/Queues/queue/SharedArea", "/home/diracpilot/shared")
+csAPI.setOption("Resources/Sites/MyGrid/MyGrid.Site1.uk/CEs/dirac-tuto/Queues/queue/BatchOutput", "/home/diracpilot/localsite/output")
 
 csAPI.setOption("Resources/Sites/MyGrid/MyGrid.Site1.uk/CEs/dirac-tuto/Queues/queue/RemoveOutput", "True")
 
