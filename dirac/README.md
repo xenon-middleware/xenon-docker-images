@@ -15,21 +15,21 @@ docker run --privileged --hostname dirac-tuto --name dirac-tuto ghcr.io/xenon-mi
 ## Build
 
 ```shell
-docker build -t xenonmiddleware/dirac:latest --progress plain --build-arg BUILDKIT_SANDBOX_HOSTNAME=dirac-tuto .
+docker build -t ghcr.io/xenon-middleware/dirac:latest --progress plain --build-arg BUILDKIT_SANDBOX_HOSTNAME=dirac-tuto .
 ```
 (During build need to interact with services which require host certificates. The `--build-arg BUILDKIT_SANDBOX_HOSTNAME=dirac-tuto` fixes the hostname so the certificate validation works.)
 
 ## Run
 
 ```shell
-docker run --privileged --hostname dirac-tuto --name dirac-tuto xenonmiddleware/dirac:latest
+docker run --privileged --hostname dirac-tuto --name dirac-tuto ghcr.io/xenon-middleware/dirac:latest
 ```
 (to run apptainer containers requires the --privileged flag)
 
 For debugging:
 
 ```shell
-docker run --privileged -ti --rm --hostname dirac-tuto --name dirac-tuto --entrypoint bash xenonmiddleware/dirac:latest
+docker run --privileged -ti --rm --hostname dirac-tuto --name dirac-tuto --entrypoint bash ghcr.io/xenon-middleware/dirac:latest
 # In another terminal
 docker exec -ti dirac-tuto bash
 /bin/entrypoint.sh &
