@@ -1,0 +1,14 @@
+version: '3.9'
+
+services:
+  dirac-tuto:
+    image: ghcr.io/xenon-middleware/dirac:latest
+    privileged: true
+  test:
+    build: .
+    volumes:
+      - .:/src
+    # command: pip install -e . && pytest
+    command: pytest
+    depends_on:
+      - dirac-tuto
