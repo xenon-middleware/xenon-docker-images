@@ -23,9 +23,6 @@ RUN adduser -s /bin/bash -d /home/dirac dirac || echo "User dirac already exists
     mkdir -p /opt/dirac/sbin /opt/dirac/startup && \
     chown -R dirac:dirac /opt/dirac/
 
-# Calls for a random number to break the cahing of the git clone
-# (https://stackoverflow.com/questions/35134713/disable-cache-for-specific-run-commands/58801213#58801213)
-# ADD "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" skipcache
 RUN nohup bash -c 'mariadbd --default-time-zone=+00:00 --user=mysql &' && \
     sleep 3 && ps -ef && \
     echo "CREATE USER 'Dirac'@'%' IDENTIFIED BY 'Dirac';FLUSH PRIVILEGES;" | mysql -B -u root && \
@@ -77,8 +74,7 @@ RUN curl -O https://raw.githubusercontent.com/DIRACGrid/management/master/instal
 
 # For some reason `eval "$(${DIRACOS}/bin/micromamba shell hook activate -s bash)"` line in diracosrc 
 # does not activate the conda environment in a runit Configuration_Server run script
-# so we patch installer to brute activate the conda environment
-# runsvstat /opt/dirac/startup/*
+# so we patch installer (install_site.sh.patch) to brute activate the conda environment
 
 # Services are only available within same run command
 # As installer needs mysql to be running we have to start mysql in the same run command.
@@ -92,9 +88,6 @@ RUN nohup bash -c '/bin/entrypoint.sh &' && \
 # ERROR: Could not connect to MySQL server
 # Fixed by symlinking mysql.sock
 
-# Generate cert that can be used in the browser
-RUN openssl pkcs12 -export -out /opt/dirac/user/certificate.p12 -inkey /opt/dirac/user/client.key -in /opt/dirac/user/client.pem -passout pass:
-
 # https://dirac.readthedocs.io/en/latest/AdministratorGuide/Tutorials/basicTutoSetup.html#client-installation
 
 RUN adduser -s /bin/bash -d /home/diracuser diracuser || echo "User diracuser already exists." && \
@@ -102,13 +95,14 @@ RUN adduser -s /bin/bash -d /home/diracuser diracuser || echo "User diracuser al
     mkdir -p ~diracuser/.globus/ && \
     cp /opt/dirac/user/client.pem ~diracuser/.globus/usercert.pem && \
     cp /opt/dirac/user/client.key ~diracuser/.globus/userkey.pem && \
+    # Generate cert that can be used in the browser
     openssl pkcs12 -export -out ~diracuser/.globus/certificate.p12 -inkey ~diracuser/.globus/userkey.pem -in ~diracuser/.globus/usercert.pem -passout pass: && \
     chown -R diracuser:diracuser ~diracuser/.globus/
 
 # Fake CernVM File System, can be used for staging software 
 RUN mkdir -p /cvmfs/my.repo.name && chmod 777 -R /cvmfs
+# TODO to publish software to cvmfs, we might need a real cvmfs server
 
 COPY --chown=diracuser:diracuser dirac.client.cfg /home/diracuser/dirac.cfg
 
 CMD ["/bin/entrypoint.sh"]
-

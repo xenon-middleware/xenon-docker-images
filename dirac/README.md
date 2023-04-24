@@ -2,26 +2,36 @@
 
 [DIRAC](https://diracgrid.org) is an interware, meaning a software framework for distributed computing.
 
-Follows the instructions from:
+Dockfile follows the instructions from:
 https://dirac.readthedocs.io/en/latest/AdministratorGuide/Tutorials/basicTutoSetup.html
-and
+,
 https://github.com/DIRACGrid/DIRAC/blob/integration/docs/source/AdministratorGuide/Tutorials/basicTutoSetup.sh
 and integration test scripts.
 
-Container image at https://github.com/xenon-middleware/xenon-docker-images/pkgs/container/dirac .
+## Run from GitHub container registry
 
-## Run from GHCR
+Run image from https://github.com/xenon-middleware/xenon-docker-images/pkgs/container/dirac with:
 
 ```shell
-docker run --privileged --hostname dirac-tuto --name dirac-tuto ghcr.io/xenon-middleware/dirac:8.0.18
+docker run --privileged --hostname dirac-tuto ghcr.io/xenon-middleware/dirac:8.0.18
 ```
+The `--privileged` flag is required to run apptainer containers inside Docker container.
+The `--hostname` flag is required to fix the hostname so the certificate validation works. 
+Also if you want to talk to the container from another machine you need to add the hostname to /etc/hosts of that machine.
+This can be done with `docker-compose` see [../diracos](diracos/README.md) for an example.
 
 ## Configuration
 
 * hostname: dirac-tuto
 * host certificates: /opt/dirac/etc/grid-security/certificates
 * setup: MyDIRAC-Production
-* Configuration server: dips://dirac-tuto:9135/Configuration/Server
+* sites:
+  * MyGrid.Site1.uk: 
+    * storage element: StorageElementOne
+    * pilot job + job
+  * MyGrid.Site2.de: 
+    * storage element: StorageElementTwo
+* configuration server: dips://dirac-tuto:9135/Configuration/Server
 * user 
   * name: diracuser
   * groups:
@@ -29,7 +39,7 @@ docker run --privileged --hostname dirac-tuto --name dirac-tuto ghcr.io/xenon-mi
     * dirac_admin: to change configuration
     * dirac_data: for pilot job
   * certificates: /home/diracuser/.globus
-* WebApp:
+* web portal:
   * https://dirac-tuto:8443
   * user web certificate: /home/diracuser/.globus/certificate.p12
 * CernVM File System:
@@ -45,30 +55,32 @@ docker run --privileged --hostname dirac-tuto --name dirac-tuto ghcr.io/xenon-mi
 ```shell
 docker build -t ghcr.io/xenon-middleware/dirac:8.0.18 --progress plain --build-arg BUILDKIT_SANDBOX_HOSTNAME=dirac-tuto .
 ```
-(During build need to interact with services which require host certificates. The `--build-arg BUILDKIT_SANDBOX_HOSTNAME=dirac-tuto` fixes the hostname so the certificate validation works.)
+During build need to interact with services which require host certificates. 
+The `--build-arg BUILDKIT_SANDBOX_HOSTNAME=dirac-tuto` fixes the hostname so the certificate validation works.
+The `--progress plain` makes it possible to see all the output logs.
 
-## Run
+## Push
 
-```shell
-docker run --privileged --hostname dirac-tuto --name dirac-tuto ghcr.io/xenon-middleware/dirac:8.0.18
-```
-(to run apptainer containers requires the --privileged flag)
-
-For debugging:
+[Configure Docker to be able to push to GitHub container registry](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry#authenticating-to-the-container-registry).
 
 ```shell
-docker run --privileged -ti --rm --hostname dirac-tuto --name dirac-tuto --entrypoint bash ghcr.io/xenon-middleware/dirac:8.0.18
-# In another terminal
-docker exec -ti dirac-tuto bash
-/bin/entrypoint.sh &
+docker push ghcr.io/xenon-middleware/dirac:8.0.18
+docker tag ghcr.io/xenon-middleware/dirac:8.0.18 ghcr.io/xenon-middleware/dirac:latest
+docker push ghcr.io/xenon-middleware/dirac:latest
 ```
 
 ## Test
 
+First login to container with
+
+```shell
+docker exec -ti <name of container> bash
+```
+
 ```shell
 su dirac
 . bashrc
-dirac-proxy-init -g dirac_user -C /opt/dirac/user/client.pem -K /opt/dirac/user/client.key
+dirac-proxy-init -g dirac_user
 cat << EOL > Simple.jdl
 JobName = "Simple_Job";
 Executable = "/bin/ls";
@@ -88,9 +100,12 @@ cat 1/StdOut
 # -rw-r--r-- 1 diracpilot diracpilot 604 Apr 21 12:08 job.info
 ```
 
-## WebApp
+## DIRAC web portal
+
+The [DIRAC web portal](https://dirac.readthedocs.io/en/latest/UserGuide/WebPortalReference/Overview/index.html) can be accessed with:
 
 1. `docker cp dirac-tuto:/home/diracuser/.globus/certificate.p12 .`
 2. Add certificate.p12 to browser
-3. Add dirac-tuto to /etc/hosts of machine running the browser
+3. Add dirac-tuto + ip of container (use `docker inspect` to get ip) to /etc/hosts of machine running the browser
 4. Goto https://dirac-tuto:8443/DIRAC/s:MyDIRAC-Production/g:dirac_user/
+   * Ignore host certificate warning
