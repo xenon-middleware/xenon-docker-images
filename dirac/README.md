@@ -2,7 +2,7 @@
 
 [DIRAC](https://diracgrid.org) is an interware, meaning a software framework for distributed computing.
 
-Dockfile follows the instructions from:
+The Dockerfile follows the instructions from:
 https://dirac.readthedocs.io/en/latest/AdministratorGuide/Tutorials/basicTutoSetup.html
 ,
 https://github.com/DIRACGrid/DIRAC/blob/integration/docs/source/AdministratorGuide/Tutorials/basicTutoSetup.sh
@@ -16,9 +16,11 @@ Run image from https://github.com/xenon-middleware/xenon-docker-images/pkgs/cont
 docker run --privileged --hostname dirac-tuto ghcr.io/xenon-middleware/dirac:8.0.18
 ```
 The `--privileged` flag is required to run apptainer containers inside Docker container.
+
 The `--hostname` flag is required to fix the hostname so the certificate validation works. 
-Also if you want to talk to the container from another machine you need to add the hostname to /etc/hosts of that machine.
-This can be done with `docker-compose` see [../diracos](diracos/README.md) for an example.
+
+If you want to talk to the container from another machine you need to add the hostname to /etc/hosts of that machine.
+This can be done with `docker-compose` see [../diracclient](diracclient/README.md) for an example.
 
 ## Configuration
 
@@ -45,7 +47,7 @@ This can be done with `docker-compose` see [../diracos](diracos/README.md) for a
 * CernVM File System:
   * root: /cvmfs
   * repository: /cvmfs/my.repo.name
-  * writable by everyone
+  * read and writable by everyone
   * just a directory not a real CVMFS repository
 * Apptainer
   * Computing element not configured
@@ -54,7 +56,8 @@ This can be done with `docker-compose` see [../diracos](diracos/README.md) for a
 ## Build
 
 ```shell
-docker build -t ghcr.io/xenon-middleware/dirac:8.0.18 --progress plain --build-arg BUILDKIT_SANDBOX_HOSTNAME=dirac-tuto .
+docker build -t ghcr.io/xenon-middleware/dirac:8.0.18 --progress plain \
+  --build-arg BUILDKIT_SANDBOX_HOSTNAME=dirac-tuto .
 ```
 During build need to interact with services which require host certificates. 
 The `--build-arg BUILDKIT_SANDBOX_HOSTNAME=dirac-tuto` fixes the hostname so the certificate validation works.
@@ -62,7 +65,7 @@ The `--progress plain` makes it possible to see all the output logs.
 
 ## Push
 
-[Configure Docker to be able to push to GitHub container registry](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry#authenticating-to-the-container-registry).
+Make sure to [configure Docker to be able to push to GitHub container registry](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry#authenticating-to-the-container-registry).
 
 ```shell
 docker push ghcr.io/xenon-middleware/dirac:8.0.18
