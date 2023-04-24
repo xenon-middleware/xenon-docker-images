@@ -49,6 +49,7 @@ This can be done with `docker-compose` see [../diracos](diracos/README.md) for a
   * just a directory not a real CVMFS repository
 * Apptainer
   * Computing element not configured
+* monitoring: not installed or configured
 
 ## Build
 
@@ -74,12 +75,13 @@ docker push ghcr.io/xenon-middleware/dirac:latest
 First login to container with
 
 ```shell
-docker exec -ti <name of container> bash
+docker exec -ti <id or name of container> bash
 ```
 
 ```shell
-su dirac
-. bashrc
+su diracuser
+cd
+. /opt/dirac/bashrc
 dirac-proxy-init -g dirac_user
 cat << EOL > Simple.jdl
 JobName = "Simple_Job";
@@ -93,8 +95,8 @@ dirac-wms-job-submit Simple.jdl
 dirac-wms-job-status 1
 # JobID=1 ApplicationStatus=Unknown; MinorStatus=Execution Complete; Status=Done; Site=MyGrid.Site1.uk;
 dirac-wms-job-get-output 1
-# Files retrieved and extracted in /opt/dirac/1
-# Job output sandbox retrieved in /opt/dirac/1/
+# Files retrieved and extracted in /home/diracuser/1
+# Job output sandbox retrieved in /home/diracuser/1/
 cat 1/StdOut
 # total 4
 # -rw-r--r-- 1 diracpilot diracpilot 604 Apr 21 12:08 job.info
@@ -104,7 +106,7 @@ cat 1/StdOut
 
 The [DIRAC web portal](https://dirac.readthedocs.io/en/latest/UserGuide/WebPortalReference/Overview/index.html) can be accessed with:
 
-1. `docker cp dirac-tuto:/home/diracuser/.globus/certificate.p12 .`
+1. `docker cp <id or name of container>:/home/diracuser/.globus/certificate.p12 .`
 2. Add certificate.p12 to browser
 3. Add dirac-tuto + ip of container (use `docker inspect` to get ip) to /etc/hosts of machine running the browser
 4. Goto https://dirac-tuto:8443/DIRAC/s:MyDIRAC-Production/g:dirac_user/

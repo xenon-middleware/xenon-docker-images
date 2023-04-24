@@ -1,4 +1,10 @@
-# Dirac setup companion
+# Dirac client
+
+Container image with [DIRAC client](https://dirac.readthedocs.io/en/latest/UserGuide/GettingStarted/InstallingClient/index.html).
+
+Should be used together with [dirac](../dirac) server inside a docker compose file.
+
+## Run
 
 To run Python tests against the DIRAC container you need to use docker compose to fix the hostname resolution.
 
@@ -20,4 +26,16 @@ To run tests from another repo, copy the Dockerfile and docker-compose.yml to th
 
 ```shell
 docker-compose run -ti test 'pip install -e .[dev] && pytest -m "dirac"'
+```
+
+## Build & push
+
+```shell
+docker build -t ghcr.io/xenon-middleware/diracclient:8.0.18 .
+```
+
+```shell
+docker push ghcr.io/xenon-middleware/diracclient:8.0.18
+docker tag ghcr.io/xenon-middleware/diracclient:8.0.18 ghcr.io/xenon-middleware/diracclient:latest
+docker push ghcr.io/xenon-middleware/diracclient:latest
 ```

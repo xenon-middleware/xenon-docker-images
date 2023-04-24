@@ -5,6 +5,7 @@ services:
     image: ghcr.io/xenon-middleware/dirac:8.0.18
     privileged: true
   test:
+    image: ghcr.io/xenon-middleware/diracclient:8.0.18
     build: .
     volumes:
       - .:/src
