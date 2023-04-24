@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+dirac_pilot_version = $1
 # TODO make prettier by moving to install.cfg or using less commands
 
 # set -euo pipefail
@@ -338,7 +339,7 @@ EOL
 # Operations/MyDIRAC-Production {
 #     Pilot
 #     {
-#     Version = v8r0p18
+#     Version = ${dirac_pilot_version}
 #     CheckVersion = False
 #     Command
 #     {
@@ -360,6 +361,7 @@ EOL
 #     StaticDirs = pilot
 # }
 python3 << EOL
+import os
 import sys
 import DIRAC
 
@@ -418,7 +420,8 @@ if not res["OK"]:
     print(res["Message"])
     sys.exit(1)
 
-csAPI.setOption("Operations/MyDIRAC-Production/Pilot/Version", "v8r0p18")
+dirac_pilot_version = os.environ["dirac_pilot_version"]
+csAPI.setOption("Operations/MyDIRAC-Production/Pilot/Version",dirac_pilot_version)
 csAPI.setOption("Operations/MyDIRAC-Production/Pilot/CheckVersion", "False")
 
 res = csAPI.createSection("Operations/MyDIRAC-Production/Pilot/Command")
@@ -494,7 +497,7 @@ echo 'restart WorkloadManagement *' | dirac-admin-sysadmin-cli --host dirac-tuto
 # Make sure pilot has proxy it can use
 dirac-proxy-init -g dirac_data -C /opt/dirac/user/client.pem -K /opt/dirac/user/client.key
 
-# TODO make sure pilot has been installed, by submitting a job and waiting for it to complete
+# TODO make sure pilot deps are only installed once, now each pilot will install diracos in own directory
 
 # TODO make intervals shorter to make using container in test suite quicker
 
@@ -503,6 +506,3 @@ dirac-proxy-init -g dirac_data -C /opt/dirac/user/client.pem -K /opt/dirac/user/
 # TODO add monitoring?
 # see https://github.com/DIRACGrid/DIRAC/blob/integration/docs/source/AdministratorGuide/Systems/MonitoringSystem/index.rst
 # will need opensearch service to be set up
-
-# TODO add cvmfs to store apptainer images
-

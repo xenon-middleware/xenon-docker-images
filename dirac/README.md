@@ -1,35 +1,63 @@
 # Dirac
 
+[DIRAC](https://diracgrid.org) is an interware, meaning a software framework for distributed computing.
+
 Follows the instructions from:
 https://dirac.readthedocs.io/en/latest/AdministratorGuide/Tutorials/basicTutoSetup.html
 and
 https://github.com/DIRACGrid/DIRAC/blob/integration/docs/source/AdministratorGuide/Tutorials/basicTutoSetup.sh
 and integration test scripts.
 
+Container image at https://github.com/xenon-middleware/xenon-docker-images/pkgs/container/dirac .
+
 ## Run from GHCR
 
 ```shell
-docker run --privileged --hostname dirac-tuto --name dirac-tuto ghcr.io/xenon-middleware/dirac:latest
+docker run --privileged --hostname dirac-tuto --name dirac-tuto ghcr.io/xenon-middleware/dirac:8.0.18
 ```
+
+## Configuration
+
+* hostname: dirac-tuto
+* host certificates: /opt/dirac/etc/grid-security/certificates
+* setup: MyDIRAC-Production
+* Configuration server: dips://dirac-tuto:9135/Configuration/Server
+* user 
+  * name: diracuser
+  * groups:
+    * dirac_user: to upload/download files and submit jobs
+    * dirac_admin: to change configuration
+    * dirac_data: for pilot job
+  * certificates: /home/diracuser/.globus
+* WebApp:
+  * https://dirac-tuto:8443
+  * user web certificate: /home/diracuser/.globus/certificate.p12
+* CernVM File System:
+  * root: /cvmfs
+  * repository: /cvmfs/my.repo.name
+  * writable by everyone
+  * just a directory not a real CVMFS repository
+* Apptainer
+  * Computing element not configured
 
 ## Build
 
 ```shell
-docker build -t ghcr.io/xenon-middleware/dirac:latest --progress plain --build-arg BUILDKIT_SANDBOX_HOSTNAME=dirac-tuto .
+docker build -t ghcr.io/xenon-middleware/dirac:8.0.18 --progress plain --build-arg BUILDKIT_SANDBOX_HOSTNAME=dirac-tuto .
 ```
 (During build need to interact with services which require host certificates. The `--build-arg BUILDKIT_SANDBOX_HOSTNAME=dirac-tuto` fixes the hostname so the certificate validation works.)
 
 ## Run
 
 ```shell
-docker run --privileged --hostname dirac-tuto --name dirac-tuto ghcr.io/xenon-middleware/dirac:latest
+docker run --privileged --hostname dirac-tuto --name dirac-tuto ghcr.io/xenon-middleware/dirac:8.0.18
 ```
 (to run apptainer containers requires the --privileged flag)
 
 For debugging:
 
 ```shell
-docker run --privileged -ti --rm --hostname dirac-tuto --name dirac-tuto --entrypoint bash ghcr.io/xenon-middleware/dirac:latest
+docker run --privileged -ti --rm --hostname dirac-tuto --name dirac-tuto --entrypoint bash ghcr.io/xenon-middleware/dirac:8.0.18
 # In another terminal
 docker exec -ti dirac-tuto bash
 /bin/entrypoint.sh &

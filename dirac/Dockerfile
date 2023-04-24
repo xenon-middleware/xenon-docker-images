@@ -1,12 +1,16 @@
 FROM diracgrid/cc7-dirac
 
+LABEL org.opencontainers.image.source=https://github.com/xenon-middleware/xenon-docker-images
+LABEL org.opencontainers.image.documentation=https://github.com/xenon-middleware/xenon-docker-images/blob/dirac/dirac/README.md
+LABEL org.opencontainers.image.licenses=Apache-2.0
+
+ARG dirac_version=8.0.18
+ARG dirac_pilot_version=v8r0p18
+
 # Use BUILDKIT_SANDBOX_HOSTNAME to force hostname
 # see https://docs.docker.com/engine/reference/builder/#buildkit-built-in-build-args
 
 RUN yum install -y tzdata passwd patch openssh-server
-
-# Dont need apptainer as it is part of diracos conda environment
-# . /opt/dirac/bashrc && apptainer run docker://sylabsio/lolcow:latest
 
 COPY MariaDB.repo /etc/yum.repos.d/MariaDB.repo
 COPY entrypoint.sh /bin/entrypoint.sh
@@ -65,6 +69,7 @@ WORKDIR /opt/dirac
 
 COPY install.cfg install_site.sh.patch post_install.sh ./
 
+
 RUN curl -O https://raw.githubusercontent.com/DIRACGrid/management/master/install_site.sh && \
     chmod +x install_site.sh post_install.sh && \
     patch install_site.sh install_site.sh.patch && \
@@ -80,7 +85,7 @@ RUN curl -O https://raw.githubusercontent.com/DIRACGrid/management/master/instal
 # In tutorial the setup is configured as diracuser user, but here we use dirac user, so not to have diracos installed twice.
 RUN nohup bash -c '/bin/entrypoint.sh &' && \
     ln -s /var/lib/mysql/mysql.sock /tmp/mysql.sock && \
-    su dirac -c './install_site.sh install.cfg && ./post_install.sh'
+    su dirac -c './install_site.sh -v ${dirac_version} install.cfg && ./post_install.sh ${dirac_pilot_version}'
 
 # 2023-04-17 14:39:58 UTC dirac-setup-site [140578409948992] ERROR: Cannot connect to the DB  MySQL Error ( 1131 : Could not connect: (2002, "Can't connect to local MySQL server through socket '/tmp/mysql.sock' (2)"))
 # 2023-04-17 14:39:58 UTC dirac-setup-site [140578409948992] ERROR: Could not connect to MySQL server
@@ -100,7 +105,10 @@ RUN adduser -s /bin/bash -d /home/diracuser diracuser || echo "User diracuser al
     openssl pkcs12 -export -out ~diracuser/.globus/certificate.p12 -inkey ~diracuser/.globus/userkey.pem -in ~diracuser/.globus/usercert.pem -passout pass: && \
     chown -R diracuser:diracuser ~diracuser/.globus/
 
-COPY dirac.client.cfg /home/diracuser/dirac.cfg
+# Fake CernVM File System, can be used for staging software 
+RUN mkdir -p /cvmfs/my.repo.name && chmod 777 -R /cvmfs
+
+COPY --chown=diracuser:diracuser dirac.client.cfg /home/diracuser/dirac.cfg
 
 CMD ["/bin/entrypoint.sh"]
 
