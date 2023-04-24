@@ -4,11 +4,11 @@ services:
   dirac-tuto:
     image: ghcr.io/xenon-middleware/dirac:8.0.18
     privileged: true
+    hostname: dirac-tuto
   test:
     image: ghcr.io/xenon-middleware/diracclient:8.0.18
     build: .
     volumes:
       - .:/src
-    command: pip install pytest && pytest
     depends_on:
       - dirac-tuto

@@ -32,6 +32,4 @@ COPY --chown=diracuser:diracuser --from=ghcr.io/xenon-middleware/dirac:8.0.18 /h
 VOLUME /src
 WORKDIR /src
 
-# COPY pyproject.toml .
-
-# RUN pip install -e .[dev]
+ENTRYPOINT ["/bin/bash", "-l", "-c"]
