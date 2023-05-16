@@ -9,7 +9,7 @@ Should be used together with [dirac](../dirac) server inside a docker compose fi
 To run Python tests against the DIRAC container you need to use docker compose to fix the hostname resolution.
 
 ```shell
-docker cmpose run -ti test 'dirac-proxy-init -g dirac_user && pytest test_submit.py'
+docker compose run -ti test 'dirac-proxy-init -g dirac_user && pytest test_submit.py'
 # ====================================================================== test session starts =======================================================================
 # platform linux -- Python 3.9.15, pytest-7.2.1, pluggy-1.0.0
 # rootdir: /src
