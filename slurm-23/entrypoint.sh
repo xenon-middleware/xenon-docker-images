@@ -1,6 +1,9 @@
 #!/bin/bash
+
 echo -e "\nstarting services..."
-systemctl start sshd munge slurmctld slurmrestd slurmdbd
+systemctl start mariadb
+systemctl start slurmdbd
+systemctl start sshd munge slurmctld  slurmrestd
 
 # TODO run slurmd instances with systemd
 echo -e "\nstarting compute nodes..."
