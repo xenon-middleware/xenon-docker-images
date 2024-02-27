@@ -34,11 +34,11 @@ COPY --from=build \
      /opt/
 
 RUN apt update && apt install -y /opt/*.deb
-RUN useradd --system -U slurm 
+RUN useradd --system -U slurm
 
 # Configure
 
-COPY slurm.conf slurm.key slurm.cert /etc/
+COPY slurm.conf slurm.key slurm.cert /etc/slurm/
 
 # sshd
 
