@@ -15,6 +15,10 @@ RUN wget https://download.schedmd.com/slurm/slurm-${SLURM_VERSION}.tar.bz2 && \
     tar -xf slurm-${SLURM_VERSION}.tar.bz2 --strip-components=1 && \
     rm slurm-${SLURM_VERSION}.tar.bz2
 
+ADD nocgroup.patch /src
+
+RUN patch -i nocgroup.patch
+
 RUN mk-build-deps -t'apt-get -y -o Debug::pkgProblemResolver=yes --no-install-recommends' -i debian/control && \ 
     debuild -b -uc -us
 
