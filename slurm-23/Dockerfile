@@ -4,7 +4,7 @@ RUN apt update && apt install -y \
     build-essential fakeroot devscripts equivs \
     gcc make libssl-dev libmunge-dev tar wget \
     libfreeipmi-dev libreadline-dev \
-    systemd libmariadb-dev \
+    systemd libmariadb-dev libpmix-dev \
     libjwt-dev libhttp-parser-dev libjson-c-dev libyaml-dev 
 
 WORKDIR /src
@@ -14,10 +14,6 @@ ARG SLURM_VERSION=23.11.4
 RUN wget https://download.schedmd.com/slurm/slurm-${SLURM_VERSION}.tar.bz2 && \
     tar -xf slurm-${SLURM_VERSION}.tar.bz2 --strip-components=1 && \
     rm slurm-${SLURM_VERSION}.tar.bz2
-
-ADD nocgroup.patch /src
-
-RUN patch -i nocgroup.patch
 
 RUN mk-build-deps -t'apt-get -y -o Debug::pkgProblemResolver=yes --no-install-recommends' -i debian/control && \ 
     debuild -b -uc -us
@@ -39,22 +35,28 @@ COPY --from=build \
      /slurm-smd-slurmctld_${SLURM_VERSION}-1_amd64.deb \
      /opt/
 
-RUN apt update && apt install -y mariadb-server openssh-server /opt/*.deb
+RUN apt update && apt install -y mariadb-server openssh-server python3-pip less /opt/*.deb
 RUN useradd --system -U slurm
+
+# slurmrestd can not run as root
+RUN useradd --system -U slurmrest && \
+    sed -i 's/# User=/User=slurmrest/' /usr/lib/systemd/system/slurmrestd.service && \
+    sed -i 's/# Group=/Group=slurmrest/' /usr/lib/systemd/system/slurmrestd.service
+
+COPY slurmd*.service /usr/lib/systemd/system/
 
 # systemd 
 # from https://github.com/gdraheim/docker-systemctl-replacement
 
-RUN apt install -y python3-pip less && \
-    pip install docker-systemctl-replacement && \
+RUN pip install docker-systemctl-replacement && \
     rm /usr/bin/systemctl && \
     ln -s /usr/local/bin/systemctl.py /usr/bin/systemctl
 
 # Configure
 
 COPY slurm.conf /etc/slurm/
-COPY --chmod=400 --chown=slurm:slurm jwt_hs256.key slurmdbd.conf /etc/slurm/
-COPY --chmod=600 --chown=slurm:slurm slurmdbd.conf /etc/slurm/
+COPY --chmod=600 --chown=slurm:slurm slurmdbd.conf cgroup.conf /etc/slurm/
+COPY --chmod=400 --chown=slurm:slurm jwt_hs256.key /etc/slurm/
 
 RUN mkdir -p /var/spool/slurm/state \
     /var/spool/slurm/slurmd.node-0 \
@@ -66,8 +68,7 @@ RUN mkdir -p /var/spool/slurm/state \
     chown -R slurm:slurm /var/spool/slurm /var/log/slurm && \
     mkdir -p /var/lib/mysql /run/mysqld; \
 	chown -R mysql:root /var/lib/mysql /var/run/mysqld; \
-	chmod 755 /var//run/mysqld; \
-    echo 'SLURMRESTD_SECURITY=disable_unshare_files,disable_unshare_sysv' >> /etc/default/slurmrestd
+	chmod 755 /var//run/mysqld;
 
 # Setup db for slurm accounting
 

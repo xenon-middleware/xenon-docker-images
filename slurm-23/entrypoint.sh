@@ -1,16 +1,23 @@
 #!/bin/bash
 
-echo -e "\nstarting services..."
-systemctl start mariadb
-systemctl start slurmdbd
-systemctl start sshd munge slurmctld  slurmrestd
+echo -e "\nstarting db..."
+systemctl start mariadb munge sshd
 
-# TODO run slurmd instances with systemd
+echo -e "\nwaiting for db to start..."
+sleep 1
+
+echo -e "\nstarting slurmdbd..."
+
+systemctl start slurmdbd
+
+echo -e "\nwaiting for slurmdbd to start..."
+sleep 1
+
+echo -e "\nstarting slurm..."
+systemctl start slurmctld slurmrestd
+
+mkdir -p /sys/fs/cgroup/system.slice
 echo -e "\nstarting compute nodes..."
-/usr/sbin/slurmd -D -N node-0 > /var/log/slurmd-node-0.out.log 2> /var/log/slurmd-node-0.err.log &
-/usr/sbin/slurmd -D -N node-1 > /var/log/slurmd-node-1.out.log 2> /var/log/slurmd-node-1.err.log &
-/usr/sbin/slurmd -D -N node-2 > /var/log/slurmd-node-2.out.log 2> /var/log/slurmd-node-2.err.log &
-/usr/sbin/slurmd -D -N node-3 > /var/log/slurmd-node-3.out.log 2> /var/log/slurmd-node-3.err.log &
-/usr/sbin/slurmd -D -N node-4 > /var/log/slurmd-node-4.out.log 2> /var/log/slurmd-node-4.err.log &
+systemctl start slurmd0 slurmd1 slurmd2 slurmd3 slurmd4
 
 sleep infinity

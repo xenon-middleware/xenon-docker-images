@@ -8,7 +8,8 @@ Features:
 ## Run
 
 ```bash
-docker run -p 10022:22 ghcr.io/xenon-middleware/slurm:23
+# https://serverfault.com/questions/1053187/systemd-fails-to-run-in-a-docker-container-when-using-cgroupv2-cgroupns-priva
+docker run  --privileged --cgroupns=private -p 10022:22 ghcr.io/xenon-middleware/slurm:23
 ```
 
 Once the container is running, you can log into it with (password is 'javagat'):
