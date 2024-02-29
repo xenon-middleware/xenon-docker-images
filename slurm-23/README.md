@@ -10,6 +10,7 @@ Features:
 ```bash
 docker run -p 10022:22 ghcr.io/xenon-middleware/slurm:23
 ```
+(depending on your Docker setup, you might need to run with `--privileged --cgroupns=private` arguments)
 
 Once the container is running, you can log into it with (password is 'javagat'):
 
