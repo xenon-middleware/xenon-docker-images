@@ -8,14 +8,26 @@ Features:
 ## Run
 
 ```bash
-# https://serverfault.com/questions/1053187/systemd-fails-to-run-in-a-docker-container-when-using-cgroupv2-cgroupns-priva
-docker run  --privileged --cgroupns=private -p 10022:22 ghcr.io/xenon-middleware/slurm:23
+docker run -p 10022:22 ghcr.io/xenon-middleware/slurm:23
 ```
 
 Once the container is running, you can log into it with (password is 'javagat'):
 
 ```bash
 ssh -p 10022 xenon@localhost
+```
+
+You can then submit a job, e.g.:
+
+```bash
+srun /bin/hostname
+```
+
+Check the status with 
+
+```bash
+squeue
+sacct
 ```
 
 ## Build

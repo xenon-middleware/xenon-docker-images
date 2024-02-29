@@ -20,4 +20,6 @@ mkdir -p /sys/fs/cgroup/system.slice
 echo -e "\nstarting compute nodes..."
 systemctl start slurmd0 slurmd1 slurmd2 slurmd3 slurmd4
 
+echo -e "\nEverthing is started"
+
 sleep infinity

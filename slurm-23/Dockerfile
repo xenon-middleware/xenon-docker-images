@@ -1,5 +1,9 @@
 FROM ubuntu:22.04 as build
 
+LABEL org.opencontainers.image.source https://github.com/xenon-middleware/xenon-docker-images
+LABEL org.opencontainers.image.documentation https://github.com/xenon-middleware/xenon-docker-images/blob/slurm-23/slurm-23/README.md
+LABEL org.opencontainers.image.licenses Apache-2.0
+
 RUN apt update && apt install -y \
     build-essential fakeroot devscripts equivs \
     gcc make libssl-dev libmunge-dev tar wget \
@@ -18,8 +22,6 @@ RUN wget https://download.schedmd.com/slurm/slurm-${SLURM_VERSION}.tar.bz2 && \
 RUN mk-build-deps -t'apt-get -y -o Debug::pkgProblemResolver=yes --no-install-recommends' -i debian/control && \ 
     debuild -b -uc -us
 
-RUN ls -l /
-
 FROM ubuntu:22.04
 
 # install
@@ -36,10 +38,10 @@ COPY --from=build \
      /opt/
 
 RUN apt update && apt install -y mariadb-server openssh-server python3-pip less /opt/*.deb
-RUN useradd --system -U slurm
+RUN useradd --system slurm
 
 # slurmrestd can not run as root
-RUN useradd --system -U slurmrest && \
+RUN useradd --system slurmrest && \
     sed -i 's/# User=/User=slurmrest/' /usr/lib/systemd/system/slurmrestd.service && \
     sed -i 's/# Group=/Group=slurmrest/' /usr/lib/systemd/system/slurmrestd.service
 
@@ -47,7 +49,6 @@ COPY slurmd*.service /usr/lib/systemd/system/
 
 # systemd 
 # from https://github.com/gdraheim/docker-systemctl-replacement
-
 RUN pip install docker-systemctl-replacement && \
     rm /usr/bin/systemctl && \
     ln -s /usr/local/bin/systemctl.py /usr/bin/systemctl
@@ -55,8 +56,8 @@ RUN pip install docker-systemctl-replacement && \
 # Configure
 
 COPY slurm.conf /etc/slurm/
-COPY --chmod=600 --chown=slurm:slurm slurmdbd.conf cgroup.conf /etc/slurm/
-COPY --chmod=400 --chown=slurm:slurm jwt_hs256.key /etc/slurm/
+COPY --chmod=600 --chown=slurm:nogroup slurmdbd.conf cgroup.conf /etc/slurm/
+COPY --chmod=400 --chown=slurm:nogroup jwt_hs256.key /etc/slurm/
 
 RUN mkdir -p /var/spool/slurm/state \
     /var/spool/slurm/slurmd.node-0 \
@@ -65,7 +66,7 @@ RUN mkdir -p /var/spool/slurm/state \
     /var/spool/slurm/slurmd.node-3 \
     /var/spool/slurm/slurmd.node-4 \
     /var/log/slurm && \
-    chown -R slurm:slurm /var/spool/slurm /var/log/slurm && \
+    chown -R slurm:nogroup /var/spool/slurm /var/log/slurm && \
     mkdir -p /var/lib/mysql /run/mysqld; \
 	chown -R mysql:root /var/lib/mysql /var/run/mysqld; \
 	chmod 755 /var//run/mysqld;
@@ -80,14 +81,19 @@ RUN systemctl start mariadb && \
     systemctl stop mariadb
 
 # xenon user
-
-RUN groupadd --system xenon && useradd --system --gid xenon --create-home xenon
+RUN useradd -U -s /bin/bash xenon
 
 RUN echo xenon:javagat | chpasswd
 
 USER xenon
 WORKDIR /home/xenon
 
+ADD --chown=xenon:xenon .ssh .ssh
+RUN chmod 700 .ssh && \
+    chmod 600 .ssh/id_rsa .ssh/id_dsa && \
+    chmod 644 .ssh/authorized_keys .ssh/id_rsa.pub .ssh/id_dsa.pub
+
+# Fixtures for xenon integration tests
 RUN mkdir -p filesystem-test-fixture/links && \
 echo "Hello World" > filesystem-test-fixture/links/file0 && \
 touch filesystem-test-fixture/links/file1 && \

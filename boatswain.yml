@@ -67,6 +67,8 @@ images:
     slurm:20:
         context: slurm-20
         from: slurm-abstract
+    slurm:23:
+        context: slurm-23
     slurm:
         context: slurm-17
         from: slurm-abstract

@@ -4,7 +4,7 @@ Collection of Dockerfiles used for integration tests of [xenon](https://github.c
 
 Each sub-directory contains a Dockerfile and optionally a docker-compose file for a different file system or batch schedulers.
 
-The docker images are registered as automated builds in the [xenon middleware Docker Hub organization](https://hub.docker.com/u/xenonmiddleware/).
+The docker images are registered as automated builds in the [xenon middleware Docker Hub organization](https://hub.docker.com/u/xenonmiddleware/) and newer ones on [GitHub packages](https://github.com/orgs/xenon-middleware/packages).
 
 ## Local build
 
