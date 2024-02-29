@@ -1,7 +1,7 @@
 FROM ubuntu:22.04 as build
 
 LABEL org.opencontainers.image.source https://github.com/xenon-middleware/xenon-docker-images
-LABEL org.opencontainers.image.documentation https://github.com/xenon-middleware/xenon-docker-images/blob/slurm-23/slurm-23/README.md
+LABEL org.opencontainers.image.documentation https://github.com/xenon-middleware/xenon-docker-images/blob/master/slurm-23/README.md
 LABEL org.opencontainers.image.licenses Apache-2.0
 
 RUN apt update && apt install -y \
