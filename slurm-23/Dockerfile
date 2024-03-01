@@ -9,7 +9,7 @@ RUN apt update && apt install -y \
     gcc make libssl-dev libmunge-dev tar wget \
     libfreeipmi-dev libreadline-dev \
     systemd libmariadb-dev libpmix-dev \
-    libjwt-dev libhttp-parser-dev libjson-c-dev libyaml-dev 
+    libjwt-dev libhttp-parser-dev libjson-c-dev libyaml-dev
 
 WORKDIR /src
 
@@ -37,19 +37,21 @@ COPY --from=build \
      /slurm-smd-slurmctld_${SLURM_VERSION}-1_amd64.deb \
      /opt/
 
-RUN apt update && apt install -y mariadb-server openssh-server python3-pip less /opt/*.deb
+RUN apt update && apt install -y mariadb-server openssh-server python3 less wget /opt/*.deb
 RUN useradd --system slurm
 
 # slurmrestd can not run as root
 RUN useradd --system slurmrest && \
     sed -i 's/# User=/User=slurmrest/' /usr/lib/systemd/system/slurmrestd.service && \
-    sed -i 's/# Group=/Group=slurmrest/' /usr/lib/systemd/system/slurmrestd.service
+    sed -i 's/# Group=/Group=slurmrest/' /usr/lib/systemd/system/slurmrestd.service && \
+    mkdir /usr/com && chown slurmrest /usr/com
 
 COPY slurmd*.service /usr/lib/systemd/system/
 
 # systemd 
 # from https://github.com/gdraheim/docker-systemctl-replacement
-RUN pip install docker-systemctl-replacement && \
+RUN wget -O /usr/local/bin/systemctl.py https://github.com/gdraheim/docker-systemctl-replacement/raw/master/files/docker/systemctl3.py && \
+    chmod +x /usr/local/bin/systemctl.py && \
     rm /usr/bin/systemctl && \
     ln -s /usr/local/bin/systemctl.py /usr/bin/systemctl
 
