@@ -4,8 +4,9 @@ LABEL org.opencontainers.image.source=https://github.com/xenon-middleware/xenon-
 LABEL org.opencontainers.image.documentation=https://github.com/xenon-middleware/xenon-docker-images/blob/dirac/dirac/README.md
 LABEL org.opencontainers.image.licenses=Apache-2.0
 
-ARG dirac_version=8.0.18
-ARG dirac_pilot_version=v8r0p18
+ARG dirac_version=8.0.39
+ARG dirac_pilot_version=v8r0p39
+ARG diracos_version=2.38
 
 # Use BUILDKIT_SANDBOX_HOSTNAME to force hostname
 # see https://docs.docker.com/engine/reference/builder/#buildkit-built-in-build-args
@@ -100,7 +101,21 @@ RUN adduser -s /bin/bash -d /home/diracuser diracuser || echo "User diracuser al
     chown -R diracuser:diracuser ~diracuser/.globus/
 
 # Fake CernVM File System, can be used for staging software 
-RUN mkdir -p /cvmfs/my.repo.name && chmod 777 -R /cvmfs
+RUN mkdir -p /cvmfs/my.repo.name && chmod 777 -R /cvmfs && \
+    # /home/diracpilot/... aka https://github.com/DIRACGrid/Pilot/ is looking in /cvmfs/grid.cern.ch for stuff, so we provide it here
+    mkdir -p /cvmfs/grid.cern.ch/etc && ln -s /opt/dirac/etc/grid-security /cvmfs/grid.cern.ch/etc/grid-security && \
+    mkdir /opt/dirac/etc/grid-security/vomsdir /opt/dirac/etc/grid-security/vomses && \
+    touch /opt/dirac/etc/grid-security/vomsdir/.valid /opt/dirac/etc/grid-security/vomses/.valid
+
+# pilot job is looking for /cvmfs/dirac.egi.eu/dirac/v8r0p39/Linux-x86_64/diracosrc
+# for quicker pilot startup so we provide it here, otherwise it will be downloaded for every pilot job
+RUN mkdir -p /cvmfs/dirac.egi.eu/dirac/${dirac_pilot_version} && \
+           # https://github.com/DIRACGrid/DIRACOS2/releases/download/2.38/DIRACOS-Linux-x86_64.sh
+    curl -LO https://github.com/DIRACGrid/DIRACOS2/releases/download/${diracos_version}/DIRACOS-Linux-$(uname -m).sh && \
+    bash DIRACOS-Linux-$(uname -m).sh -p /cvmfs/dirac.egi.eu/dirac/${dirac_pilot_version}/Linux-$(uname -m) && \
+    rm DIRACOS-Linux-$(uname -m).sh && \
+    source /cvmfs/dirac.egi.eu/dirac/${dirac_pilot_version}/Linux-$(uname -m)/diracosrc && pip install DIRAC==${dirac_version}
+
 # TODO to publish software to cvmfs, we might need a real cvmfs server
 
 COPY --chown=diracuser:diracuser dirac.client.cfg /home/diracuser/dirac.cfg
