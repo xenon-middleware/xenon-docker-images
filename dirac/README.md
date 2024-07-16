@@ -56,7 +56,7 @@ This can be done with `docker-compose` see [../diracclient](diracclient/README.m
 ## Build
 
 ```shell
-docker build -t ghcr.io/xenon-middleware/dirac:8.0.39 --progress plain \
+docker build -t ghcr.io/xenon-middleware/dirac:8.0.49 --progress plain \
   --build-arg BUILDKIT_SANDBOX_HOSTNAME=dirac-tuto .
 ```
 During build need to interact with services which require host certificates. 
