@@ -25,8 +25,9 @@ def test_submit():
     for i in range(max_checks):
         print('Checking status')
         result = monitoring.getJobsStatus(job_id)
+        print(result)
         if result['Value'][job_id]['Status'] == 'Done':
-            break;
+            break
         time.sleep(sleep_time)
     else:
         raise Exception("Failed to finish job")
