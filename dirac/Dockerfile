@@ -1,12 +1,12 @@
-FROM diracgrid/cc7-dirac
+FROM cern/alma9-base
 
 LABEL org.opencontainers.image.source=https://github.com/xenon-middleware/xenon-docker-images
 LABEL org.opencontainers.image.documentation=https://github.com/xenon-middleware/xenon-docker-images/blob/dirac/dirac/README.md
 LABEL org.opencontainers.image.licenses=Apache-2.0
 
-ARG dirac_version=8.0.49
-ARG dirac_pilot_version=v8r0p49
-ARG diracos_version=2.42
+ARG dirac_version=8.0.53
+ARG dirac_pilot_version=v8r0p53
+ARG diracos_version=2.43
 
 # Use BUILDKIT_SANDBOX_HOSTNAME to force hostname
 # see https://docs.docker.com/engine/reference/builder/#buildkit-built-in-build-args
@@ -120,9 +120,11 @@ RUN mkdir -p /cvmfs/dirac.egi.eu/dirac/${dirac_pilot_version} && \
 
 COPY --chown=diracuser:diracuser dirac.client.cfg /home/diracuser/dirac.cfg
 
-RUN yum install -y myproxy myproxy-server myproxy-admin 
-RUN chown dirac:dirac /var/lib/myproxy/
+# docker run -ti --rm --privileged cern/alma9-base:latest bash
+# RUN yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm 
+# RUN yum install -y https://github.com/apptainer/apptainer/releases/download/v1.3.4/apptainer-1.3.4-1.x86_64.rpm
+# RUN yum install -y https://github.com/apptainer/apptainer/releases/download/v1.3.4/apptainer-suid-1.3.4-1.x86_64.rpm
 
-COPY myproxy-server.config /etc/myproxy-server.config
+# RUN apptainer run docker://alpine cat /etc/os-release
 
 CMD ["/bin/entrypoint.sh"]
