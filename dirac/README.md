@@ -13,7 +13,7 @@ and integration test scripts.
 Run image from https://github.com/xenon-middleware/xenon-docker-images/pkgs/container/dirac with:
 
 ```shell
-docker run --privileged --hostname dirac-tuto ghcr.io/xenon-middleware/dirac:8.0.49
+docker run --privileged --hostname dirac-tuto ghcr.io/xenon-middleware/dirac:8.0.53
 ```
 The `--privileged` flag is required to run apptainer containers inside Docker container.
 
@@ -56,7 +56,7 @@ This can be done with `docker-compose` see [../diracclient](diracclient/README.m
 ## Build
 
 ```shell
-docker build -t ghcr.io/xenon-middleware/dirac:8.0.49 --progress plain \
+docker build -t ghcr.io/xenon-middleware/dirac:8.0.53 --progress plain \
   --build-arg BUILDKIT_SANDBOX_HOSTNAME=dirac-tuto .
 ```
 During build need to interact with services which require host certificates. 
@@ -68,8 +68,8 @@ The `--progress plain` makes it possible to see all the output logs.
 Make sure to [configure Docker to be able to push to GitHub container registry](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry#authenticating-to-the-container-registry).
 
 ```shell
-docker push ghcr.io/xenon-middleware/dirac:8.0.49
-docker tag ghcr.io/xenon-middleware/dirac:8.0.49 ghcr.io/xenon-middleware/dirac:latest
+docker push ghcr.io/xenon-middleware/dirac:8.0.53
+docker tag ghcr.io/xenon-middleware/dirac:8.0.53 ghcr.io/xenon-middleware/dirac:latest
 docker push ghcr.io/xenon-middleware/dirac:latest
 ```
 
