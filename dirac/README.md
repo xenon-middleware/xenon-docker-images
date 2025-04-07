@@ -13,7 +13,7 @@ and integration test scripts.
 Run image from https://github.com/xenon-middleware/xenon-docker-images/pkgs/container/dirac with:
 
 ```shell
-docker run --privileged --hostname dirac-tuto ghcr.io/xenon-middleware/dirac:8.0.39
+docker run --privileged --hostname dirac-tuto ghcr.io/xenon-middleware/dirac:8.0.49
 ```
 The `--privileged` flag is required to run apptainer containers inside Docker container.
 
@@ -56,7 +56,7 @@ This can be done with `docker-compose` see [../diracclient](diracclient/README.m
 ## Build
 
 ```shell
-docker build -t ghcr.io/xenon-middleware/dirac:8.0.39 --progress plain \
+docker build -t ghcr.io/xenon-middleware/dirac:8.0.49 --progress plain \
   --build-arg BUILDKIT_SANDBOX_HOSTNAME=dirac-tuto .
 ```
 During build need to interact with services which require host certificates. 
@@ -68,8 +68,8 @@ The `--progress plain` makes it possible to see all the output logs.
 Make sure to [configure Docker to be able to push to GitHub container registry](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry#authenticating-to-the-container-registry).
 
 ```shell
-docker push ghcr.io/xenon-middleware/dirac:8.0.39
-docker tag ghcr.io/xenon-middleware/dirac:8.0.39 ghcr.io/xenon-middleware/dirac:latest
+docker push ghcr.io/xenon-middleware/dirac:8.0.49
+docker tag ghcr.io/xenon-middleware/dirac:8.0.49 ghcr.io/xenon-middleware/dirac:latest
 docker push ghcr.io/xenon-middleware/dirac:latest
 ```
 
@@ -114,3 +114,31 @@ The [DIRAC web portal](https://dirac.readthedocs.io/en/latest/UserGuide/WebPorta
 3. Add dirac-tuto + ip of container (use `docker inspect` to get ip) to /etc/hosts of machine running the browser
 4. Goto https://dirac-tuto:8443/DIRAC/s:MyDIRAC-Production/g:dirac_user/
    * Ignore host certificate warning
+
+## Debugging
+
+The DIRAC server stores logs in `/opt/dirac/startup/*/log/current`
+(where `*` are the DIRAC services) and pilot jobs are started under `/home/diracpilot`.
+It can take a while for the job to start due to
+the `WorkloadManagement_SiteDirector` service starting a pilot.
+
+When the DIRAC server container is running you can login to it with
+
+```shell
+docker exec -ti <id or name of container> bash
+. bashrc
+dirac-proxy-init -K ~diracuser/.globus/userkey.pem -C ~diracuser/.globus/usercert.pem
+# to fetch job status
+dirac-wms-job-status 1
+dirac-wms-job-logging-info 1
+# to download raw logs
+dirac-wms-job-get-output 1
+# to download output files
+dirac-wms-job-get-output-data 1
+# to browse storage
+dirac-dms-filecatalog-cli
+# pilot logs
+cat /opt/dirac/startup/WorkloadManagement_SiteDirector/log/current
+cat ~diracpilot/localsite/output/*
+cat ~diracpilot/localsite/error/*
+```
