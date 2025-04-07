@@ -10,8 +10,9 @@ Features:
 ## Run
 
 ```bash
-docker run -p 10022:22 ghcr.io/xenon-middleware/slurm:23
+docker run  --privileged -p 10022:22 ghcr.io/xenon-middleware/slurm:23
 ```
+(privileged flag is needed becasue slurm needs cgroup and IPC permission)
 
 (depending on your Docker setup, you might need to run with `--privileged --cgroupns=private` arguments)
 (if you want to interact with the REST API outside container add `-p 6820:6820` arguments, 
