@@ -1,0 +1,53 @@
+# Copy of original with changes to make in runnable in Docker
+[Unit]
+Description=MariaDB 10.11.11 database server
+Documentation=man:mariadbd(8)
+Documentation=https://mariadb.com/kb/en/library/systemd/
+After=network.target
+
+[Install]
+WantedBy=multi-user.target
+
+[Service]
+
+##############################################################################
+## Core requirements
+##
+
+Type=notify
+
+# Setting this to true can break replication and the Type=notify settings
+# See also bind-address mariadbd option.
+PrivateNetwork=false
+
+##############################################################################
+## Package maintainers
+##
+
+User=mysql
+Group=mysql
+CapabilityBoundingSet=CAP_IPC_LOCK CAP_DAC_OVERRIDE CAP_AUDIT_WRITE
+
+# PrivateDevices=true implies NoNewPrivileges=true and
+# SUID auth_pam_tool suddenly doesn't do setuid anymore
+PrivateDevices=false
+
+# Prevent writes to /usr, /boot, and /etc
+ProtectSystem=full
+
+# Doesn't yet work properly with SELinux enabled
+# NoNewPrivileges=true
+
+# Prevent accessing /home, /root and /run/user
+ProtectHome=true
+
+# Execute pre and post scripts as root, otherwise it does it as User=
+PermissionsStartOnly=true
+ExecStart=/usr/sbin/mariadbd $MYSQLD_OPTS
+
+ExecStartPost=/etc/mysql/debian-start
+
+KillSignal=SIGTERM
+
+# Don't want to see an automated SIGKILL ever
+SendSIGKILL=no
