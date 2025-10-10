@@ -41,10 +41,10 @@ RUN apt update && apt install -y mariadb-server openssh-server python3 less wget
 RUN useradd --system slurm
 
 # slurmrestd can not run as root
-RUN useradd --system slurmrest && \
-    sed -i 's/# User=/User=slurmrest/' /usr/lib/systemd/system/slurmrestd.service && \
-    sed -i 's/# Group=/Group=slurmrest/' /usr/lib/systemd/system/slurmrestd.service && \
-    mkdir /usr/com && chown slurmrest /usr/com
+RUN useradd --system slurmrestd && \
+    sed -i 's/# User=/User=slurmrestd/' /usr/lib/systemd/system/slurmrestd.service && \
+    sed -i 's/# Group=/Group=slurmrestd/' /usr/lib/systemd/system/slurmrestd.service && \
+    mkdir /usr/com && chown slurmrestd /usr/com
 
 COPY slurmd*.service /usr/lib/systemd/system/
 
