@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo -e "\nstarting db..."
-systemctl start mariadb munge sshd
+systemctl start mariadb munge ssh
 
 echo -e "\nwaiting for db to start..."
 sleep 1

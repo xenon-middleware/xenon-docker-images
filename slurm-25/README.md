@@ -55,7 +55,11 @@ wget --header="X-SLURM-USER-TOKEN:${SLURM_JWT}" -q -S -O - http://localhost:6820
 
 To build we reuse the Dockerfile and context from [../slurm-23](../slurm-23/) and just pass a different version.
 
-```shelll
+```shell
 cd ../slurm-23
-docker build --build-arg SLURM_VERSION=25.05.3 -t ghcr.io/xenon-middleware/slurm:25 .
+docker build --progress=plain --build-arg SLURM_VERSION=25.05.4 -t ghcr.io/xenon-middleware/slurm:25.05.4 .
+docker push ghcr.io/xenon-middleware/slurm:25.05.4
+# Once working, also tag as 25
+docker tag ghcr.io/xenon-middleware/slurm:25.05.4 ghcr.io/xenon-middleware/slurm:25
+docker push ghcr.io/xenon-middleware/slurm:25
 ```
