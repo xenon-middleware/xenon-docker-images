@@ -1,8 +1,8 @@
-FROM ubuntu:22.04 as build
+FROM ubuntu:24.04 AS build
 
-LABEL org.opencontainers.image.source https://github.com/xenon-middleware/xenon-docker-images
-LABEL org.opencontainers.image.documentation https://github.com/xenon-middleware/xenon-docker-images/blob/master/slurm-23/README.md
-LABEL org.opencontainers.image.licenses Apache-2.0
+LABEL org.opencontainers.image.source=https://github.com/xenon-middleware/xenon-docker-images
+LABEL org.opencontainers.image.documentation=https://github.com/xenon-middleware/xenon-docker-images/blob/master/slurm-23/README.md
+LABEL org.opencontainers.image.licenses=Apache-2.0
 
 RUN apt update && apt install -y \
     build-essential fakeroot devscripts equivs \
@@ -22,7 +22,7 @@ RUN wget https://download.schedmd.com/slurm/slurm-${SLURM_VERSION}.tar.bz2 && \
 RUN mk-build-deps -t'apt-get -y -o Debug::pkgProblemResolver=yes --no-install-recommends' -i debian/control && \ 
     debuild -b -uc -us
 
-FROM ubuntu:22.04
+FROM ubuntu:24.04
 
 # install
 
@@ -70,8 +70,8 @@ RUN mkdir -p /var/spool/slurm/state \
     /var/log/slurm && \
     chown -R slurm:nogroup /var/spool/slurm /var/log/slurm && \
     mkdir -p /var/lib/mysql /run/mysqld; \
-	chown -R mysql:root /var/lib/mysql /var/run/mysqld; \
-	chmod 755 /var//run/mysqld;
+    chown -R mysql:root /var/lib/mysql /var/run/mysqld; \
+    chmod 755 /var/run/mysqld;
 
 # Setup db for slurm accounting
 
@@ -81,6 +81,8 @@ ADD mariadb.service /usr/lib/systemd/system/mariadb.service
 RUN systemctl start mariadb && \
     mariadb < /etc/slurm/slurm_acct_db.sql && \
     systemctl stop mariadb
+
+RUN  dd if=/dev/random of=/etc/slurm/slurm.key bs=1024 count=1 && chown slurm:slurm /etc/slurm/slurm.key && chmod 600 /etc/slurm/slurm.key
 
 # xenon user
 RUN useradd -U -s /bin/bash xenon
