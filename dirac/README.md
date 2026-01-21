@@ -105,6 +105,36 @@ cat 1/StdOut
 # -rw-r--r-- 1 diracpilot diracpilot 604 Apr 21 12:08 job.info
 ```
 
+Using myproxy
+
+```
+export MYPROXY_SERVER=dirac-tuto
+myproxy-init -d -n -v
+MyProxy v6.2 Jan 2024 PAM SASL KRB5 LDAP VOMS OCSP
+Attempting to connect to 172.17.0.2:7512 
+Successfully connected to dirac-tuto:7512 
+
+User Cert File: /home/diracuser/.globus/usercert.pem
+User Key File: /home/diracuser/.globus/userkey.pem
+
+Trusted CA Cert Dir: /opt/dirac/etc/grid-security/certificates
+
+Output File: /tmp/myproxy-proxy.1002.2393
+Your identity: /C=ch/O=DIRAC/OU=DIRAC CI/CN=ciuser
+Creating proxy .......+.........+............+..+..........+...+.........+.....+...+...+....+......+.....+...+......+....+..+.......+..+...+..........+.....+......+.+...........+....+...+.....+......+................+..............+....+..+.............+..+...+.+..+....+.....+..........+.........+..+.......+..+++++++++++++++++++++++++++++++++++++++*.....+.+..+...+++++++++++++++++++++++++++++++++++++++*...+......++++++
+.+..................+.+...+..+.............+..+....+++++++++++++++++++++++++++++++++++++++*.+...+.+..+...+.........+...+...+.......+++++++++++++++++++++++++++++++++++++++*....+..+..........+.................+......+.......+..+......+....+...............+......+.....+.........+.+......+.....++++++
+ Done
+Error: Couldn't verify the authenticity of the user's credential to generate a proxy from.
+       grid_proxy_init.c:957: globus_credential: Error verifying credential: Failed to verify credential
+globus_gsi_callback_module: Could not verify credential
+globus_gsi_callback_module: Could not verify credential
+globus_gsi_callback_module: Error with signing policy
+globus_gsi_callback_module: Error with signing policy
+globus_sysconfig: Error getting signing policy file
+globus_sysconfig: File does not exist: /opt/dirac/etc/grid-security/certificates/855f710d.signing_policy is not a valid file
+grid-proxy-init failed
+```
+
 ## DIRAC web portal
 
 The [DIRAC web portal](https://dirac.readthedocs.io/en/latest/UserGuide/WebPortalReference/Overview/index.html) can be accessed with:

@@ -4,9 +4,9 @@ LABEL org.opencontainers.image.source=https://github.com/xenon-middleware/xenon-
 LABEL org.opencontainers.image.documentation=https://github.com/xenon-middleware/xenon-docker-images/blob/dirac/dirac/README.md
 LABEL org.opencontainers.image.licenses=Apache-2.0
 
-ARG dirac_version=8.0.39
-ARG dirac_pilot_version=v8r0p39
-ARG diracos_version=2.38
+ARG dirac_version=8.0.49
+ARG dirac_pilot_version=v8r0p49
+ARG diracos_version=2.42
 
 # Use BUILDKIT_SANDBOX_HOSTNAME to force hostname
 # see https://docs.docker.com/engine/reference/builder/#buildkit-built-in-build-args
@@ -119,5 +119,10 @@ RUN mkdir -p /cvmfs/dirac.egi.eu/dirac/${dirac_pilot_version} && \
 # TODO to publish software to cvmfs, we might need a real cvmfs server
 
 COPY --chown=diracuser:diracuser dirac.client.cfg /home/diracuser/dirac.cfg
+
+RUN yum install -y myproxy myproxy-server myproxy-admin 
+RUN chown dirac:dirac /var/lib/myproxy/
+
+COPY myproxy-server.config /etc/myproxy-server.config
 
 CMD ["/bin/entrypoint.sh"]

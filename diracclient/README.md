@@ -24,11 +24,11 @@ docker compose run -ti test 'dirac-proxy-init -g dirac_user && pytest test_submi
 ## Build & push
 
 ```shell
-docker build -t ghcr.io/xenon-middleware/diracclient:8.0.39 .
+docker build -t ghcr.io/xenon-middleware/diracclient:8.0.49 .
 ```
 
 ```shell
-docker push ghcr.io/xenon-middleware/diracclient:8.0.39
-docker tag ghcr.io/xenon-middleware/diracclient:8.0.39 ghcr.io/xenon-middleware/diracclient:latest
+docker push ghcr.io/xenon-middleware/diracclient:8.0.49
+docker tag ghcr.io/xenon-middleware/diracclient:8.0.49 ghcr.io/xenon-middleware/diracclient:latest
 docker push ghcr.io/xenon-middleware/diracclient:latest
 ```
